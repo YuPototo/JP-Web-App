@@ -1,9 +1,9 @@
-import { splitApi } from "../../store/query";
+import { splitApi } from "../../store/query/splitApi";
 import type {
     BaseCategory,
     GetCategoriyesResponse,
     TopCategory,
-} from "./types";
+} from "./booksTypes";
 
 export function transformCategoryRes(
     data: GetCategoriyesResponse

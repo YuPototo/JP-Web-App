@@ -1,7 +1,7 @@
 import { createSlice, PayloadAction } from "@reduxjs/toolkit";
 import type { RootState } from "../../store/store";
-import type { TopCategory } from "./types";
-import { booksApi } from "./bookService";
+import type { TopCategory } from "./booksTypes";
+import { booksApi } from "./booksService";
 
 interface BookListState {
     categories: TopCategory[];

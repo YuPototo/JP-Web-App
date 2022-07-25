@@ -1,5 +1,5 @@
-import { transformCategoryRes } from "../bookService";
-import type { GetCategoriyesResponse } from "../types";
+import { transformCategoryRes } from "../booksService";
+import type { GetCategoriyesResponse } from "../booksTypes";
 
 describe("transformCategoryRes()", () => {
     it("should transform response data to right form", () => {

@@ -1,5 +1,5 @@
 import { Toaster } from "react-hot-toast";
-import CategoryNav from "./features/bookList/Category";
+import CategoryNav from "./features/books/Category";
 
 function App() {
     return (
