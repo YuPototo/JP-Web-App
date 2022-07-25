@@ -1,26 +1,20 @@
-import React from 'react';
-import logo from './logo.svg';
-import './App.css';
+import { useGetCategoriyesQuery } from "./features/bookList/bookService";
+import { useAppSelector } from "./store/hooks";
 
 function App() {
-  return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.tsx</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
-  );
+    const value = useAppSelector((state) => state.bookList.value);
+
+    const { data, isLoading, error } = useGetCategoriyesQuery();
+
+    return (
+        <div>
+            <h1 className="text-3xl font-bold underline">Hello world!</h1>
+            <div>{value}</div>
+            {isLoading && <div>Loading...</div>}
+            {error && <div>error: {error.toString()}</div>}
+            {data && <div>finish fetching categories</div>}
+        </div>
+    );
 }
 
 export default App;
