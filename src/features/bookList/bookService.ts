@@ -3,7 +3,6 @@ import type {
     BaseCategory,
     GetCategoriyesResponse,
     TopCategory,
-    TopCategoryOutput,
 } from "./types";
 
 export function transformCategoryRes(
@@ -29,10 +28,9 @@ export function transformCategoryRes(
 
 export const booksApi = splitApi.injectEndpoints({
     endpoints: (build) => ({
-        getCategoriyes: build.query<TopCategoryOutput[], void>({
+        getCategoriyes: build.query<TopCategory[], void>({
             query: () => "categories",
-            transformResponse: (response: GetCategoriyesResponse) =>
-                response.categories,
+            transformResponse: transformCategoryRes,
         }),
     }),
 });

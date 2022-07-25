@@ -1,17 +1,23 @@
 import clsx from "clsx";
 import { useAppDispatch, useAppSelector } from "../../store/hooks";
+import stringifyRtkQuerryError from "../../store/utils/stringifyRtkQuerryError";
 import {
     selectTopCategories,
     pickTopCategory,
     selectChildCategories,
     pickChildCategory,
 } from "./bookListSlice";
+import { useGetCategoriyesQuery } from "./bookService";
 
 export default function CategoryNav() {
+    const { isLoading, error } = useGetCategoriyesQuery();
+
     return (
         <div className="my-4">
+            {isLoading && <div>loading...</div>}
             <TopCategoryNav />
             <ChildrenCategoryNav />
+            {error && <div>{stringifyRtkQuerryError(error)}</div>}
         </div>
     );
 }

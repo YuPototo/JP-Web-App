@@ -1,6 +1,7 @@
 import { createSlice, PayloadAction } from "@reduxjs/toolkit";
 import type { RootState } from "../../store/store";
 import type { TopCategory } from "./types";
+import { booksApi } from "./bookService";
 
 interface BookListState {
     categories: TopCategory[];
@@ -10,53 +11,8 @@ interface BookListState {
     };
 }
 
-const TEMP_CATEGORIES = [
-    {
-        key: "study",
-        displayName: "学习",
-        subCategories: [
-            [
-                {
-                    key: "newStandardJP",
-                    displayName: "新标日",
-                },
-                {
-                    key: "other",
-                    displayName: "其他",
-                },
-            ],
-        ],
-    },
-    {
-        key: "jlpt",
-        displayName: "JLPT",
-        subCategories: [
-            [
-                {
-                    key: "n1",
-                    displayName: "N1",
-                },
-                {
-                    key: "n2",
-                    displayName: "N2",
-                },
-            ],
-            [
-                {
-                    key: "words",
-                    displayName: "文字词汇",
-                },
-                {
-                    key: "read",
-                    displayName: "阅读",
-                },
-            ],
-        ],
-    },
-];
 const initialState: BookListState = {
-    categories: TEMP_CATEGORIES,
-    selectedCategories: { topKey: "jlpt", childrenKeys: [] },
+    categories: [],
 };
 
 export const bookListSlice = createSlice({
@@ -83,6 +39,14 @@ export const bookListSlice = createSlice({
                 );
             }
         },
+    },
+    extraReducers: (builder) => {
+        builder.addMatcher(
+            booksApi.endpoints.getCategoriyes.matchFulfilled,
+            (state, { payload }) => {
+                state.categories = payload;
+            }
+        );
     },
 });
 
