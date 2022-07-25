@@ -1,7 +1,7 @@
 /**
  * category api return type, same as backend api
  */
-interface BaseCategory {
+export interface BaseCategory {
     key: string;
     displayName: string;
 }
