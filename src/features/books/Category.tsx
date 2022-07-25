@@ -14,15 +14,25 @@ export default function CategoryNav() {
 
     return (
         <div className="my-4">
-            {isLoading && <div>loading...</div>}
-            <TopCategoryNav />
-            <ChildrenCategoryNav />
-            {error && <div>{stringifyRtkQuerryError(error)}</div>}
+            {isLoading ? (
+                <div className="skeleton mb-4 h-6  w-60"></div>
+            ) : (
+                <div>
+                    <TopCategoryNav />
+                    <ChildrenCategoryNav />
+                </div>
+            )}
+
+            {error && (
+                <span className="text-red-500">
+                    {`获取内容分类出错：${stringifyRtkQuerryError(error)}`}
+                </span>
+            )}
         </div>
     );
 }
 
-function TopCategoryNav() {
+function TopCategoryNav({ className }: { className?: string }) {
     const dispatch = useAppDispatch();
     const topCategories = useAppSelector(selectTopCategories);
     const handlePickTopCategory = (key: string) => {
@@ -32,7 +42,7 @@ function TopCategoryNav() {
         (state) => state.bookList.selectedCategories
     );
     return (
-        <div className="my-2">
+        <div className={className}>
             {topCategories.map((category) => (
                 <span
                     className={clsx(
@@ -50,7 +60,7 @@ function TopCategoryNav() {
     );
 }
 
-function ChildrenCategoryNav() {
+function ChildrenCategoryNav({ className }: { className?: string }) {
     const dispatch = useAppDispatch();
 
     const childCategories = useAppSelector(selectChildCategories);
@@ -71,7 +81,7 @@ function ChildrenCategoryNav() {
     if (!childCategories) return <></>;
 
     return (
-        <div className="m-2">
+        <div className={className}>
             {childCategories.map((categoryList, index) => (
                 <div key={index} className="my-4">
                     {categoryList.map((category) => (
