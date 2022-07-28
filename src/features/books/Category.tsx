@@ -4,13 +4,26 @@ import stringifyRtkQuerryError from "../../store/storeUtils/stringifyRtkQuerryEr
 import {
     selectTopCategories,
     pickTopCategory,
-    selectChildCategories,
-    pickChildCategory,
+    selectMetaTypeByTopKey,
+    selectSubcategoryByMetaType,
+    pickSubCategory,
 } from "./booksSlice";
-import { useGetCategoriyesQuery } from "./booksService";
+// import { useGetCategoriyesQuery } from "./booksService";
+import type {
+    SubCategoryKey,
+    SubCategoryMetaType,
+    TopCategoryKey,
+} from "./booksTypes";
 
 export default function CategoryNav() {
-    const { isLoading, error } = useGetCategoriyesQuery();
+    // const { isLoading, error } = useGetCategoriyesQuery();
+
+    const isLoading = false;
+    const error = undefined;
+
+    const selectedTopKey = useAppSelector(
+        (state) => state.bookList.selectedCategories?.topKey
+    );
 
     return (
         <div className="my-4">
@@ -19,7 +32,9 @@ export default function CategoryNav() {
             ) : (
                 <div>
                     <TopCategoryNav />
-                    <ChildrenCategoryNav />
+                    {selectedTopKey && (
+                        <SubcategoryNav2 topKey={selectedTopKey} />
+                    )}
                 </div>
             )}
 
@@ -60,46 +75,57 @@ function TopCategoryNav({ className }: { className?: string }) {
     );
 }
 
-function ChildrenCategoryNav({ className }: { className?: string }) {
+function SubcategoryNav2({ topKey }: { topKey: TopCategoryKey }) {
+    const metaTypes = useAppSelector(selectMetaTypeByTopKey(topKey));
+    if (!metaTypes) return <></>;
+    return (
+        <div>
+            {metaTypes.map((metaType) => (
+                <SubCategoryList
+                    key={metaType}
+                    topKey={topKey}
+                    metaType={metaType}
+                />
+            ))}
+        </div>
+    );
+}
+
+function SubCategoryList({
+    metaType,
+    topKey,
+}: {
+    metaType: SubCategoryMetaType;
+    topKey: TopCategoryKey;
+}) {
     const dispatch = useAppDispatch();
 
-    const childCategories = useAppSelector(selectChildCategories);
-
-    const selectedCategories = useAppSelector(
-        (state) => state.bookList.selectedCategories
+    const subcategoryList = useAppSelector(
+        selectSubcategoryByMetaType(topKey, metaType)
     );
 
-    const handlePickChildCategory = (index: number, key: string) => {
-        dispatch(
-            pickChildCategory({
-                index,
-                key,
-            })
-        );
+    const selectedSubcategoryKey = useAppSelector(
+        (state) => state.bookList.selectedCategories?.subCategories[metaType]
+    );
+
+    const handleSelectSubCategory = (subCategoryKey: SubCategoryKey) => {
+        dispatch(pickSubCategory({ metaType, key: subCategoryKey }));
     };
 
-    if (!childCategories) return <></>;
-
     return (
-        <div className={className}>
-            {childCategories.map((categoryList, index) => (
-                <div key={index} className="my-4">
-                    {categoryList.map((category) => (
-                        <span
-                            key={category.key}
-                            className={clsx(
-                                "mx-4 bg-yellow-50 p-2 hover:cursor-pointer hover:bg-yellow-300",
-                                selectedCategories?.childrenKeys[index] ===
-                                    category.key && "bg-yellow-300"
-                            )}
-                            onClick={() =>
-                                handlePickChildCategory(index, category.key)
-                            }
-                        >
-                            {category.displayName}
-                        </span>
-                    ))}
-                </div>
+        <div className="m-6">
+            {subcategoryList?.map((subCatetory) => (
+                <span
+                    className={clsx(
+                        selectedSubcategoryKey === subCatetory.key &&
+                            "bg-yellow-300",
+                        "m-2 p-2 hover:cursor-pointer hover:bg-yellow-300"
+                    )}
+                    key={subCatetory.key}
+                    onClick={() => handleSelectSubCategory(subCatetory.key)}
+                >
+                    {subCatetory.displayName}
+                </span>
             ))}
         </div>
     );
