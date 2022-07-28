@@ -21,41 +21,7 @@ interface BookListState {
 }
 
 const initialState: BookListState = {
-    categories: [
-        {
-            key: "jlpt",
-            displayName: "JLPT",
-            subCategorySeq: ["jlptLevel", "practiceDomain"],
-            subCategories: {
-                jlptLevel: [
-                    { key: "n1", displayName: "N1" },
-                    { key: "n2", displayName: "N2" },
-                    { key: "n3", displayName: "N3" },
-                ],
-                practiceDomain: [
-                    { key: "read", displayName: "阅读" },
-                    { key: "words", displayName: "文字词汇" },
-                ],
-            },
-        },
-        {
-            key: "study",
-            displayName: "学习辅助",
-            subCategorySeq: ["studySubMeta"],
-            subCategories: {
-                studySubMeta: [
-                    {
-                        key: "newStandardJP",
-                        displayName: "新标日",
-                    },
-                    {
-                        key: "other",
-                        displayName: "其他",
-                    },
-                ],
-            },
-        },
-    ],
+    categories: [],
 
     //@ts-ignore
     books: [
@@ -74,7 +40,7 @@ const initialState: BookListState = {
             categories: {
                 jlpt: {
                     jlptLevel: ["n1"],
-                    practiceDomain: ["read"],
+                    practiceDomain: ["reading"],
                 },
             },
         },
@@ -120,14 +86,14 @@ export const bookListSlice = createSlice({
             state.selectedCategories.subCategories[metaType] = key;
         },
     },
-    // extraReducers: (builder) => {
-    //     builder.addMatcher(
-    //         booksApi.endpoints.getCategoriyes.matchFulfilled,
-    //         (state, { payload }) => {
-    //             state.categories = payload;
-    //         }
-    //     );
-    // },
+    extraReducers: (builder) => {
+        builder.addMatcher(
+            booksApi.endpoints.getCategoriyes.matchFulfilled,
+            (state, { payload }) => {
+                state.categories = payload;
+            }
+        );
+    },
 });
 
 export const { pickTopCategory, pickSubCategory } = bookListSlice.actions;
@@ -152,7 +118,7 @@ export const selectMetaTypeByTopKey =
             console.error(`topCategory with key ${topKey} is not found`);
             return;
         }
-        return topCategory.subCategorySeq;
+        return topCategory.subCategoryMetaSeq;
     };
 
 export const selectSubcategoryByMetaType =

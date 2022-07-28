@@ -1,11 +1,11 @@
 import { splitApi } from "../../store/query/splitApi";
-import type { TopCategory } from "./booksTypes";
+import type { CategoryTree } from "./booksTypes";
 
 export const booksApi = splitApi.injectEndpoints({
     endpoints: (build) => ({
-        getCategoriyes: build.query<TopCategory[], void>({
+        getCategoriyes: build.query<CategoryTree, void>({
             query: () => "categories",
-            transformResponse: (res: { categories: TopCategory[] }) =>
+            transformResponse: (res: { categories: CategoryTree }) =>
                 res.categories,
         }),
     }),

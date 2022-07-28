@@ -8,7 +8,7 @@ import {
     selectSubcategoryByMetaType,
     pickSubCategory,
 } from "./booksSlice";
-// import { useGetCategoriyesQuery } from "./booksService";
+import { useGetCategoriyesQuery } from "./booksService";
 import type {
     SubCategoryKey,
     SubCategoryMetaType,
@@ -16,10 +16,7 @@ import type {
 } from "./booksTypes";
 
 export default function CategoryNav() {
-    // const { isLoading, error } = useGetCategoriyesQuery();
-
-    const isLoading = false;
-    const error = undefined;
+    const { isLoading, error } = useGetCategoriyesQuery();
 
     const selectedTopKey = useAppSelector(
         (state) => state.bookList.selectedCategories?.topKey

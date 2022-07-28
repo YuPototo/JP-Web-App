@@ -11,7 +11,7 @@ export interface BaseCategory {
 type SubCategory = BaseCategory;
 
 export interface TopCategory extends BaseCategory {
-    subCategorySeq: SubCategoryMetaType[];
+    subCategoryMetaSeq: SubCategoryMetaType[];
     subCategories: {
         [key: SubCategoryMetaType]: SubCategory[];
     };
