@@ -26,12 +26,19 @@ const initialState: BookListState = {
     //@ts-ignore
     books: [
         {
-            title: "abc",
+            title: "study",
             id: "62dfa04e2391de581a76ecdc",
             categories: {
                 study: {
-                    studySubMeta: ["newStandardJP"],
+                    studyMeta1: ["newStandardJP"],
                 },
+            },
+        },
+        {
+            title: "test one",
+            id: "62dfa04e2391de581a76ecdc",
+            categories: {
+                study: {},
             },
         },
         {
@@ -62,11 +69,14 @@ export const bookListSlice = createSlice({
     initialState,
     reducers: {
         pickTopCategory: (state, action: PayloadAction<string>) => {
-            if (state.selectedCategories?.topKey === action.payload) return;
-            state.selectedCategories = {
-                topKey: action.payload,
-                subCategories: {},
-            };
+            if (state.selectedCategories?.topKey === action.payload) {
+                state.selectedCategories = undefined;
+            } else {
+                state.selectedCategories = {
+                    topKey: action.payload,
+                    subCategories: {},
+                };
+            }
         },
 
         pickSubCategory: (
@@ -77,13 +87,19 @@ export const bookListSlice = createSlice({
             }>
         ) => {
             const { metaType, key } = payload.payload;
-            if (!state.selectedCategories) {
+            const selectedCategory = state.selectedCategories;
+            if (!selectedCategory) {
                 console.error(
                     "pickSubCategory: selectedCategories is undefined"
                 );
                 return;
             }
-            state.selectedCategories.subCategories[metaType] = key;
+            const subkey = selectedCategory.subCategories[metaType];
+            if (subkey === key) {
+                delete selectedCategory.subCategories[metaType];
+            } else {
+                selectedCategory.subCategories[metaType] = key;
+            }
         },
     },
     extraReducers: (builder) => {
