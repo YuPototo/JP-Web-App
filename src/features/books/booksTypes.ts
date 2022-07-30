@@ -1,31 +1,20 @@
 /* cateogry */
-export type TopCategoryKey = string;
-export type SubCategoryKey = string;
-export type SubCategoryMetaType = string;
+export type CategoryKey = string;
 
-export interface BaseCategory {
-    key: TopCategoryKey | SubCategoryKey;
-    displayName: string;
+export interface Category {
+    key: CategoryKey;
+    displayValue: string;
+    children?: Category[];
 }
-
-type SubCategory = BaseCategory;
-
-export interface TopCategory extends BaseCategory {
-    subCategoryMetaSeq: SubCategoryMetaType[];
-    subCategories: {
-        [key: SubCategoryMetaType]: SubCategory[];
-    };
-}
-
-export type CategoryTree = TopCategory[];
 
 /* books */
+interface BookCategory {
+    key: CategoryKey;
+    child?: BookCategory;
+}
+
 export interface Book {
     id: string;
     title: string;
-    categories: {
-        [key: TopCategoryKey]: {
-            [key: SubCategoryMetaType]: SubCategoryKey[];
-        };
-    };
+    category: BookCategory;
 }

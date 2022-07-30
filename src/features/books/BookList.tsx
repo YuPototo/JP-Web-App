@@ -1,8 +1,10 @@
 import React from "react";
 import { useAppSelector } from "../../store/hooks";
+import { useGetBooksQuery } from "./booksService";
 import { selectBooksByCategory } from "./booksSlice";
 
 export default function BookList() {
+    useGetBooksQuery();
     const books = useAppSelector(selectBooksByCategory);
 
     return (

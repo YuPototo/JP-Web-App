@@ -1,178 +1,126 @@
 import { createSlice, PayloadAction } from "@reduxjs/toolkit";
 import type { RootState } from "../../store/store";
-import type {
-    Book,
-    TopCategoryKey,
-    SubCategoryKey,
-    SubCategoryMetaType,
-    CategoryTree,
-} from "./booksTypes";
+import type { Book, Category, CategoryKey } from "./booksTypes";
 import { booksApi } from "./booksService";
 
-interface BookListState {
-    categories: CategoryTree;
-    selectedCategories?: {
-        topKey: TopCategoryKey;
-        subCategories: {
-            [key: SubCategoryMetaType]: SubCategoryKey;
-        };
-    };
+export interface BookListState {
+    categories: Category[];
+    selectedCategoryKeys: CategoryKey[];
     books: Book[];
 }
 
 const initialState: BookListState = {
     categories: [],
-
-    //@ts-ignore
-    books: [
-        {
-            title: "study",
-            id: "62dfa04e2391de581a76ecdc",
-            categories: {
-                study: {
-                    studyMeta1: ["newStandardJP"],
-                },
-            },
-        },
-        {
-            title: "test one",
-            id: "62dfa04e2391de581a76ecdc",
-            categories: {
-                study: {},
-            },
-        },
-        {
-            title: "n1 阅读",
-            id: "62e1d10885a923ba6e1acc25",
-            categories: {
-                jlpt: {
-                    jlptLevel: ["n1"],
-                    practiceDomain: ["reading"],
-                },
-            },
-        },
-        {
-            title: "n1 单词",
-            id: "62e1d10885a923ba6e1acc25",
-            categories: {
-                jlpt: {
-                    jlptLevel: ["n1"],
-                    practiceDomain: ["words"],
-                },
-            },
-        },
-    ],
+    selectedCategoryKeys: [],
+    books: [],
 };
 
 export const bookListSlice = createSlice({
     name: "bookList",
     initialState,
     reducers: {
-        pickTopCategory: (state, action: PayloadAction<string>) => {
-            if (state.selectedCategories?.topKey === action.payload) {
-                state.selectedCategories = undefined;
-            } else {
-                state.selectedCategories = {
-                    topKey: action.payload,
-                    subCategories: {},
-                };
-            }
-        },
-
-        pickSubCategory: (
+        setCategoryKey: (
             state,
-            payload: PayloadAction<{
-                metaType: SubCategoryMetaType;
-                key: SubCategoryKey;
-            }>
+            action: PayloadAction<{ categoryLevel: number; key: string }>
         ) => {
-            const { metaType, key } = payload.payload;
-            const selectedCategory = state.selectedCategories;
-            if (!selectedCategory) {
+            const { categoryLevel: index, key } = action.payload;
+
+            if (index > state.selectedCategoryKeys.length) {
                 console.error(
-                    "pickSubCategory: selectedCategories is undefined"
+                    `setCategoryKey: index ${index} is larger than selectedCategoryKeys.length ${state.selectedCategoryKeys.length}`
                 );
                 return;
             }
-            const subkey = selectedCategory.subCategories[metaType];
-            if (subkey === key) {
-                delete selectedCategory.subCategories[metaType];
-            } else {
-                selectedCategory.subCategories[metaType] = key;
+
+            if (index === 0) {
+                state.selectedCategoryKeys = [key];
+            } else if (index === 1) {
+                state.selectedCategoryKeys = [
+                    state.selectedCategoryKeys[0],
+                    key,
+                ];
+            } else if (index === 2) {
+                state.selectedCategoryKeys = [
+                    state.selectedCategoryKeys[0],
+                    state.selectedCategoryKeys[1],
+                    key,
+                ];
             }
         },
     },
     extraReducers: (builder) => {
-        builder.addMatcher(
-            booksApi.endpoints.getCategoriyes.matchFulfilled,
-            (state, { payload }) => {
-                state.categories = payload;
-            }
-        );
+        builder
+            .addMatcher(
+                booksApi.endpoints.getCategoriyes.matchFulfilled,
+                (state, { payload }) => {
+                    state.categories = payload;
+                }
+            )
+            .addMatcher(
+                booksApi.endpoints.getBooks.matchFulfilled,
+                (state, { payload }) => {
+                    state.books = payload;
+                }
+            );
     },
 });
 
-export const { pickTopCategory, pickSubCategory } = bookListSlice.actions;
+export const { setCategoryKey } = bookListSlice.actions;
 
 /* selectors */
-export const selectTopCategories = (state: RootState) => {
-    return state.bookList.categories.map((el) => ({
-        key: el.key,
-        displayName: el.displayName,
-    }));
-};
 
 /**
- * selectMetaTypeByTopKey
+ * 给定 Category level 和 state，返回被选中的 category 的 chidlren
+ * 假定只有前2层 category 会有 children
  */
-export const selectMetaTypeByTopKey =
-    (topKey: TopCategoryKey) => (state: RootState) => {
-        const topCategory = state.bookList.categories.find(
-            (category) => category.key === topKey
-        );
-        if (!topCategory) {
-            console.error(`topCategory with key ${topKey} is not found`);
+export const selectChildrenByLevel =
+    (categoryLevel: number) => (state: RootState) => {
+        const categories = state.bookList.categories;
+        const selectedCategoryKeys = state.bookList.selectedCategoryKeys;
+        if (categoryLevel === 0) {
+            const key = selectedCategoryKeys?.[0];
+            return categories.find((c) => c.key === key)?.children;
+        } else if (categoryLevel === 1) {
+            const key_0 = selectedCategoryKeys?.[0];
+            const parentCategories = categories.find(
+                (c) => c.key === key_0
+            )?.children;
+            const key_1 = selectedCategoryKeys?.[1];
+            return parentCategories?.find((c) => c.key === key_1)?.children;
+        } else {
             return;
         }
-        return topCategory.subCategoryMetaSeq;
-    };
-
-export const selectSubcategoryByMetaType =
-    (topKey: TopCategoryKey, metaType: SubCategoryMetaType) =>
-    (state: RootState) => {
-        const topCategory = state.bookList.categories.find(
-            (category) => category.key === topKey
-        );
-        if (!topCategory) {
-            console.error(`topCategory with key ${topKey} is not found`);
-            return;
-        }
-        return topCategory.subCategories[metaType];
     };
 
 export const selectBooksByCategory = (state: RootState) => {
-    const { selectedCategories } = state.bookList;
-    if (!selectedCategories) {
-        return state.bookList.books;
+    const selectedCategoryKeys = state.bookList.selectedCategoryKeys;
+    const books = state.bookList.books;
+
+    const selectedCategoryLength = selectedCategoryKeys.length;
+    if (selectedCategoryLength === 0) {
+        return books;
+    } else if (selectedCategoryLength === 1) {
+        const key = selectedCategoryKeys[0];
+        return books.filter((b) => b.category.key === key);
+    } else if (selectedCategoryLength === 2) {
+        const key_0 = selectedCategoryKeys[0];
+        const key_1 = selectedCategoryKeys[1];
+        return books.filter(
+            (b) => b.category.key === key_0 && b.category.child?.key === key_1
+        );
+    } else if (selectedCategoryLength === 3) {
+        const key_0 = selectedCategoryKeys[0];
+        const key_1 = selectedCategoryKeys[1];
+        const key_2 = selectedCategoryKeys[2];
+        return books.filter(
+            (b) =>
+                b.category.key === key_0 &&
+                b.category.child?.key === key_1 &&
+                b.category.child?.child?.key === key_2
+        );
+    } else {
+        console.error("不允许4层及以上 cateory");
+        return books;
     }
-
-    const { topKey, subCategories } = selectedCategories;
-
-    let books = state.bookList.books.filter(
-        (book) => topKey in book.categories
-    );
-
-    const selectedSubMetaTypes = Object.keys(subCategories);
-
-    for (const metaType of selectedSubMetaTypes) {
-        const subKey = subCategories[metaType];
-        books = books.filter((book) => {
-            const topCategory = book.categories[topKey];
-            return topCategory[metaType]?.includes(subKey);
-        });
-    }
-
-    return books;
 };
-
 export default bookListSlice.reducer;
