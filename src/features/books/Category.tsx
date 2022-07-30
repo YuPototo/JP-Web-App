@@ -1,38 +1,22 @@
 import clsx from "clsx";
 import { useAppDispatch, useAppSelector } from "../../store/hooks";
 import stringifyRtkQuerryError from "../../store/storeUtils/stringifyRtkQuerryError";
-import {
-    selectTopCategories,
-    pickTopCategory,
-    selectMetaTypeByTopKey,
-    selectSubcategoryByMetaType,
-    pickSubCategory,
-} from "./booksSlice";
+import { selectChildrenByLevel, setCategoryKey } from "./booksSlice";
 import { useGetCategoriyesQuery } from "./booksService";
-import type {
-    SubCategoryKey,
-    SubCategoryMetaType,
-    TopCategoryKey,
-} from "./booksTypes";
+import type { Category } from "./booksTypes";
+import React from "react";
 
 export default function CategoryNav() {
     const { isLoading, error } = useGetCategoriyesQuery();
 
-    const selectedTopKey = useAppSelector(
-        (state) => state.bookList.selectedCategories?.topKey
-    );
+    const topCategories = useAppSelector((state) => state.bookList.categories);
 
     return (
         <div className="my-4">
             {isLoading ? (
                 <div className="skeleton mb-4 h-6  w-60"></div>
             ) : (
-                <div>
-                    <TopCategoryNav />
-                    {selectedTopKey && (
-                        <SubcategoryNav2 topKey={selectedTopKey} />
-                    )}
-                </div>
+                <CategoryList categories={topCategories} categoryLevel={0} />
             )}
 
             {error && (
@@ -44,86 +28,49 @@ export default function CategoryNav() {
     );
 }
 
-function TopCategoryNav({ className }: { className?: string }) {
-    const dispatch = useAppDispatch();
-    const topCategories = useAppSelector(selectTopCategories);
-    const handlePickTopCategory = (key: string) => {
-        dispatch(pickTopCategory(key));
-    };
-    const selectedCategories = useAppSelector(
-        (state) => state.bookList.selectedCategories
-    );
-    return (
-        <div className={className}>
-            {topCategories.map((category) => (
-                <span
-                    className={clsx(
-                        "m-2 bg-green-50 p-2 hover:cursor-pointer hover:bg-green-300",
-                        selectedCategories?.topKey === category.key &&
-                            "bg-green-300"
-                    )}
-                    key={category.key}
-                    onClick={() => handlePickTopCategory(category.key)}
-                >
-                    {category.displayName}
-                </span>
-            ))}
-        </div>
-    );
+interface CategoryListProps {
+    categories: Category[];
+    categoryLevel: number;
+    selectedCategoryKeys?: string[];
 }
 
-function SubcategoryNav2({ topKey }: { topKey: TopCategoryKey }) {
-    const metaTypes = useAppSelector(selectMetaTypeByTopKey(topKey));
-    if (!metaTypes) return <></>;
-    return (
-        <div>
-            {metaTypes.map((metaType) => (
-                <SubCategoryList
-                    key={metaType}
-                    topKey={topKey}
-                    metaType={metaType}
-                />
-            ))}
-        </div>
-    );
-}
-
-function SubCategoryList({
-    metaType,
-    topKey,
-}: {
-    metaType: SubCategoryMetaType;
-    topKey: TopCategoryKey;
-}) {
+function CategoryList({ categories, categoryLevel }: CategoryListProps) {
     const dispatch = useAppDispatch();
+    const children = useAppSelector(selectChildrenByLevel(categoryLevel));
 
-    const subcategoryList = useAppSelector(
-        selectSubcategoryByMetaType(topKey, metaType)
+    const selectedCategoryKey = useAppSelector(
+        (state) => state.bookList.selectedCategoryKeys?.[categoryLevel]
     );
 
-    const selectedSubcategoryKey = useAppSelector(
-        (state) => state.bookList.selectedCategories?.subCategories[metaType]
-    );
-
-    const handleSelectSubCategory = (subCategoryKey: SubCategoryKey) => {
-        dispatch(pickSubCategory({ metaType, key: subCategoryKey }));
+    const handleClickCategory = (key: string) => {
+        dispatch(setCategoryKey({ categoryLevel, key }));
     };
 
     return (
-        <div className="m-6">
-            {subcategoryList?.map((subCatetory) => (
-                <span
-                    className={clsx(
-                        selectedSubcategoryKey === subCatetory.key &&
-                            "bg-yellow-300",
-                        "m-2 p-2 hover:cursor-pointer hover:bg-yellow-300"
-                    )}
-                    key={subCatetory.key}
-                    onClick={() => handleSelectSubCategory(subCatetory.key)}
-                >
-                    {subCatetory.displayName}
-                </span>
-            ))}
-        </div>
+        <>
+            <div className="m-2">
+                {categories.map((category) => (
+                    <span
+                        className={clsx(
+                            selectedCategoryKey === category.key &&
+                                "bg-red-200",
+                            "m-2 p-2 hover:cursor-pointer hover:bg-red-200"
+                        )}
+                        key={category.key}
+                        onClick={() => handleClickCategory(category.key)}
+                    >
+                        {category.displayValue}
+                    </span>
+                ))}
+            </div>
+            <div className="m-2">
+                {children && (
+                    <CategoryList
+                        categories={children}
+                        categoryLevel={categoryLevel + 1}
+                    />
+                )}
+            </div>
+        </>
     );
 }
