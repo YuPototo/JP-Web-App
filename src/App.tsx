@@ -1,6 +1,6 @@
-import { Toaster } from "react-hot-toast";
-import BookList from "./features/books/BookList";
-import CategoryNav from "./features/books/Category";
+import { Toaster } from 'react-hot-toast'
+import BookList from './features/books/BookList'
+import CategoryNav from './features/books/Category'
 
 function App() {
     return (
@@ -11,7 +11,7 @@ function App() {
             <CategoryNav />
             <BookList />
         </div>
-    );
+    )
 }
 
-export default App;
+export default App

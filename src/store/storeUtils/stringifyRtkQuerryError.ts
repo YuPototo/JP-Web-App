@@ -1,5 +1,5 @@
-import type { SerializedError } from "@reduxjs/toolkit";
-import type { FetchBaseQueryError } from "@reduxjs/toolkit/dist/query";
+import type { SerializedError } from '@reduxjs/toolkit'
+import type { FetchBaseQueryError } from '@reduxjs/toolkit/dist/query'
 
 /*
  * reference: https://redux-toolkit.js.org/rtk-query/usage-with-typescript#type-safe-error-handling
@@ -10,13 +10,13 @@ import type { FetchBaseQueryError } from "@reduxjs/toolkit/dist/query";
 export default function stringifyRtkQuerryError(
     error: SerializedError | FetchBaseQueryError
 ): string {
-    if ("status" in error) {
+    if ('status' in error) {
         // you can access all properties of `FetchBaseQueryError` here
         const errMsg =
-            "error" in error ? error.error : JSON.stringify(error.data);
-        return errMsg;
+            'error' in error ? error.error : JSON.stringify(error.data)
+        return errMsg
     } else {
         // you can access all properties of `SerializedError` here
-        return error.message || JSON.stringify(error);
+        return error.message || JSON.stringify(error)
     }
 }

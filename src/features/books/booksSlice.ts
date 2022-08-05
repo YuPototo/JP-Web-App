@@ -1,50 +1,50 @@
-import { createSlice, PayloadAction } from "@reduxjs/toolkit";
-import type { RootState } from "../../store/store";
-import type { Book, Category, CategoryKey } from "./booksTypes";
-import { booksApi } from "./booksService";
+import { createSlice, PayloadAction } from '@reduxjs/toolkit'
+import type { RootState } from '../../store/store'
+import type { Book, Category, CategoryKey } from './booksTypes'
+import { booksApi } from './booksService'
 
 export interface BookListState {
-    categories: Category[];
-    selectedCategoryKeys: CategoryKey[];
-    books: Book[];
+    categories: Category[]
+    selectedCategoryKeys: CategoryKey[]
+    books: Book[]
 }
 
 const initialState: BookListState = {
     categories: [],
     selectedCategoryKeys: [],
     books: [],
-};
+}
 
 export const bookListSlice = createSlice({
-    name: "bookList",
+    name: 'bookList',
     initialState,
     reducers: {
         setCategoryKey: (
             state,
             action: PayloadAction<{ categoryLevel: number; key: string }>
         ) => {
-            const { categoryLevel: index, key } = action.payload;
+            const { categoryLevel: index, key } = action.payload
 
             if (index > state.selectedCategoryKeys.length) {
                 console.error(
                     `setCategoryKey: index ${index} is larger than selectedCategoryKeys.length ${state.selectedCategoryKeys.length}`
-                );
-                return;
+                )
+                return
             }
 
             if (index === 0) {
-                state.selectedCategoryKeys = [key];
+                state.selectedCategoryKeys = [key]
             } else if (index === 1) {
                 state.selectedCategoryKeys = [
                     state.selectedCategoryKeys[0],
                     key,
-                ];
+                ]
             } else if (index === 2) {
                 state.selectedCategoryKeys = [
                     state.selectedCategoryKeys[0],
                     state.selectedCategoryKeys[1],
                     key,
-                ];
+                ]
             }
         },
     },
@@ -53,19 +53,19 @@ export const bookListSlice = createSlice({
             .addMatcher(
                 booksApi.endpoints.getCategoriyes.matchFulfilled,
                 (state, { payload }) => {
-                    state.categories = payload;
+                    state.categories = payload
                 }
             )
             .addMatcher(
                 booksApi.endpoints.getBooks.matchFulfilled,
                 (state, { payload }) => {
-                    state.books = payload;
+                    state.books = payload
                 }
-            );
+            )
     },
-});
+})
 
-export const { setCategoryKey } = bookListSlice.actions;
+export const { setCategoryKey } = bookListSlice.actions
 
 /* selectors */
 
@@ -75,52 +75,52 @@ export const { setCategoryKey } = bookListSlice.actions;
  */
 export const selectChildrenByLevel =
     (categoryLevel: number) => (state: RootState) => {
-        const categories = state.bookList.categories;
-        const selectedCategoryKeys = state.bookList.selectedCategoryKeys;
+        const categories = state.bookList.categories
+        const selectedCategoryKeys = state.bookList.selectedCategoryKeys
         if (categoryLevel === 0) {
-            const key = selectedCategoryKeys?.[0];
-            return categories.find((c) => c.key === key)?.children;
+            const key = selectedCategoryKeys?.[0]
+            return categories.find((c) => c.key === key)?.children
         } else if (categoryLevel === 1) {
-            const key_0 = selectedCategoryKeys?.[0];
+            const key_0 = selectedCategoryKeys?.[0]
             const parentCategories = categories.find(
                 (c) => c.key === key_0
-            )?.children;
-            const key_1 = selectedCategoryKeys?.[1];
-            return parentCategories?.find((c) => c.key === key_1)?.children;
+            )?.children
+            const key_1 = selectedCategoryKeys?.[1]
+            return parentCategories?.find((c) => c.key === key_1)?.children
         } else {
-            return;
+            return
         }
-    };
+    }
 
 export const selectBooksByCategory = (state: RootState) => {
-    const selectedCategoryKeys = state.bookList.selectedCategoryKeys;
-    const books = state.bookList.books;
+    const selectedCategoryKeys = state.bookList.selectedCategoryKeys
+    const books = state.bookList.books.filter((book) => !book.hidden)
 
-    const selectedCategoryLength = selectedCategoryKeys.length;
+    const selectedCategoryLength = selectedCategoryKeys.length
     if (selectedCategoryLength === 0) {
-        return books;
+        return books
     } else if (selectedCategoryLength === 1) {
-        const key = selectedCategoryKeys[0];
-        return books.filter((b) => b.category.key === key);
+        const key = selectedCategoryKeys[0]
+        return books.filter((b) => b.category.key === key)
     } else if (selectedCategoryLength === 2) {
-        const key_0 = selectedCategoryKeys[0];
-        const key_1 = selectedCategoryKeys[1];
+        const key_0 = selectedCategoryKeys[0]
+        const key_1 = selectedCategoryKeys[1]
         return books.filter(
             (b) => b.category.key === key_0 && b.category.child?.key === key_1
-        );
+        )
     } else if (selectedCategoryLength === 3) {
-        const key_0 = selectedCategoryKeys[0];
-        const key_1 = selectedCategoryKeys[1];
-        const key_2 = selectedCategoryKeys[2];
+        const key_0 = selectedCategoryKeys[0]
+        const key_1 = selectedCategoryKeys[1]
+        const key_2 = selectedCategoryKeys[2]
         return books.filter(
             (b) =>
                 b.category.key === key_0 &&
                 b.category.child?.key === key_1 &&
                 b.category.child?.child?.key === key_2
-        );
+        )
     } else {
-        console.error("不允许4层及以上 cateory");
-        return books;
+        console.error('不允许4层及以上 cateory')
+        return books
     }
-};
-export default bookListSlice.reducer;
+}
+export default bookListSlice.reducer
