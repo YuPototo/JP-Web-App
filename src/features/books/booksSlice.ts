@@ -123,4 +123,9 @@ export const selectBooksByCategory = (state: RootState) => {
         return books
     }
 }
+
+export const selectBookById = (bookId: string) => (state: RootState) => {
+    return state.bookList.books.find((book) => book.id === bookId)
+}
+
 export default bookListSlice.reducer
