@@ -7,3 +7,58 @@
         @apply animate-pulse rounded-full bg-gray-200  dark:bg-gray-400;
     }
 }
+
+/* css rule for jp renderer elements */
+.jp-rich-text {
+    white-space: pre;
+}
+
+.jp-paragraph {
+    margin-bottom: 1em;
+}
+
+.jp-filler {
+    width: 25px;
+    padding: 0 22px;
+    border-bottom: 1px solid #555;
+}
+
+.jp-bold {
+    font-weight: bold;
+}
+
+.jp-underline {
+    text-decoration: underline;
+}
+
+/* css rule for jp tip renderer elements */
+.jp-tip {
+    position: relative;
+    display: inline-block;
+    border-bottom: 1px dashed #999;
+}
+
+.jp-tip > span:hover:not(.jp-tip-content) {
+    background-color: #dcfce7;
+    padding: 0 3px;
+}
+
+.jp-tip .jp-tip-content {
+    visibility: hidden;
+    width: 100px;
+    background-color: black;
+    color: white;
+    text-align: center;
+    padding: 10px;
+    border-radius: 10px;
+    position: absolute;
+    z-index: 1;
+}
+
+.jp-tip:hover .jp-tip-content {
+    visibility: visible;
+    width: 100px;
+    bottom: 100%;
+    left: 50%;
+    margin-left: -50px;
+}

@@ -5672,6 +5672,14 @@ jest@^27.4.3:
     import-local "^3.0.2"
     jest-cli "^27.5.1"
 
+jp_to_react@^1.1.0:
+  version "1.1.0"
+  resolved "https://registry.npmmirror.com/jp_to_react/-/jp_to_react-1.1.0.tgz#dbaca57c20c609160924d1c56daf6a7c631d2a6a"
+  integrity sha512-PMa9KyqO84whk8kZ1t6OtcIPqCiGhF7orYdhn3VRJEjOnaMDvX94n/96Pq1REi/8nFNuqy1zUV7IPOAzORaMcQ==
+  dependencies:
+    clsx "^1.2.1"
+    lodash "^4.17.21"
+
 "js-tokens@^3.0.0 || ^4.0.0", js-tokens@^4.0.0:
   version "4.0.0"
   resolved "https://registry.yarnpkg.com/js-tokens/-/js-tokens-4.0.0.tgz#19203fb59991df98e3a287050d4647cdeaf32499"
