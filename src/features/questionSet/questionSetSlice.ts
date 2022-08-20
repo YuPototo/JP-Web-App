@@ -1,8 +1,8 @@
 import { createSlice, PayloadAction } from '@reduxjs/toolkit'
+import { AppStartListening } from '../../store/listenerMiddleware'
 import { AppThunk, RootState } from '../../store/store'
 import { doneInChapter } from '../practiceChapter/practiceChapterSlice'
 import { questionSetApi } from './questionSetService'
-import { startAppListening } from '../../store/store'
 
 export interface QuestionSetState {
     questionSetId: string | null
@@ -154,30 +154,29 @@ export const pickOptionThunk =
         }
 
         dispatch(setOptionSelected({ questionIndex, optionIndex }))
-
-        const stateAfter = getState()
-        const isDoneAfter = selectIsDone(stateAfter)
-        if (!isDoneAfter) return
-
-        // set result
-        const isRight = selectIsRight(stateAfter)
-        const questionSetId = selectCurrentQuestionSet(stateAfter)?.id
-
-        if (!questionSetId) {
-            console.error('questionSetId 为 undefined')
-            return
-        }
-
-        dispatch(doneInChapter(questionSetId, isRight))
     }
 
 export default questionSetSlice.reducer
 
 /* listenerMiddleware */
+export const addQuestionSetListeners = (startListening: AppStartListening) => {
+    startListening({
+        actionCreator: setOptionSelected,
+        effect: (_, { getState, dispatch }) => {
+            const state = getState()
+            const isDone = selectIsDone(state)
+            if (!isDone) return
 
-startAppListening({
-    actionCreator: setOptionSelected,
-    effect: () => {
-        console.log(1)
-    },
-})
+            // set result
+            const isRight = selectIsRight(state)
+            const questionSetId = selectCurrentQuestionSet(state)?.id
+
+            if (!questionSetId) {
+                console.error('questionSetId 为 undefined')
+                return
+            }
+
+            dispatch(doneInChapter(questionSetId, isRight))
+        },
+    })
+}

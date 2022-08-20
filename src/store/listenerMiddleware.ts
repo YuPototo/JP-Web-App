@@ -1,9 +1,23 @@
 // https://redux-toolkit.js.org/api/createListenerMiddleware#typescript-usage
 
-import { createListenerMiddleware } from '@reduxjs/toolkit'
+import { addQuestionSetListeners } from '../features/questionSet/questionSetSlice'
+import { createListenerMiddleware, addListener } from '@reduxjs/toolkit'
+import type { TypedStartListening, TypedAddListener } from '@reduxjs/toolkit'
 
-const listenerMiddlewareInstance = createListenerMiddleware({
-    onError: () => console.error,
-})
+import type { RootState, AppDispatch } from './store'
 
-export default listenerMiddlewareInstance
+export const listenerMiddleware = createListenerMiddleware()
+
+export type AppStartListening = TypedStartListening<RootState, AppDispatch>
+
+export const startAppListening =
+    listenerMiddleware.startListening as AppStartListening
+
+export const addAppListener = addListener as TypedAddListener<
+    RootState,
+    AppDispatch
+>
+
+export default listenerMiddleware
+
+addQuestionSetListeners(startAppListening)

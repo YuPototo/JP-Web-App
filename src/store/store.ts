@@ -1,18 +1,11 @@
-import {
-    configureStore,
-    ThunkAction,
-    Action,
-    TypedStartListening,
-    TypedAddListener,
-    ListenerEffectAPI,
-    addListener,
-} from '@reduxjs/toolkit'
+import { configureStore, ThunkAction, Action } from '@reduxjs/toolkit'
 import { combineReducers } from 'redux'
 import { splitApi } from './query/splitApi'
 
 import bookListReducer from '../features/books/booksSlice'
 import questionSetReducer from '../features/questionSet/questionSetSlice'
 import practiceChapterReducer from '../features/practiceChapter/practiceChapterSlice'
+
 import listenerMiddleware from './listenerMiddleware'
 
 const rootReducer = combineReducers({
@@ -38,13 +31,3 @@ export type AppThunk<ReturnType = void> = ThunkAction<
     unknown,
     Action<string>
 >
-
-export type AppListenerEffectAPI = ListenerEffectAPI<RootState, AppDispatch>
-
-// @see https://redux-toolkit.js.org/api/createListenerMiddleware#typescript-usage
-export type AppStartListening = TypedStartListening<RootState, AppDispatch>
-export type AppAddListener = TypedAddListener<RootState, AppDispatch>
-
-export const startAppListening =
-    listenerMiddleware.startListening as AppStartListening
-export const addAppListener = addListener as AppAddListener
