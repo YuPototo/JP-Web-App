@@ -36,13 +36,15 @@ export const bookListSlice = createSlice({
                 state.selectedCategoryKeys = [key]
             } else if (index === 1) {
                 state.selectedCategoryKeys = [
-                    state.selectedCategoryKeys[0],
+                    // todo: remove as
+                    state.selectedCategoryKeys[0] as string,
                     key,
                 ]
             } else if (index === 2) {
                 state.selectedCategoryKeys = [
-                    state.selectedCategoryKeys[0],
-                    state.selectedCategoryKeys[1],
+                    // todo: remove as
+                    state.selectedCategoryKeys[0] as string,
+                    state.selectedCategoryKeys[1] as string,
                     key,
                 ]
             }

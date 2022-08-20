@@ -2,6 +2,7 @@ import { Toaster } from 'react-hot-toast'
 import { BrowserRouter, Routes, Route } from 'react-router-dom'
 import BookDetail from './pages/BookDetail'
 import Home from './pages/Home'
+import PracticePage from './pages/PracticePage'
 import RendererExample from './pages/RendererExample'
 
 function App() {
@@ -16,6 +17,10 @@ function App() {
                             <Route
                                 path="/books/:bookId"
                                 element={<BookDetail />}
+                            />
+                            <Route
+                                path="/chapter/:chapterId/index/:questionSetIndex"
+                                element={<PracticePage />}
                             />
                             <Route
                                 path="/renderExample"
