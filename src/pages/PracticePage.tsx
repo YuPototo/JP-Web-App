@@ -1,8 +1,14 @@
 import clsx from 'clsx'
 import { useNavigate, useParams } from 'react-router-dom'
-import QuestionSet from '../features/practice/QuestionSet'
-import { useGetChapterQuery } from '../features/practice/practiceService'
-import QuestionSetSkeleton from '../features/practice/QuestionSetSkeleton'
+import QuestionSet from '../features/questionSet/QuestionSet'
+import { useGetChapterQuery } from '../features/practiceChapter/chapterSerivce'
+import QuestionSetSkeleton from '../features/questionSet/QuestionSetSkeleton'
+import { useAppDispatch, useAppSelector } from '../store/hooks'
+import {
+    fillOptionsThunk,
+    resetQuestionSet,
+    selectIsDone,
+} from '../features/questionSet/questionSetSlice'
 
 export default function PracticePage() {
     const { chapterId, questionSetIndex: qSetIndexString } = useParams() as {
@@ -17,7 +23,9 @@ export default function PracticePage() {
         isSuccess: isQuerySuccess,
         error,
     } = useGetChapterQuery(chapterId)
+    const isDone = useAppSelector(selectIsDone)
 
+    const dispatch = useAppDispatch()
     const navigate = useNavigate()
 
     const qSetIndexNumber = parseInt(qSetIndexString)
@@ -27,6 +35,24 @@ export default function PracticePage() {
 
     if (isQueryError) {
         return <div>出错了：{JSON.stringify(error)}</div>
+    }
+
+    const handleToNext = () => {
+        dispatch(resetQuestionSet())
+        navigate(`/chapter/${chapterId}/index/${qSetIndexNumber + 1}`, {
+            replace: true,
+        })
+    }
+
+    const handleToLast = () => {
+        dispatch(resetQuestionSet())
+        navigate(`/chapter/${chapterId}/index/${qSetIndexNumber - 1}`, {
+            replace: true,
+        })
+    }
+
+    const handleFinishChapter = () => {
+        navigate('/chapterResult', { replace: true })
     }
 
     return (
@@ -57,24 +83,39 @@ export default function PracticePage() {
                     invisible: noLastQuestionSet(qSetIndexNumber),
                 })}
                 disabled={noLastQuestionSet(qSetIndexNumber)}
-                onClick={() =>
-                    navigate(
-                        `/chapter/${chapterId}/index/${qSetIndexNumber - 1}`
-                    )
-                }
+                onClick={handleToLast}
             >
                 上一题
             </button>
+
+            <button
+                className={clsx('m-2 bg-green-100 p-2', {
+                    invisible: isDone,
+                })}
+                onClick={() => dispatch(fillOptionsThunk())}
+            >
+                答案
+            </button>
+
             {hasNextQuestionSet(qSetIndexNumber, questionSets) && (
                 <button
-                    className={clsx('m-2 bg-green-100 p-2')}
-                    onClick={() =>
-                        navigate(
-                            `/chapter/${chapterId}/index/${qSetIndexNumber + 1}`
-                        )
-                    }
+                    className={clsx('m-2 bg-green-100 p-2', {
+                        invisible: !isDone,
+                    })}
+                    onClick={handleToNext}
                 >
                     下一题
+                </button>
+            )}
+
+            {isLastQuestionSet(qSetIndexNumber, questionSets) && (
+                <button
+                    className={clsx('m-2 bg-green-100 p-2', {
+                        invisible: !isDone,
+                    })}
+                    onClick={handleFinishChapter}
+                >
+                    完成本章
                 </button>
             )}
         </div>
@@ -119,4 +160,8 @@ function noLastQuestionSet(qSetIndex: number) {
 
 function hasNextQuestionSet(qSetIndex: number, questionSets: string[]) {
     return qSetIndex < questionSets.length - 1
+}
+
+function isLastQuestionSet(qSetIndex: number, questionSets: string[]) {
+    return qSetIndex === questionSets.length - 1
 }

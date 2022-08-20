@@ -3,10 +3,14 @@ import { combineReducers } from 'redux'
 import { splitApi } from './query/splitApi'
 
 import bookListReducer from '../features/books/booksSlice'
+import questionSetReducer from '../features/questionSet/questionSetSlice'
+import practiceChapterReducer from '../features/practiceChapter/practiceChapterSlice'
 
 const rootReducer = combineReducers({
     [splitApi.reducerPath]: splitApi.reducer,
     bookList: bookListReducer,
+    practiceChapter: practiceChapterReducer,
+    questionSet: questionSetReducer,
 })
 
 export const store = configureStore({

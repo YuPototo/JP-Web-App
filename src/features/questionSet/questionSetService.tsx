@@ -1,12 +1,5 @@
 import { splitApi } from '../../store/query/splitApi'
 
-interface ChapterInfo {
-    id: string
-    title: string
-    desc?: string
-    questionSets: string[]
-}
-
 export interface IQuestion {
     body?: string
     explanation?: string
@@ -20,18 +13,15 @@ export interface IAudio {
 }
 
 export interface IQuestionSet {
+    id: string
     body?: string
     questions: IQuestion[]
     explanation?: string
     audio?: IAudio
 }
 
-export const practiceApi = splitApi.injectEndpoints({
+export const questionSetApi = splitApi.injectEndpoints({
     endpoints: (build) => ({
-        getChapter: build.query<ChapterInfo, string>({
-            query: (chapterId) => `chapters/${chapterId}`,
-            transformResponse: (res: { chapter: ChapterInfo }) => res.chapter,
-        }),
         getQuestionSet: build.query<IQuestionSet, string>({
             query: (questionSetId) => `questionSets/${questionSetId}`,
             transformResponse: (res: { questionSet: IQuestionSet }) =>
@@ -40,4 +30,4 @@ export const practiceApi = splitApi.injectEndpoints({
     }),
 })
 
-export const { useGetChapterQuery, useGetQuestionSetQuery } = practiceApi
+export const { useGetQuestionSetQuery } = questionSetApi
