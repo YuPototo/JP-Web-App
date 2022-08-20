@@ -2,15 +2,14 @@ import { createSlice, PayloadAction } from '@reduxjs/toolkit'
 import { AppThunk, RootState } from '../../store/store'
 import { doneInChapter } from '../practiceChapter/practiceChapterSlice'
 import { questionSetApi } from './questionSetService'
+import { startAppListening } from '../../store/store'
 
 export interface QuestionSetState {
-    // questionSet: IQuestionSet | null
     questionSetId: string | null
     optionsSelected: number[]
 }
 
 const initialState: QuestionSetState = {
-    // questionSet: null,
     questionSetId: null,
     optionsSelected: [],
 }
@@ -29,7 +28,6 @@ export const questionSetSlice = createSlice({
                 optionIndex: number
             }>
         ) => {
-            console.log('inside reducer')
             const { questionIndex, optionIndex } = action.payload
             state.optionsSelected[questionIndex] = optionIndex
         },
@@ -174,3 +172,12 @@ export const pickOptionThunk =
     }
 
 export default questionSetSlice.reducer
+
+/* listenerMiddleware */
+
+startAppListening({
+    actionCreator: setOptionSelected,
+    effect: () => {
+        console.log(1)
+    },
+})
