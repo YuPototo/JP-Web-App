@@ -9,6 +9,7 @@ const initialState: QuestionSetState = {
     questionSetId: null,
     practiceMode: null,
     optionsSelected: [],
+    isError: false,
 }
 
 export const questionSetSlice = createSlice({
@@ -44,10 +45,13 @@ export const questionSetSlice = createSlice({
         ) => {
             state.optionsSelected = Array(payload.questionLength).fill(-1)
         },
+        setIsError: (state, { payload }: PayloadAction<boolean>) => {
+            state.isError = payload
+        },
     },
 })
 
-export const { setOptionSelected, fillOptions, initQuestionSet } =
+export const { setOptionSelected, fillOptions, initQuestionSet, setIsError } =
     questionSetSlice.actions
 
 /* selectors */

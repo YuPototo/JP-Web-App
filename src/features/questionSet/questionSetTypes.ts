@@ -2,6 +2,7 @@ export interface QuestionSetState {
     questionSetId: string | null
     practiceMode: PracticeMode | null
     optionsSelected: number[]
+    isError: boolean
 }
 
 export enum PracticeMode {

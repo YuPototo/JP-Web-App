@@ -46,6 +46,9 @@ export default function PracticeChapterPage() {
     } = useGetChapterQuery(chapterId)
 
     const isDone = useAppSelector(selectIsDone)
+    const isQuestionSetError = useAppSelector(
+        (state) => state.questionSet.isError
+    )
 
     const questionSets = chapterInfo?.questionSets || []
 
@@ -77,6 +80,8 @@ export default function PracticeChapterPage() {
     if (isQueryError) {
         return <div>出错了：{JSON.stringify(error)}</div>
     }
+
+    console.log(!isDone && !isQuestionSetError)
 
     return (
         <div>
@@ -126,7 +131,7 @@ export default function PracticeChapterPage() {
             {hasNextQuestionSet(questionSetIndex, questionSets) && (
                 <button
                     className={clsx('m-2 bg-green-100 p-2', {
-                        invisible: !isDone,
+                        invisible: !showNextBtn(isDone, isQuestionSetError),
                     })}
                     onClick={handleToNext}
                 >
@@ -137,7 +142,7 @@ export default function PracticeChapterPage() {
             {isLastQuestionSet(questionSetIndex, questionSets) && (
                 <button
                     className={clsx('m-2 bg-green-100 p-2', {
-                        invisible: !isDone,
+                        invisible: !showNextBtn(isDone, isQuestionSetError),
                     })}
                     onClick={handleFinishChapter}
                 >
@@ -190,4 +195,9 @@ function hasNextQuestionSet(qSetIndex: number, questionSets: string[]) {
 
 function isLastQuestionSet(qSetIndex: number, questionSets: string[]) {
     return qSetIndex === questionSets.length - 1
+}
+
+function showNextBtn(isDone: boolean, isQuestionSetError: boolean) {
+    if (isQuestionSetError) return true
+    return isDone
 }

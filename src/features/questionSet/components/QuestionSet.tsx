@@ -5,6 +5,7 @@ import {
     selectIsRight,
     selectIsDone,
     initQuestionSet,
+    setIsError,
 } from '../questionSetSlice'
 
 import { useEffect } from 'react'
@@ -31,9 +32,15 @@ export default function QuestionSet({ questionSetId, practiceMode }: Props) {
 
     const dispatch = useAppDispatch()
 
+    // init question set
     useEffect(() => {
         dispatch(initQuestionSet({ questionSetId, practiceMode }))
     }, [questionSetId, dispatch, practiceMode])
+
+    // set error
+    useEffect(() => {
+        isError && dispatch(setIsError(isError))
+    }, [isError, dispatch])
 
     const isDone = useAppSelector(selectIsDone)
     const isRight = useAppSelector(selectIsRight)
