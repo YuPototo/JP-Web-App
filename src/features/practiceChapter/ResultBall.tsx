@@ -1,5 +1,6 @@
 import clsx from 'clsx'
-import { QuestionSetResult, Result } from './practiceChapterTypes'
+import { Result } from './practiceChapterSlice'
+import type { QuestionSetResult } from './practiceChapterTypes'
 
 type Props = {
     questionSetResult: QuestionSetResult

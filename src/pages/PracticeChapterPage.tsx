@@ -12,6 +12,7 @@ import { useEffect } from 'react'
 import {
     initResults,
     setChapterId,
+    setQuestionSetIndex,
 } from '../features/practiceChapter/practiceChapterSlice'
 import { PracticeMode } from '../features/questionSet/questionSetTypes'
 
@@ -24,9 +25,17 @@ export default function PracticeChapterPage() {
         questionSetIndex: string
     }
 
+    const questionSetIndex = useAppSelector(
+        (state) => state.practiceChapter.questionSetIndex
+    )
+
     useEffect(() => {
         dispatch(setChapterId(chapterId))
     }, [chapterId, dispatch])
+
+    useEffect(() => {
+        dispatch(setQuestionSetIndex(parseInt(qSetIndexString)))
+    }, [qSetIndexString, dispatch])
 
     const {
         data: chapterInfo,
@@ -38,10 +47,9 @@ export default function PracticeChapterPage() {
 
     const isDone = useAppSelector(selectIsDone)
 
-    const qSetIndexNumber = parseInt(qSetIndexString)
-
     const questionSets = chapterInfo?.questionSets || []
-    const questionSetId = questionSets[qSetIndexNumber]
+
+    const questionSetId = questionSets[questionSetIndex]
 
     // init results
     useEffect(() => {
@@ -55,13 +63,13 @@ export default function PracticeChapterPage() {
     }
 
     const handleToNext = () => {
-        navigate(`/chapter/${chapterId}/index/${qSetIndexNumber + 1}`, {
+        navigate(`/chapter/${chapterId}/index/${questionSetIndex + 1}`, {
             replace: true,
         })
     }
 
     const handleToLast = () => {
-        navigate(`/chapter/${chapterId}/index/${qSetIndexNumber - 1}`, {
+        navigate(`/chapter/${chapterId}/index/${questionSetIndex - 1}`, {
             replace: true,
         })
     }
@@ -98,9 +106,9 @@ export default function PracticeChapterPage() {
 
             <button
                 className={clsx('m-2 bg-green-100 p-2', {
-                    invisible: noLastQuestionSet(qSetIndexNumber),
+                    invisible: noLastQuestionSet(questionSetIndex),
                 })}
-                disabled={noLastQuestionSet(qSetIndexNumber)}
+                disabled={noLastQuestionSet(questionSetIndex)}
                 onClick={handleToLast}
             >
                 上一题
@@ -115,7 +123,7 @@ export default function PracticeChapterPage() {
                 答案
             </button>
 
-            {hasNextQuestionSet(qSetIndexNumber, questionSets) && (
+            {hasNextQuestionSet(questionSetIndex, questionSets) && (
                 <button
                     className={clsx('m-2 bg-green-100 p-2', {
                         invisible: !isDone,
@@ -126,7 +134,7 @@ export default function PracticeChapterPage() {
                 </button>
             )}
 
-            {isLastQuestionSet(qSetIndexNumber, questionSets) && (
+            {isLastQuestionSet(questionSetIndex, questionSets) && (
                 <button
                     className={clsx('m-2 bg-green-100 p-2', {
                         invisible: !isDone,

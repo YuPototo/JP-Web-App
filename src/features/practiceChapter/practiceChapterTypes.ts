@@ -1,12 +1,9 @@
+import { Result } from './practiceChapterSlice'
+
 export interface PracticeChapterState {
     chapterId: string | null
+    questionSetIndex: number
     results: QuestionSetResult[]
-}
-
-export enum Result {
-    Right,
-    Wrong,
-    NoRecord,
 }
 
 export interface QuestionSetResult {

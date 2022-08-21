@@ -1,10 +1,17 @@
 import { createSlice, PayloadAction } from '@reduxjs/toolkit'
-import type { AppThunk, RootState } from '../../store/store'
 import { selectChapterQuetionSetIds } from './chapterSerivce'
-import { PracticeChapterState, Result } from './practiceChapterTypes'
+import { PracticeChapterState } from './practiceChapterTypes'
+import type { AppThunk, RootState } from '../../store/store'
+
+export enum Result {
+    Right,
+    Wrong,
+    NoRecord,
+}
 
 const initialState: PracticeChapterState = {
     chapterId: null,
+    questionSetIndex: 0,
     results: [],
 }
 
@@ -12,6 +19,9 @@ export const practiceChapterSlice = createSlice({
     name: 'practiceChapter',
     initialState,
     reducers: {
+        setQuestionSetIndex: (state, { payload }: PayloadAction<number>) => {
+            state.questionSetIndex = payload
+        },
         setChapterId: (state, { payload }: PayloadAction<string>) => {
             state.chapterId = payload
         },
@@ -34,7 +44,7 @@ export const practiceChapterSlice = createSlice({
     },
 })
 
-export const { setResult, initResults, setChapterId } =
+export const { setResult, initResults, setChapterId, setQuestionSetIndex } =
     practiceChapterSlice.actions
 
 // selectors
