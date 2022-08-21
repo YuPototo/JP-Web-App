@@ -1,4 +1,4 @@
-import type { Book } from './booksTypes'
+import type { Book } from '../booksTypes'
 
 interface Props {
     book: Book

@@ -1,11 +1,11 @@
 import { Toaster } from 'react-hot-toast'
 import { BrowserRouter, Routes, Route } from 'react-router-dom'
-import BookDetail from './pages/BookDetail'
+import BookDetail from './pages/BookDetailPage'
 import ChapterResultPage from './pages/ChapterResultPage'
-import Home from './pages/Home'
+import Home from './pages/HomePage'
 import PracticeChapterPage from './pages/PracticeChapterPage'
 import PracticeReviewPage from './pages/PracticeReviewPage'
-import RendererExample from './pages/RendererExample'
+import RendererExample from './pages/RendererExamplePage'
 
 function App() {
     return (

@@ -4,10 +4,10 @@ import {
     selectNextInfo,
     NextInfoResult,
     NextInfoResultType,
-} from '../features/content/contentService'
+    booksApi,
+} from '../features/books/booksService'
 import ResultBall from '../features/practiceChapter/ResultBall'
 import { useAppDispatch, useAppSelector } from '../store/hooks'
-import { contentApi } from '../features/content/contentService'
 
 export default function ChapterResultPage() {
     const navigate = useNavigate()
@@ -63,7 +63,7 @@ function NextInfo({
 
     useEffect(() => {
         if (nextInfo.resultType === NextInfoResultType.NoContent) {
-            dispatch(contentApi.endpoints.getBookContent.initiate(bookId))
+            dispatch(booksApi.endpoints.getBookContent.initiate(bookId))
         }
     }, [nextInfo.resultType, bookId, dispatch])
 

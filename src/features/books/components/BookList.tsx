@@ -1,8 +1,8 @@
 import React from 'react'
-import { useAppSelector } from '../../store/hooks'
+import { useAppSelector } from '../../../store/hooks'
 import BookCard from './BookCard'
-import { useGetBooksQuery } from './booksService'
-import { selectBooksByCategory } from './booksSlice'
+import { useGetBooksQuery } from '../booksService'
+import { selectBooksByCategory } from '../booksSlice'
 import { useNavigate } from 'react-router-dom'
 
 export default function BookList() {

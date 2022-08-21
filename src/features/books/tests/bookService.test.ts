@@ -1,5 +1,5 @@
-import { getCurrentSectionIndex } from '../contentService'
-import { ISection } from '../contentTypes'
+import { getCurrentSectionIndex } from '../booksService'
+import type { ISection } from '../booksTypes'
 
 describe('getCurrentSectionIndex', () => {
     it('simple case 1', () => {

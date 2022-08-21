@@ -1,9 +1,9 @@
 import clsx from 'clsx'
-import { useAppDispatch, useAppSelector } from '../../store/hooks'
-import stringifyRtkQuerryError from '../../store/storeUtils/stringifyRtkQuerryError'
-import { selectChildrenByLevel, setCategoryKey } from './booksSlice'
-import { useGetCategoriyesQuery } from './booksService'
-import type { Category } from './booksTypes'
+import { useAppDispatch, useAppSelector } from '../../../store/hooks'
+import stringifyRtkQuerryError from '../../../store/storeUtils/stringifyRtkQuerryError'
+import { selectChildrenByLevel, setCategoryKey } from '../booksSlice'
+import { useGetCategoriyesQuery } from '../booksService'
+import type { Category } from '../booksTypes'
 
 export default function CategoryNav() {
     const { isLoading, error } = useGetCategoriyesQuery()

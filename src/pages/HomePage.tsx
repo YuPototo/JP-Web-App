@@ -1,6 +1,6 @@
 import React from 'react'
-import BookList from '../features/books/BookList'
-import CategoryNav from '../features/books/Category'
+import BookList from '../features/books/components/BookList'
+import CategoryNav from '../features/books/components/Category'
 
 export default function home() {
     return (

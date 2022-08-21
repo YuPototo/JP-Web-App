@@ -1,6 +1,6 @@
 import { useParams } from 'react-router-dom'
-import BookCard from '../features/books/BookCard'
-import Content from '../features/content/Content'
+import BookCard from '../features/books/components/BookCard'
+import Content from '../features/books/components/Content'
 import { useAppDispatch, useAppSelector } from '../store/hooks'
 import { selectBookById, setCurrentBookId } from '../features/books/booksSlice'
 import { useEffect } from 'react'

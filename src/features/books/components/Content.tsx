@@ -1,8 +1,8 @@
 import clsx from 'clsx'
 import React, { useState } from 'react'
 import { useNavigate } from 'react-router-dom'
-import { useGetBookContentQuery } from './contentService'
-import { IChapter, ISection } from './contentTypes'
+import { useGetBookContentQuery } from '../booksService'
+import type { IChapter, ISection } from '../booksTypes'
 
 type Props = {
     bookId: string
