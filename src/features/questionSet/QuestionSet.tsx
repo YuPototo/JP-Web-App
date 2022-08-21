@@ -1,4 +1,4 @@
-import { IAudio, IQuestion, useGetQuestionSetQuery } from './questionSetService'
+import { useGetQuestionSetQuery } from './questionSetService'
 import QuestionSetSkeleton from './QuestionSetSkeleton'
 import RichtTextRenderer from 'jp_to_react'
 import { useAppDispatch, useAppSelector } from '../../store/hooks'
@@ -8,10 +8,10 @@ import {
     selectIsRight,
     selectIsDone,
     initQuestionSet,
-    PracticeMode,
 } from './questionSetSlice'
 import clsx from 'clsx'
 import { useEffect } from 'react'
+import { IAudio, IQuestion, PracticeMode } from './questionSetTypes'
 
 type Props = {
     questionSetId: string

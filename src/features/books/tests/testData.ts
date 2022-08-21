@@ -1,4 +1,4 @@
-import { Book } from '../booksTypes'
+import { IBook } from '../booksTypes'
 
 /**
  * Test data
@@ -81,7 +81,7 @@ const categoryStudy = {
 export const categories = [categoryJLPT, categoryStudy]
 
 /* books */
-export const books: Book[] = [
+export const books: IBook[] = [
     {
         title: '新标日 - 初级',
         id: '62dfa04e2391de581a76ecdc',

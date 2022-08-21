@@ -1,10 +1,17 @@
+export interface BookListState {
+    categories: ICategory[]
+    selectedCategoryKeys: CategoryKey[]
+    books: IBook[]
+    currentBookId: string | null
+}
+
 /* cateogry */
 export type CategoryKey = string
 
-export interface Category {
+export interface ICategory {
     key: CategoryKey
     displayValue: string
-    children?: Category[]
+    children?: ICategory[]
 }
 
 /* books */
@@ -13,7 +20,7 @@ interface BookCategory {
     child?: BookCategory
 }
 
-export interface Book {
+export interface IBook {
     id: string
     title: string
     category: BookCategory

@@ -6,7 +6,6 @@ import QuestionSetSkeleton from '../features/questionSet/QuestionSetSkeleton'
 import { useAppDispatch, useAppSelector } from '../store/hooks'
 import {
     fillOptionsThunk,
-    PracticeMode,
     selectIsDone,
 } from '../features/questionSet/questionSetSlice'
 import { useEffect } from 'react'
@@ -14,8 +13,9 @@ import {
     initResults,
     setChapterId,
 } from '../features/practiceChapter/practiceChapterSlice'
+import { PracticeMode } from '../features/questionSet/questionSetTypes'
 
-export default function PracticePage() {
+export default function PracticeChapterPage() {
     const dispatch = useAppDispatch()
     const navigate = useNavigate()
 
@@ -35,6 +35,7 @@ export default function PracticePage() {
         isSuccess: isQuerySuccess,
         error,
     } = useGetChapterQuery(chapterId)
+
     const isDone = useAppSelector(selectIsDone)
 
     const qSetIndexNumber = parseInt(qSetIndexString)

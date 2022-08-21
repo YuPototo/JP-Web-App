@@ -6,7 +6,9 @@ import { selectBookById, setCurrentBookId } from '../features/books/booksSlice'
 import { useEffect } from 'react'
 
 export default function BookDetail() {
-    // todo: remove as
+    /** Tech debt
+     * * remove as keyword
+     */
     const { bookId } = useParams() as { bookId: string }
     const dispatch = useAppDispatch()
 

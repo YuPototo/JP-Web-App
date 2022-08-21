@@ -1,14 +1,7 @@
 import { createSlice, PayloadAction } from '@reduxjs/toolkit'
 import type { RootState } from '../../store/store'
-import type { Book, Category, CategoryKey } from './booksTypes'
+import type { BookListState } from './booksTypes'
 import { booksApi } from './booksService'
-
-export interface BookListState {
-    categories: Category[]
-    selectedCategoryKeys: CategoryKey[]
-    books: Book[]
-    currentBookId: string | null
-}
 
 const initialState: BookListState = {
     categories: [],

@@ -1,5 +1,4 @@
 import { splitApi } from '../../store/query/splitApi'
-import { RootState } from '../../store/store'
 
 interface ChapterInfo {
     id: string

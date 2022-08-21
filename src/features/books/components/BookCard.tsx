@@ -1,7 +1,7 @@
-import type { Book } from '../booksTypes'
+import type { IBook } from '../booksTypes'
 
 interface Props {
-    book: Book
+    book: IBook
 }
 
 function BookCard({ book }: Props) {

@@ -3,16 +3,7 @@ import { AppStartListening } from '../../store/listenerMiddleware'
 import { AppThunk, RootState } from '../../store/store'
 import { doneInChapter } from '../practiceChapter/practiceChapterSlice'
 import { questionSetApi } from './questionSetService'
-
-export enum PracticeMode {
-    Chapter,
-}
-
-export interface QuestionSetState {
-    questionSetId: string | null
-    practiceMode: PracticeMode | null
-    optionsSelected: number[]
-}
+import { PracticeMode, QuestionSetState } from './questionSetTypes'
 
 const initialState: QuestionSetState = {
     questionSetId: null,
