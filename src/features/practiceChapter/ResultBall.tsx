@@ -8,7 +8,7 @@ type Props = {
 }
 
 export default function ResultBall({ questionSetResult, index }: Props) {
-    const { questionSetId, result } = questionSetResult
+    const { result } = questionSetResult
     return (
         <div
             className={clsx(
@@ -19,7 +19,6 @@ export default function ResultBall({ questionSetResult, index }: Props) {
                     'bg-gray-300': result === Result.NoRecord,
                 }
             )}
-            // onClick={() => handleClickBall(index)}
         >
             {index + 1}
         </div>

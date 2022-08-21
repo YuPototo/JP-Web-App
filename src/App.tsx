@@ -25,7 +25,7 @@ function App() {
                                 element={<PracticeChapterPage />}
                             />
                             <Route
-                                path="/chapterResult"
+                                path="/chapterResult/:chapterId"
                                 element={<ChapterResultPage />}
                             />
                             <Route

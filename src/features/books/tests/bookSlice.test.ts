@@ -19,6 +19,7 @@ describe('reducer: setCategoryKey', () => {
             categories,
             selectedCategoryKeys: [],
             books: [],
+            currentBookId: null,
         }
 
         expect(
@@ -36,6 +37,7 @@ describe('reducer: setCategoryKey', () => {
             categories,
             selectedCategoryKeys: ['jlpt'],
             books: [],
+            currentBookId: null,
         }
 
         expect(
@@ -53,6 +55,7 @@ describe('reducer: setCategoryKey', () => {
             categories,
             selectedCategoryKeys: ['jlpt', 'n1'],
             books: [],
+            currentBookId: null,
         }
 
         expect(
@@ -70,6 +73,7 @@ describe('reducer: setCategoryKey', () => {
             categories,
             selectedCategoryKeys: ['jlpt', 'n1', 'reading'],
             books: [],
+            currentBookId: null,
         }
 
         expect(
@@ -87,6 +91,7 @@ describe('reducer: setCategoryKey', () => {
             categories,
             selectedCategoryKeys: ['jlpt', 'n1', 'reading'],
             books: [],
+            currentBookId: null,
         }
 
         expect(
@@ -104,6 +109,7 @@ describe('reducer: setCategoryKey', () => {
             categories,
             selectedCategoryKeys: [],
             books: [],
+            currentBookId: null,
         }
 
         expect(
@@ -120,6 +126,7 @@ describe('selectChildrenByLevel', () => {
         categories,
         selectedCategoryKeys: [],
         books: [],
+        currentBookId: null,
     }
 
     it("select ['jlpt']", () => {
@@ -175,6 +182,7 @@ describe('selectBooksByCategory', () => {
         categories,
         selectedCategoryKeys: [],
         books,
+        currentBookId: null,
     }
 
     it('no selection', () => {

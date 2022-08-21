@@ -66,7 +66,7 @@ export default function PracticePage() {
     }
 
     const handleFinishChapter = () => {
-        navigate('/chapterResult', { replace: true })
+        navigate(`/chapterResult/${chapterId}`, { replace: true })
     }
 
     return (
