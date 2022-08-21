@@ -1,6 +1,6 @@
 import React from 'react'
 import { useNavigate, useParams } from 'react-router-dom'
-import QuestionSet from '../features/questionSet/QuestionSet'
+import QuestionSet from '../features/questionSet/components/QuestionSet'
 import { fillOptionsThunk } from '../features/questionSet/questionSetSlice'
 import { PracticeMode } from '../features/questionSet/questionSetTypes'
 import { useAppDispatch } from '../store/hooks'

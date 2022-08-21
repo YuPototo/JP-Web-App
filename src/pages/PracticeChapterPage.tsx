@@ -1,8 +1,8 @@
 import clsx from 'clsx'
 import { useNavigate, useParams } from 'react-router-dom'
-import QuestionSet from '../features/questionSet/QuestionSet'
+import QuestionSet from '../features/questionSet/components/QuestionSet'
 import { useGetChapterQuery } from '../features/practiceChapter/chapterSerivce'
-import QuestionSetSkeleton from '../features/questionSet/QuestionSetSkeleton'
+import QuestionSetSkeleton from '../features/questionSet/components/QuestionSetSkeleton'
 import { useAppDispatch, useAppSelector } from '../store/hooks'
 import {
     fillOptionsThunk,
@@ -58,10 +58,6 @@ export default function PracticeChapterPage() {
         }
     }, [dispatch, chapterId, isQuerySuccess, questionSets.length])
 
-    if (isQueryError) {
-        return <div>出错了：{JSON.stringify(error)}</div>
-    }
-
     const handleToNext = () => {
         navigate(`/chapter/${chapterId}/index/${questionSetIndex + 1}`, {
             replace: true,
@@ -76,6 +72,10 @@ export default function PracticeChapterPage() {
 
     const handleFinishChapter = () => {
         navigate(`/chapterResult/${chapterId}`, { replace: true })
+    }
+
+    if (isQueryError) {
+        return <div>出错了：{JSON.stringify(error)}</div>
     }
 
     return (
