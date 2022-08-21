@@ -28,6 +28,7 @@ export const questionSetSlice = createSlice({
             state.questionSetId = payload.questionSetId
             state.practiceMode = payload.practiceMode
             state.optionsSelected = []
+            state.isError = false
         },
         setOptionSelected: (
             state,
