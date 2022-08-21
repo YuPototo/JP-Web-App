@@ -1,5 +1,6 @@
 import { createSlice, PayloadAction } from '@reduxjs/toolkit'
 import type { AppThunk, RootState } from '../../store/store'
+import { selectChapterQuetionSetIds } from './chapterSerivce'
 
 export enum Result {
     Right,
@@ -13,10 +14,12 @@ export interface QuestionSetResult {
 }
 
 export interface PracticeChapterState {
+    chapterId: string | null
     results: QuestionSetResult[]
 }
 
 const initialState: PracticeChapterState = {
+    chapterId: null,
     results: [],
 }
 
@@ -24,29 +27,61 @@ export const practiceChapterSlice = createSlice({
     name: 'practiceChapter',
     initialState,
     reducers: {
-        pushResult: (
+        setChapterId: (state, { payload }: PayloadAction<string>) => {
+            state.chapterId = payload
+        },
+        initResults: (state, { payload }: PayloadAction<number>) => {
+            state.results = Array(payload).fill(Result.NoRecord)
+        },
+        setResult: (
             state,
             {
                 payload,
             }: PayloadAction<{
+                questionSetIndex: number
                 questionSetId: string
                 result: Result
             }>
         ) => {
-            const { questionSetId, result } = payload
-            state.results.push({ questionSetId, result })
+            const { questionSetIndex, questionSetId, result } = payload
+            state.results[questionSetIndex] = { questionSetId, result }
         },
     },
 })
 
-export const { pushResult } = practiceChapterSlice.actions
+export const { setResult, initResults, setChapterId } =
+    practiceChapterSlice.actions
+
+// selectors
+export const selectChapterId = (state: RootState) =>
+    state.practiceChapter.chapterId
 
 // thunks
 export const doneInChapter =
     (questionSetId: string, isRight: boolean): AppThunk =>
-    (dispatch) => {
+    (dispatch, getState) => {
         const result = isRight ? Result.Right : Result.Wrong
-        dispatch(pushResult({ questionSetId, result }))
+
+        // 获取当前 questionSet 的 index
+        // 一个方法是：获取 api query 里的 questionSet Array，然后获取其 index
+        const state = getState()
+        const chapterId = selectChapterId(state)
+        if (!chapterId) {
+            console.error('chapterId is null')
+            return
+        }
+
+        const questionSetIds =
+            selectChapterQuetionSetIds(chapterId)(state).data?.questionSets
+
+        if (!questionSetIds) {
+            console.error('questionSetIds is null')
+            return
+        }
+
+        const questionSetIndex = questionSetIds.indexOf(questionSetId)
+
+        dispatch(setResult({ questionSetIndex, questionSetId, result }))
     }
 
 export default practiceChapterSlice.reducer

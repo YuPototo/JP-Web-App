@@ -3,7 +3,8 @@ import { BrowserRouter, Routes, Route } from 'react-router-dom'
 import BookDetail from './pages/BookDetail'
 import ChapterResultPage from './pages/ChapterResultPage'
 import Home from './pages/Home'
-import PracticePage from './pages/PracticePage'
+import PracticeChapterPage from './pages/PracticeChapterPage'
+import PracticeReviewPage from './pages/PracticeReviewPage'
 import RendererExample from './pages/RendererExample'
 
 function App() {
@@ -21,11 +22,15 @@ function App() {
                             />
                             <Route
                                 path="/chapter/:chapterId/index/:questionSetIndex"
-                                element={<PracticePage />}
+                                element={<PracticeChapterPage />}
                             />
                             <Route
                                 path="/chapterResult"
                                 element={<ChapterResultPage />}
+                            />
+                            <Route
+                                path="/practiceReview/:questionSetId"
+                                element={<PracticeReviewPage />}
                             />
                             <Route
                                 path="/renderExample"

@@ -1,4 +1,5 @@
 import { splitApi } from '../../store/query/splitApi'
+import { RootState } from '../../store/store'
 
 interface ChapterInfo {
     id: string
@@ -17,3 +18,9 @@ export const chapterApi = splitApi.injectEndpoints({
 })
 
 export const { useGetChapterQuery } = chapterApi
+
+/* api slice selectors */
+
+export const selectChapterQuetionSetIds = (chapterId: string) => {
+    return chapterApi.endpoints.getChapter.select(chapterId)
+}

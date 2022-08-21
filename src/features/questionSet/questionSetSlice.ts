@@ -4,13 +4,19 @@ import { AppThunk, RootState } from '../../store/store'
 import { doneInChapter } from '../practiceChapter/practiceChapterSlice'
 import { questionSetApi } from './questionSetService'
 
+export enum PracticeMode {
+    Chapter,
+}
+
 export interface QuestionSetState {
     questionSetId: string | null
+    practiceMode: PracticeMode | null
     optionsSelected: number[]
 }
 
 const initialState: QuestionSetState = {
     questionSetId: null,
+    practiceMode: null,
     optionsSelected: [],
 }
 
@@ -18,8 +24,18 @@ export const questionSetSlice = createSlice({
     name: 'questionSet',
     initialState,
     reducers: {
-        setQuestionSetId: (state, { payload }: PayloadAction<string>) => {
-            state.questionSetId = payload
+        initQuestionSet: (
+            state,
+            {
+                payload,
+            }: PayloadAction<{
+                questionSetId: string
+                practiceMode: PracticeMode
+            }>
+        ) => {
+            state.questionSetId = payload.questionSetId
+            state.practiceMode = payload.practiceMode
+            state.optionsSelected = []
         },
         setOptionSelected: (
             state,
@@ -37,19 +53,11 @@ export const questionSetSlice = createSlice({
         ) => {
             state.optionsSelected = Array(payload.questionLength).fill(-1)
         },
-        resetQuestionSet: (state) => {
-            state.questionSetId = null
-            state.optionsSelected = []
-        },
     },
 })
 
-export const {
-    setOptionSelected,
-    fillOptions,
-    resetQuestionSet,
-    setQuestionSetId,
-} = questionSetSlice.actions
+export const { setOptionSelected, fillOptions, initQuestionSet } =
+    questionSetSlice.actions
 
 /* selectors */
 export const selectPickedIndex =
@@ -114,7 +122,7 @@ export const selectIsDone = (state: RootState) => {
     return nonEmptySelection.length === questionSet.questions.length
 }
 
-// thunks
+/* thunks */
 export const fillOptionsThunk = (): AppThunk => (dispatch, getState) => {
     const state = getState()
 
@@ -133,6 +141,7 @@ export const fillOptionsThunk = (): AppThunk => (dispatch, getState) => {
         console.error('questionSetId 为 undefined')
         return
     }
+
     dispatch(doneInChapter(questionSetId, false))
 }
 
@@ -159,6 +168,7 @@ export const pickOptionThunk =
 export default questionSetSlice.reducer
 
 /* listenerMiddleware */
+
 export const addQuestionSetListeners = (startListening: AppStartListening) => {
     startListening({
         actionCreator: setOptionSelected,
@@ -176,7 +186,15 @@ export const addQuestionSetListeners = (startListening: AppStartListening) => {
                 return
             }
 
-            dispatch(doneInChapter(questionSetId, isRight))
+            const practiceMode = state.questionSet.practiceMode
+
+            switch (practiceMode) {
+                case PracticeMode.Chapter:
+                    dispatch(doneInChapter(questionSetId, isRight))
+                    break
+                default:
+                    console.log(`unhandled practice mode: ${practiceMode}`)
+            }
         },
     })
 }

@@ -6,15 +6,27 @@ import QuestionSetSkeleton from '../features/questionSet/QuestionSetSkeleton'
 import { useAppDispatch, useAppSelector } from '../store/hooks'
 import {
     fillOptionsThunk,
-    resetQuestionSet,
+    PracticeMode,
     selectIsDone,
 } from '../features/questionSet/questionSetSlice'
+import { useEffect } from 'react'
+import {
+    initResults,
+    setChapterId,
+} from '../features/practiceChapter/practiceChapterSlice'
 
 export default function PracticePage() {
+    const dispatch = useAppDispatch()
+    const navigate = useNavigate()
+
     const { chapterId, questionSetIndex: qSetIndexString } = useParams() as {
         chapterId: string
         questionSetIndex: string
     }
+
+    useEffect(() => {
+        dispatch(setChapterId(chapterId))
+    }, [chapterId, dispatch])
 
     const {
         data: chapterInfo,
@@ -25,27 +37,29 @@ export default function PracticePage() {
     } = useGetChapterQuery(chapterId)
     const isDone = useAppSelector(selectIsDone)
 
-    const dispatch = useAppDispatch()
-    const navigate = useNavigate()
-
     const qSetIndexNumber = parseInt(qSetIndexString)
 
     const questionSets = chapterInfo?.questionSets || []
     const questionSetId = questionSets[qSetIndexNumber]
+
+    // init results
+    useEffect(() => {
+        if (isQuerySuccess) {
+            dispatch(initResults(questionSets.length))
+        }
+    }, [dispatch, chapterId, isQuerySuccess, questionSets.length])
 
     if (isQueryError) {
         return <div>出错了：{JSON.stringify(error)}</div>
     }
 
     const handleToNext = () => {
-        dispatch(resetQuestionSet())
         navigate(`/chapter/${chapterId}/index/${qSetIndexNumber + 1}`, {
             replace: true,
         })
     }
 
     const handleToLast = () => {
-        dispatch(resetQuestionSet())
         navigate(`/chapter/${chapterId}/index/${qSetIndexNumber - 1}`, {
             replace: true,
         })
@@ -70,7 +84,10 @@ export default function PracticePage() {
 
             {isQuerySuccess &&
                 (questionSetId ? (
-                    <QuestionSet questionSetId={questionSetId} />
+                    <QuestionSet
+                        questionSetId={questionSetId}
+                        practiceMode={PracticeMode.Chapter}
+                    />
                 ) : (
                     <div>
                         出错了：chapter 内没有第{qSetIndexString}个 question set

@@ -7,16 +7,18 @@ import {
     selectPickedIndex,
     selectIsRight,
     selectIsDone,
-    setQuestionSetId,
+    initQuestionSet,
+    PracticeMode,
 } from './questionSetSlice'
 import clsx from 'clsx'
 import { useEffect } from 'react'
 
 type Props = {
     questionSetId: string
+    practiceMode: PracticeMode
 }
 
-export default function QuestionSet({ questionSetId }: Props) {
+export default function QuestionSet({ questionSetId, practiceMode }: Props) {
     const {
         data: questionSet,
         isLoading, // 第1次请求
@@ -30,8 +32,8 @@ export default function QuestionSet({ questionSetId }: Props) {
     const dispatch = useAppDispatch()
 
     useEffect(() => {
-        dispatch(setQuestionSetId(questionSetId))
-    }, [questionSetId, dispatch])
+        dispatch(initQuestionSet({ questionSetId, practiceMode }))
+    }, [questionSetId, dispatch, practiceMode])
 
     const isDone = useAppSelector(selectIsDone)
     const isRight = useAppSelector(selectIsRight)
@@ -100,7 +102,12 @@ function Option({
     return (
         <div
             onClick={() =>
-                dispatch(pickOptionThunk({ questionIndex, optionIndex }))
+                dispatch(
+                    pickOptionThunk({
+                        questionIndex,
+                        optionIndex,
+                    })
+                )
             }
             className={clsx(
                 '"my-4 hover:bg-yellow-100" p-2 ',
