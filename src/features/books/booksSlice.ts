@@ -1,17 +1,17 @@
 import { createSlice, PayloadAction } from '@reduxjs/toolkit'
 import type { RootState } from '../../store/store'
-import type { BookListState } from './booksTypes'
+import type { BooksState } from './booksTypes'
 import { booksApi } from './booksService'
 
-const initialState: BookListState = {
+const initialState: BooksState = {
     categories: [],
     selectedCategoryKeys: [],
     books: [],
     currentBookId: null,
 }
 
-export const bookListSlice = createSlice({
-    name: 'bookList',
+export const booksSlice = createSlice({
+    name: 'books',
     initialState,
     reducers: {
         setCurrentBookId: (state, { payload }: PayloadAction<string>) => {
@@ -65,7 +65,7 @@ export const bookListSlice = createSlice({
     },
 })
 
-export const { setCategoryKey, setCurrentBookId } = bookListSlice.actions
+export const { setCategoryKey, setCurrentBookId } = booksSlice.actions
 
 /* selectors */
 
@@ -75,8 +75,8 @@ export const { setCategoryKey, setCurrentBookId } = bookListSlice.actions
  */
 export const selectChildrenByLevel =
     (categoryLevel: number) => (state: RootState) => {
-        const categories = state.bookList.categories
-        const selectedCategoryKeys = state.bookList.selectedCategoryKeys
+        const categories = state.books.categories
+        const selectedCategoryKeys = state.books.selectedCategoryKeys
         if (categoryLevel === 0) {
             const key = selectedCategoryKeys?.[0]
             return categories.find((c) => c.key === key)?.children
@@ -93,8 +93,8 @@ export const selectChildrenByLevel =
     }
 
 export const selectBooksByCategory = (state: RootState) => {
-    const selectedCategoryKeys = state.bookList.selectedCategoryKeys
-    const books = state.bookList.books.filter((book) => !book.hidden)
+    const selectedCategoryKeys = state.books.selectedCategoryKeys
+    const books = state.books.books.filter((book) => !book.hidden)
 
     const selectedCategoryLength = selectedCategoryKeys.length
     if (selectedCategoryLength === 0) {
@@ -125,7 +125,7 @@ export const selectBooksByCategory = (state: RootState) => {
 }
 
 export const selectBookById = (bookId?: string) => (state: RootState) => {
-    return state.bookList.books.find((book) => book.id === bookId)
+    return state.books.books.find((book) => book.id === bookId)
 }
 
-export default bookListSlice.reducer
+export default booksSlice.reducer

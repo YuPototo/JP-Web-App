@@ -1,10 +1,10 @@
 import { RootState } from '../../../store/store'
 import bookSliceReducer, {
-    BookListState,
     selectChildrenByLevel,
     setCategoryKey,
     selectBooksByCategory,
 } from '../booksSlice'
+import { BooksState } from '../booksTypes'
 import {
     categories,
     jlptChildren,
@@ -15,10 +15,10 @@ import {
 
 describe('reducer: setCategoryKey', () => {
     it('should set 1st level category key', () => {
-        const initialState: BookListState = {
+        const initialState: BooksState = {
             categories,
             selectedCategoryKeys: [],
-            books: [],
+            books,
             currentBookId: null,
         }
 
@@ -33,7 +33,7 @@ describe('reducer: setCategoryKey', () => {
     })
 
     it('should set 2nd level category key', () => {
-        const initialState: BookListState = {
+        const initialState: BooksState = {
             categories,
             selectedCategoryKeys: ['jlpt'],
             books: [],
@@ -51,7 +51,7 @@ describe('reducer: setCategoryKey', () => {
     })
 
     it('should set 3rd level category key', () => {
-        const initialState: BookListState = {
+        const initialState: BooksState = {
             categories,
             selectedCategoryKeys: ['jlpt', 'n1'],
             books: [],
@@ -69,7 +69,7 @@ describe('reducer: setCategoryKey', () => {
     })
 
     it('should remove 2nd and 3rd level key if 1st level key is changed', () => {
-        const initialState: BookListState = {
+        const initialState: BooksState = {
             categories,
             selectedCategoryKeys: ['jlpt', 'n1', 'reading'],
             books: [],
@@ -87,7 +87,7 @@ describe('reducer: setCategoryKey', () => {
     })
 
     it('should remove remove 3rd level key if 2nd level key is changed', () => {
-        const initialState: BookListState = {
+        const initialState: BooksState = {
             categories,
             selectedCategoryKeys: ['jlpt', 'n1', 'reading'],
             books: [],
@@ -105,7 +105,7 @@ describe('reducer: setCategoryKey', () => {
     })
 
     it("shouldn't change state when index is larger than selectedCategoryKeys.length", () => {
-        const initialState: BookListState = {
+        const initialState: BooksState = {
             categories,
             selectedCategoryKeys: [],
             books: [],
@@ -122,7 +122,7 @@ describe('reducer: setCategoryKey', () => {
 })
 
 describe('selectChildrenByLevel', () => {
-    const initialState: BookListState = {
+    const initialState: BooksState = {
         categories,
         selectedCategoryKeys: [],
         books: [],
@@ -133,7 +133,7 @@ describe('selectChildrenByLevel', () => {
         initialState.selectedCategoryKeys = ['jlpt']
 
         const result = selectChildrenByLevel(0)({
-            bookList: initialState,
+            books: initialState,
         } as RootState)
         expect(result).toEqual(jlptChildren)
     })
@@ -142,7 +142,7 @@ describe('selectChildrenByLevel', () => {
         initialState.selectedCategoryKeys = ['study']
 
         const result = selectChildrenByLevel(0)({
-            bookList: initialState,
+            books: initialState,
         } as RootState)
         expect(result).toEqual(studyChidlren)
     })
@@ -150,7 +150,7 @@ describe('selectChildrenByLevel', () => {
     it("select ['jlpt', 'n1']", () => {
         initialState.selectedCategoryKeys = ['jlpt', 'n1']
         const result = selectChildrenByLevel(1)({
-            bookList: initialState,
+            books: initialState,
         } as RootState)
         expect(result).toEqual(practiceTypeCategories)
     })
@@ -158,7 +158,7 @@ describe('selectChildrenByLevel', () => {
     it("select ['study', 'newStandardJP']", () => {
         initialState.selectedCategoryKeys = ['study', 'newStandardJP']
         const result = selectChildrenByLevel(1)({
-            bookList: initialState,
+            books: initialState,
         } as RootState)
         expect(result).toEqual([
             {
@@ -178,7 +178,7 @@ describe('selectChildrenByLevel', () => {
 })
 
 describe('selectBooksByCategory', () => {
-    const initialState: BookListState = {
+    const initialState: BooksState = {
         categories,
         selectedCategoryKeys: [],
         books,
@@ -187,7 +187,7 @@ describe('selectBooksByCategory', () => {
 
     it('no selection', () => {
         const result = selectBooksByCategory({
-            bookList: initialState,
+            books: initialState,
         } as RootState)
         expect(result).toEqual(books)
     })
@@ -195,111 +195,27 @@ describe('selectBooksByCategory', () => {
     it('select level 1', () => {
         initialState.selectedCategoryKeys = ['jlpt']
         const result = selectBooksByCategory({
-            bookList: initialState,
+            books: initialState,
         } as RootState)
-        const expectedResult = [
-            {
-                title: 'n1 阅读',
-                id: '62e1d10885a923ba6e1acc25',
-                category: {
-                    key: 'jlpt',
-                    child: {
-                        key: 'n1',
-                        child: {
-                            key: 'reading',
-                        },
-                    },
-                },
-                hidden: false,
-                desc: '',
-                cover: 'test_cover',
-            },
-            {
-                title: 'n1 单词',
-                id: '62e1d10885a923ba6e1acc25',
-                category: {
-                    key: 'jlpt',
-                    child: { key: 'n1', child: { key: 'words' } },
-                },
-                hidden: false,
-                desc: '',
-                cover: 'test_cover',
-            },
-            {
-                title: 'n2 单词',
-                id: '62e1d10885a923ba6e1acc25',
-                category: {
-                    key: 'jlpt',
-                    child: { key: 'n2', child: { key: 'words' } },
-                },
-                hidden: false,
-                desc: '',
-                cover: 'test_cover',
-            },
-        ]
-        expect(result).toEqual(expectedResult)
+        const expectedTitleList = ['n1 阅读', 'n1 单词', 'n2 单词']
+        expect(result.map((book) => book.title)).toEqual(expectedTitleList)
     })
 
     it('select level 2', () => {
         initialState.selectedCategoryKeys = ['jlpt', 'n1']
         const result = selectBooksByCategory({
-            bookList: initialState,
+            books: initialState,
         } as RootState)
-        const expectedResult = [
-            {
-                title: 'n1 阅读',
-                id: '62e1d10885a923ba6e1acc25',
-                category: {
-                    key: 'jlpt',
-                    child: {
-                        key: 'n1',
-                        child: {
-                            key: 'reading',
-                        },
-                    },
-                },
-                hidden: false,
-                desc: '',
-                cover: 'test_cover',
-            },
-            {
-                title: 'n1 单词',
-                id: '62e1d10885a923ba6e1acc25',
-                category: {
-                    key: 'jlpt',
-                    child: { key: 'n1', child: { key: 'words' } },
-                },
-                hidden: false,
-                desc: '',
-                cover: 'test_cover',
-            },
-        ]
-        expect(result).toEqual(expectedResult)
+        const expectedTitleList = ['n1 阅读', 'n1 单词']
+        expect(result.map((book) => book.title)).toEqual(expectedTitleList)
     })
 
     it('select level 3', () => {
         initialState.selectedCategoryKeys = ['jlpt', 'n1', 'reading']
         const result = selectBooksByCategory({
-            bookList: initialState,
+            books: initialState,
         } as RootState)
-        const expectedResult = [
-            {
-                title: 'n1 阅读',
-                id: '62e1d10885a923ba6e1acc25',
-                category: {
-                    key: 'jlpt',
-                    child: {
-                        key: 'n1',
-                        child: {
-                            key: 'reading',
-                        },
-                    },
-                },
-                hidden: false,
-                desc: '',
-                cover: 'test_cover',
-            },
-        ]
-        expect(result).toEqual(expectedResult)
+        const expectedTitleList = ['n1 阅读']
+        expect(result.map((book) => book.title)).toEqual(expectedTitleList)
     })
 })

@@ -10,7 +10,7 @@ import listenerMiddleware from './listenerMiddleware'
 
 const rootReducer = combineReducers({
     [splitApi.reducerPath]: splitApi.reducer,
-    bookList: bookListReducer,
+    books: bookListReducer,
     practiceChapter: practiceChapterReducer,
     questionSet: questionSetReducer,
 })

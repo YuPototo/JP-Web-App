@@ -1,4 +1,4 @@
-export interface BookListState {
+export interface BooksState {
     categories: ICategory[]
     selectedCategoryKeys: CategoryKey[]
     books: IBook[]

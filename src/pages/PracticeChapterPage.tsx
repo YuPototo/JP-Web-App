@@ -25,6 +25,10 @@ export default function PracticeChapterPage() {
         questionSetIndex: string
     }
 
+    useEffect(() => {
+        dispatch(setQuestionSetIndex(parseInt(qSetIndexString)))
+    }, [qSetIndexString, dispatch])
+
     const questionSetIndex = useAppSelector(
         (state) => state.practiceChapter.questionSetIndex
     )
@@ -32,10 +36,6 @@ export default function PracticeChapterPage() {
     useEffect(() => {
         dispatch(setChapterId(chapterId))
     }, [chapterId, dispatch])
-
-    useEffect(() => {
-        dispatch(setQuestionSetIndex(parseInt(qSetIndexString)))
-    }, [qSetIndexString, dispatch])
 
     const {
         data: chapterInfo,
@@ -61,6 +61,7 @@ export default function PracticeChapterPage() {
         }
     }, [dispatch, chapterId, isQuerySuccess, questionSets.length])
 
+    // functions
     const handleToNext = () => {
         navigate(`/chapter/${chapterId}/index/${questionSetIndex + 1}`, {
             replace: true,
@@ -80,8 +81,6 @@ export default function PracticeChapterPage() {
     if (isQueryError) {
         return <div>出错了：{JSON.stringify(error)}</div>
     }
-
-    console.log(!isDone && !isQuestionSetError)
 
     return (
         <div>

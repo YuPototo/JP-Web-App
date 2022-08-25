@@ -18,7 +18,7 @@ export default function ChapterResultPage() {
     const { chapterId } = useParams() as { chapterId: string }
 
     const results = useAppSelector((state) => state.practiceChapter.results)
-    const bookId = useAppSelector((state) => state.bookList.currentBookId)
+    const bookId = useAppSelector((state) => state.books.currentBookId)
 
     const nextInfo = useAppSelector(selectNextInfo(bookId, chapterId))
 
