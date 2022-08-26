@@ -67,7 +67,6 @@ function NextInfo({
         }
     }, [nextInfo.resultType, bookId, dispatch])
 
-    const toHomePage = () => navigate('/')
     const toNextChapter = (chapterId: string) =>
         navigate(`/chapter/${chapterId}/index/0`, { replace: true })
 
@@ -77,11 +76,15 @@ function NextInfo({
         return <></>
     }
 
+    const ToBookDetailButton = (
+        <button onClick={() => navigate(-1)}>返回目录</button>
+    )
+
     if (nextInfo.resultType === NextInfoResultType.Error) {
         return (
             <div>
                 <div>出错了：{nextInfo.errorMsg}</div>
-                <button onClick={toHomePage}>返回首页</button>
+                {ToBookDetailButton}
             </div>
         )
     }
@@ -90,7 +93,7 @@ function NextInfo({
         return (
             <div>
                 <div>恭喜你，完成了所有练习</div>
-                <button onClick={toHomePage}>返回首页</button>
+                {ToBookDetailButton}
             </div>
         )
     }
@@ -102,7 +105,7 @@ function NextInfo({
                 <button onClick={() => toNextChapter(nextInfo.nextChapter.id)}>
                     继续做题
                 </button>
-                <button onClick={toHomePage}>返回首页</button>
+                {ToBookDetailButton}
             </div>
         )
     }
@@ -117,7 +120,7 @@ function NextInfo({
                 <button onClick={() => toNextChapter(nextInfo.nextChapter.id)}>
                     继续做题
                 </button>
-                <button onClick={toHomePage}>返回首页</button>
+                {ToBookDetailButton}
             </div>
         )
     }

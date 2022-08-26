@@ -27,16 +27,12 @@ export default function PracticeChapterPage() {
     }
 
     useEffect(() => {
-        dispatch(setQuestionSetIndex(parseInt(qSetIndexString)))
-    }, [qSetIndexString, dispatch])
-
-    const questionSetIndex = useAppSelector(
-        (state) => state.practiceChapter.questionSetIndex
-    )
-
-    useEffect(() => {
         dispatch(setChapterId(chapterId))
     }, [chapterId, dispatch])
+
+    useEffect(() => {
+        dispatch(setQuestionSetIndex(parseInt(qSetIndexString)))
+    }, [qSetIndexString, dispatch])
 
     const {
         data: chapterInfo,
@@ -46,16 +42,12 @@ export default function PracticeChapterPage() {
         error,
     } = useGetChapterQuery(chapterId)
 
+    const questionSetIndex = useAppSelector(
+        (state) => state.practiceChapter.questionSetIndex
+    )
+
     const questionSets = chapterInfo?.questionSets || []
-
     const questionSetId = questionSets[questionSetIndex]
-
-    const {
-        isFetching: isFetchingQuestionSet,
-        isLoading: isLoadingQuestionSet,
-    } = useGetQuestionSetQuery(questionSetId!, {
-        skip: questionSetId === undefined,
-    })
 
     // init results
     useEffect(() => {
@@ -64,7 +56,12 @@ export default function PracticeChapterPage() {
         }
     }, [dispatch, chapterId, isQuerySuccess, questionSets.length])
 
-    const foundQuestionSetId = questionSetId !== undefined
+    const {
+        isFetching: isFetchingQuestionSet,
+        isLoading: isLoadingQuestionSet,
+    } = useGetQuestionSetQuery(questionSetId!, {
+        skip: questionSetId === undefined,
+    })
 
     if (isLoadingChapterInfo) {
         return (
@@ -79,6 +76,8 @@ export default function PracticeChapterPage() {
     if (isQueryError) {
         return <div>获取 chapter 信息出错：{JSON.stringify(error)}</div>
     }
+
+    const foundQuestionSetId = questionSetId !== undefined
 
     if (!foundQuestionSetId) {
         return (
