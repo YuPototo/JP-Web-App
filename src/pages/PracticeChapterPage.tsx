@@ -15,6 +15,7 @@ import {
     setQuestionSetIndex,
 } from '../features/practiceChapter/practiceChapterSlice'
 import { PracticeMode } from '../features/questionSet/questionSetTypes'
+import { useGetQuestionSetQuery } from '../features/questionSet/questionSetService'
 
 export default function PracticeChapterPage() {
     const dispatch = useAppDispatch()
@@ -45,14 +46,16 @@ export default function PracticeChapterPage() {
         error,
     } = useGetChapterQuery(chapterId)
 
-    const isDone = useAppSelector(selectIsDone)
-    const isQuestionSetError = useAppSelector(
-        (state) => state.questionSet.isError
-    )
-
     const questionSets = chapterInfo?.questionSets || []
 
     const questionSetId = questionSets[questionSetIndex]
+
+    const {
+        isFetching: isFetchingQuestionSet,
+        isLoading: isLoadingQuestionSet,
+    } = useGetQuestionSetQuery(questionSetId!, {
+        skip: questionSetId === undefined,
+    })
 
     // init results
     useEffect(() => {
@@ -61,7 +64,36 @@ export default function PracticeChapterPage() {
         }
     }, [dispatch, chapterId, isQuerySuccess, questionSets.length])
 
-    // functions
+    const foundQuestionSetId = questionSetId !== undefined
+
+    if (isLoadingChapterInfo) {
+        return (
+            <>
+                <QuestionInfoSkeleton />
+
+                <QuestionSetSkeleton />
+            </>
+        )
+    }
+
+    if (isQueryError) {
+        return <div>获取 chapter 信息出错：{JSON.stringify(error)}</div>
+    }
+
+    if (!foundQuestionSetId) {
+        return (
+            <div>
+                出错了：chapter.questionSetIds 里找不到第{questionSetIndex}个
+                element
+            </div>
+        )
+    }
+
+    const showBtnArea = isQuerySuccess && !isLoadingQuestionSet
+    const showChapterInfo = chapterInfo && questionSetIndex === 0
+    const showQuestionSet = isQuerySuccess && foundQuestionSetId
+    const disableBtnArea = isFetchingQuestionSet
+
     const handleToNext = () => {
         navigate(`/chapter/${chapterId}/index/${questionSetIndex + 1}`, {
             replace: true,
@@ -78,41 +110,90 @@ export default function PracticeChapterPage() {
         navigate(`/chapterResult/${chapterId}`, { replace: true })
     }
 
-    if (isQueryError) {
-        return <div>出错了：{JSON.stringify(error)}</div>
+    return (
+        <div>
+            {showChapterInfo && (
+                <ChapterInfo
+                    title={chapterInfo.title}
+                    desc={chapterInfo.desc}
+                />
+            )}
+
+            {showQuestionSet && (
+                <QuestionSet
+                    questionSetId={questionSetId}
+                    practiceMode={PracticeMode.Chapter}
+                />
+            )}
+
+            {showBtnArea && (
+                <OperationArea
+                    questionSetIndex={questionSetIndex}
+                    questionSets={questionSets}
+                    disabled={disableBtnArea}
+                    handleToLast={handleToLast}
+                    handleToNext={handleToNext}
+                    handleFinishChapter={handleFinishChapter}
+                />
+            )}
+        </div>
+    )
+}
+
+function QuestionInfoSkeleton() {
+    return (
+        <div>
+            <div className="skeleton my-2 h-6 w-12"></div>
+            <div className="skeleton my-2 h-6 w-12"></div>
+        </div>
+    )
+}
+
+function ChapterInfo({ title, desc }: { title: string; desc?: string }) {
+    return (
+        <div>
+            <div>{title}</div>
+            {desc && <div>{desc}</div>}
+        </div>
+    )
+}
+
+function OperationArea({
+    questionSetIndex,
+    questionSets,
+    disabled,
+    handleToLast,
+    handleToNext,
+    handleFinishChapter,
+}: {
+    questionSetIndex: number
+    questionSets: string[]
+    disabled: boolean
+    handleToLast: () => void
+    handleToNext: () => void
+    handleFinishChapter: () => void
+}) {
+    const dispatch = useAppDispatch()
+    const isDone = useAppSelector(selectIsDone)
+
+    const isQuestionSetError = useAppSelector(
+        (state) => state.questionSet.isError
+    )
+
+    const hasNext = questionSetIndex < questionSets.length - 1
+    const hasPreviousQuestionSet = questionSetIndex > 0
+
+    const handleContinue = () => {
+        hasNext ? handleToNext() : handleFinishChapter()
     }
 
     return (
-        <div>
-            <ChapterTitle
-                isLoading={isLoadingChapterInfo}
-                title={chapterInfo?.title}
-            />
-            <ChapterDesc
-                isLoading={isLoadingChapterInfo}
-                desc={chapterInfo?.desc}
-            />
-
-            {isLoadingChapterInfo && <QuestionSetSkeleton />}
-
-            {isQuerySuccess &&
-                (questionSetId ? (
-                    <QuestionSet
-                        questionSetId={questionSetId}
-                        practiceMode={PracticeMode.Chapter}
-                    />
-                ) : (
-                    <div>
-                        出错了：chapter 内没有第{qSetIndexString}个 question set
-                        id
-                    </div>
-                ))}
-
+        <>
             <button
                 className={clsx('m-2 bg-green-100 p-2', {
-                    invisible: noLastQuestionSet(questionSetIndex),
+                    invisible: !hasPreviousQuestionSet,
                 })}
-                disabled={noLastQuestionSet(questionSetIndex)}
+                disabled={disabled}
                 onClick={handleToLast}
             >
                 上一题
@@ -122,78 +203,23 @@ export default function PracticeChapterPage() {
                 className={clsx('m-2 bg-green-100 p-2', {
                     invisible: isDone,
                 })}
+                disabled={disabled}
                 onClick={() => dispatch(fillOptionsThunk())}
             >
                 答案
             </button>
 
-            {hasNextQuestionSet(questionSetIndex, questionSets) && (
-                <button
-                    className={clsx('m-2 bg-green-100 p-2', {
-                        invisible: !showNextBtn(isDone, isQuestionSetError),
-                    })}
-                    onClick={handleToNext}
-                >
-                    下一题
-                </button>
-            )}
-
-            {isLastQuestionSet(questionSetIndex, questionSets) && (
-                <button
-                    className={clsx('m-2 bg-green-100 p-2', {
-                        invisible: !showNextBtn(isDone, isQuestionSetError),
-                    })}
-                    onClick={handleFinishChapter}
-                >
-                    完成本章
-                </button>
-            )}
-        </div>
+            <button
+                className={clsx('m-2 bg-green-100 p-2', {
+                    invisible: !showNextBtn(isDone, isQuestionSetError),
+                })}
+                disabled={disabled}
+                onClick={handleContinue}
+            >
+                {hasNext ? '下一题' : '完成本节'}
+            </button>
+        </>
     )
-}
-
-function ChapterTitle({
-    isLoading,
-    title,
-}: {
-    isLoading: boolean
-    title?: string
-}) {
-    if (isLoading) {
-        return <div className="skeleton h-6 w-12"></div>
-    }
-
-    return <div>{title}</div>
-}
-
-function ChapterDesc({
-    isLoading,
-    desc,
-}: {
-    isLoading: boolean
-    desc?: string
-}) {
-    if (isLoading) {
-        return <div className="skeleton h-6 w-12"></div>
-    }
-
-    if (desc) {
-        return <div>{desc}</div>
-    }
-
-    return <></>
-}
-
-function noLastQuestionSet(qSetIndex: number) {
-    return qSetIndex === 0
-}
-
-function hasNextQuestionSet(qSetIndex: number, questionSets: string[]) {
-    return qSetIndex < questionSets.length - 1
-}
-
-function isLastQuestionSet(qSetIndex: number, questionSets: string[]) {
-    return qSetIndex === questionSets.length - 1
 }
 
 function showNextBtn(isDone: boolean, isQuestionSetError: boolean) {
