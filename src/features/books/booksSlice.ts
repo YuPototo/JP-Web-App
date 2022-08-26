@@ -5,7 +5,7 @@ import { booksApi } from './booksService'
 
 const initialState: BooksState = {
     categories: [],
-    selectedCategoryKeys: [],
+    selectedCategoryKeys: [], // 第1个元素表示第1层 category，第2个元素表示第2层 category
     books: [],
     currentBookId: null,
 }
@@ -31,20 +31,30 @@ export const booksSlice = createSlice({
             }
 
             if (index === 0) {
-                state.selectedCategoryKeys = [key]
+                if (state.selectedCategoryKeys[0] === key) {
+                    state.selectedCategoryKeys = [] // 反选
+                } else {
+                    state.selectedCategoryKeys = [key]
+                }
             } else if (index === 1) {
-                state.selectedCategoryKeys = [
-                    // todo: remove as
-                    state.selectedCategoryKeys[0] as string,
-                    key,
-                ]
+                if (state.selectedCategoryKeys[1] === key) {
+                    state.selectedCategoryKeys.splice(1, 1)
+                } else {
+                    state.selectedCategoryKeys = [
+                        state.selectedCategoryKeys[0] as string, // Tech debt: remove as
+                        key,
+                    ]
+                }
             } else if (index === 2) {
-                state.selectedCategoryKeys = [
-                    // todo: remove as
-                    state.selectedCategoryKeys[0] as string,
-                    state.selectedCategoryKeys[1] as string,
-                    key,
-                ]
+                if (state.selectedCategoryKeys[2] === key) {
+                    state.selectedCategoryKeys.splice(2, 1)
+                } else {
+                    state.selectedCategoryKeys = [
+                        state.selectedCategoryKeys[0] as string, // Tech debt: remove as
+                        state.selectedCategoryKeys[1] as string,
+                        key,
+                    ]
+                }
             }
         },
     },

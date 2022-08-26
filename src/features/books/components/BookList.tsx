@@ -12,7 +12,6 @@ export default function BookList() {
 
     return (
         <div>
-            <h1>book list</h1>
             {books.length > 0 ? (
                 books.map((book) => (
                     <div
