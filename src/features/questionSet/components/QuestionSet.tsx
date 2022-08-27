@@ -13,6 +13,7 @@ import { IAudio, PracticeMode } from '../questionSetTypes'
 import Body from './Body'
 import Explanation from './Explanation'
 import Questions from './Questions'
+import Transcription from './Transcription'
 
 type Props = {
     questionSetId: string
@@ -60,6 +61,11 @@ export default function QuestionSet({ questionSetId, practiceMode }: Props) {
                     <Body body={questionSet.body} />
                     <Questions questions={questionSet.questions} />
                     <Explanation explanation={questionSet.explanation} />
+                    {isDone && (
+                        <Transcription
+                            transcription={questionSet.audio?.transcription}
+                        />
+                    )}
                     {isDone &&
                         (isRight ? (
                             <div className="bg-green-100 p-4 text-lg">正确</div>
