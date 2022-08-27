@@ -10,7 +10,13 @@
 
 /* css rule for jp renderer elements */
 .jp-rich-text {
-    white-space: pre;
+    /*
+     下面两个属性很重要，能保证：
+        1. 文字超出 box 宽度时，有换行
+        2. 文本中的多个空格得到保留
+    */
+    white-space: pre-wrap;
+    word-break: break-word;
 }
 
 .jp-paragraph {
