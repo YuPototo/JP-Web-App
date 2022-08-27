@@ -1,5 +1,5 @@
 import { createSlice, PayloadAction } from '@reduxjs/toolkit'
-import { selectChapterQuetionSetIds } from './chapterSerivce'
+import { chapterApi, selectChapterQuetionSetIds } from './chapterSerivce'
 import { PracticeChapterState } from './practiceChapterTypes'
 import type { AppThunk, RootState } from '../../store/store'
 
@@ -62,7 +62,7 @@ export const selectChapterId = (state: RootState) =>
 // thunks
 export const doneInChapter =
     (questionSetId: string, isRight: boolean): AppThunk =>
-    (dispatch, getState) => {
+    async (dispatch, getState) => {
         const result = isRight ? Result.Right : Result.Wrong
 
         // 获取当前 questionSet 的 index
@@ -74,12 +74,21 @@ export const doneInChapter =
             return
         }
 
-        const questionSetIds =
+        let questionSetIds =
             selectChapterQuetionSetIds(chapterId)(state).data?.questionSets
 
         if (!questionSetIds) {
-            console.error('questionSetIds is null')
-            return
+            // 需要在下面这行使用 await，不然 query 会处于 pending 状态
+            await dispatch(chapterApi.endpoints.getChapter.initiate(chapterId))
+            const newState = getState()
+            questionSetIds =
+                selectChapterQuetionSetIds(chapterId)(newState).data
+                    ?.questionSets
+
+            if (!questionSetIds) {
+                console.error('doneInChapter: 无法重新获取 questionSetIds')
+                return
+            }
         }
 
         const questionSetIndex = questionSetIds.indexOf(questionSetId)

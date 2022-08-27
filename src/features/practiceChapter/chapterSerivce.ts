@@ -10,8 +10,12 @@ interface ChapterInfo {
 export const chapterApi = splitApi.injectEndpoints({
     endpoints: (build) => ({
         getChapter: build.query<ChapterInfo, string>({
-            query: (chapterId) => `chapters/${chapterId}`,
+            query: (chapterId) => {
+                console.log('inside query functoon')
+                return `chapters/${chapterId}`
+            },
             transformResponse: (res: { chapter: ChapterInfo }) => res.chapter,
+            keepUnusedDataFor: 300,
         }),
     }),
 })
