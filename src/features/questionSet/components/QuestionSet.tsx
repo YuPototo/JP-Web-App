@@ -9,11 +9,12 @@ import {
 } from '../questionSetSlice'
 
 import { useEffect } from 'react'
-import { IAudio, PracticeMode } from '../questionSetTypes'
+import { PracticeMode } from '../questionSetTypes'
 import Body from './Body'
 import Explanation from './Explanation'
 import Questions from './Questions'
 import Transcription from './Transcription'
+import AudioPlayer from './AudioPlayer'
 
 type Props = {
     questionSetId: string
@@ -57,7 +58,7 @@ export default function QuestionSet({ questionSetId, practiceMode }: Props) {
         <div className={isFetching ? 'bg-gray-100' : ''}>
             {questionSet ? (
                 <>
-                    <Audio audio={questionSet.audio} />
+                    <AudioPlayer audio={questionSet.audio} />
                     <Body body={questionSet.body} />
                     <Questions questions={questionSet.questions} />
                     <Explanation explanation={questionSet.explanation} />
@@ -80,9 +81,4 @@ export default function QuestionSet({ questionSetId, practiceMode }: Props) {
             )}
         </div>
     )
-}
-
-function Audio({ audio }: { audio?: IAudio }) {
-    if (!audio) return null
-    return <audio controls src={audio.key} />
 }
