@@ -2,3 +2,5 @@
 out
 coverage
 public
+node_modules
+.vscode

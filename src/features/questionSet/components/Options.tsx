@@ -52,13 +52,13 @@ function Option({
                     pickOptionThunk({
                         questionIndex,
                         optionIndex,
-                    })
+                    }),
                 )
             }
             className={clsx(
                 '"my-4 hover:bg-yellow-100" p-2 ',
                 { 'cursor-pointer': !isDone },
-                { 'bg-gray-300': picked }
+                { 'bg-gray-300': picked },
             )}
         >
             <RichTextRenderer data={option} />

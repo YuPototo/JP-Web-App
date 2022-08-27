@@ -43,7 +43,7 @@ export default function PracticeChapterPage() {
     } = useGetChapterQuery(chapterId)
 
     const questionSetIndex = useAppSelector(
-        (state) => state.practiceChapter.questionSetIndex
+        (state) => state.practiceChapter.questionSetIndex,
     )
 
     const questionSets = chapterInfo?.questionSets || []
@@ -176,7 +176,7 @@ function OperationArea({
     const isDone = useAppSelector(selectIsDone)
 
     const isQuestionSetError = useAppSelector(
-        (state) => state.questionSet.isError
+        (state) => state.questionSet.isError,
     )
 
     const hasNext = questionSetIndex < questionSets.length - 1

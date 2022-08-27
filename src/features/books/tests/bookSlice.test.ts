@@ -25,8 +25,8 @@ describe('reducer: setCategoryKey', () => {
         expect(
             bookSliceReducer(
                 initialState,
-                setCategoryKey({ categoryLevel: 0, key: 'jlpt' })
-            )
+                setCategoryKey({ categoryLevel: 0, key: 'jlpt' }),
+            ),
         ).toMatchObject({
             selectedCategoryKeys: ['jlpt'],
         })
@@ -43,8 +43,8 @@ describe('reducer: setCategoryKey', () => {
         expect(
             bookSliceReducer(
                 initialState,
-                setCategoryKey({ categoryLevel: 1, key: 'n1' })
-            )
+                setCategoryKey({ categoryLevel: 1, key: 'n1' }),
+            ),
         ).toMatchObject({
             selectedCategoryKeys: ['jlpt', 'n1'],
         })
@@ -61,8 +61,8 @@ describe('reducer: setCategoryKey', () => {
         expect(
             bookSliceReducer(
                 initialState,
-                setCategoryKey({ categoryLevel: 2, key: 'reading' })
-            )
+                setCategoryKey({ categoryLevel: 2, key: 'reading' }),
+            ),
         ).toMatchObject({
             selectedCategoryKeys: ['jlpt', 'n1', 'reading'],
         })
@@ -79,8 +79,8 @@ describe('reducer: setCategoryKey', () => {
         expect(
             bookSliceReducer(
                 initialState,
-                setCategoryKey({ categoryLevel: 0, key: 'study' })
-            )
+                setCategoryKey({ categoryLevel: 0, key: 'study' }),
+            ),
         ).toMatchObject({
             selectedCategoryKeys: ['study'],
         })
@@ -97,8 +97,8 @@ describe('reducer: setCategoryKey', () => {
         expect(
             bookSliceReducer(
                 initialState,
-                setCategoryKey({ categoryLevel: 1, key: 'n2' })
-            )
+                setCategoryKey({ categoryLevel: 1, key: 'n2' }),
+            ),
         ).toMatchObject({
             selectedCategoryKeys: ['jlpt', 'n2'],
         })
@@ -115,8 +115,8 @@ describe('reducer: setCategoryKey', () => {
         expect(
             bookSliceReducer(
                 initialState,
-                setCategoryKey({ categoryLevel: 1, key: 'n1' })
-            )
+                setCategoryKey({ categoryLevel: 1, key: 'n1' }),
+            ),
         ).toEqual(initialState)
     })
 })

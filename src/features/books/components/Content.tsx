@@ -68,7 +68,7 @@ function Chapter({ chapter }: ChapterProps) {
     return (
         <div
             className={clsx(
-                'flex cursor-pointer justify-between bg-white p-2 hover:bg-yellow-100'
+                'flex cursor-pointer justify-between bg-white p-2 hover:bg-yellow-100',
             )}
             onClick={() => navigate(`/chapter/${chapter.id}/index/0`)}
         >

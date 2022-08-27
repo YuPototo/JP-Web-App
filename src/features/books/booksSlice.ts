@@ -19,13 +19,13 @@ export const booksSlice = createSlice({
         },
         setCategoryKey: (
             state,
-            action: PayloadAction<{ categoryLevel: number; key: string }>
+            action: PayloadAction<{ categoryLevel: number; key: string }>,
         ) => {
             const { categoryLevel: index, key } = action.payload
 
             if (index > state.selectedCategoryKeys.length) {
                 console.error(
-                    `setCategoryKey: index ${index} is larger than selectedCategoryKeys.length ${state.selectedCategoryKeys.length}`
+                    `setCategoryKey: index ${index} is larger than selectedCategoryKeys.length ${state.selectedCategoryKeys.length}`,
                 )
                 return
             }
@@ -64,13 +64,13 @@ export const booksSlice = createSlice({
                 booksApi.endpoints.getCategoriyes.matchFulfilled,
                 (state, { payload }) => {
                     state.categories = payload
-                }
+                },
             )
             .addMatcher(
                 booksApi.endpoints.getBooks.matchFulfilled,
                 (state, { payload }) => {
                     state.books = payload
-                }
+                },
             )
     },
 })
@@ -93,7 +93,7 @@ export const selectChildrenByLevel =
         } else if (categoryLevel === 1) {
             const key_0 = selectedCategoryKeys?.[0]
             const parentCategories = categories.find(
-                (c) => c.key === key_0
+                (c) => c.key === key_0,
             )?.children
             const key_1 = selectedCategoryKeys?.[1]
             return parentCategories?.find((c) => c.key === key_1)?.children
@@ -116,7 +116,7 @@ export const selectBooksByCategory = (state: RootState) => {
         const key_0 = selectedCategoryKeys[0]
         const key_1 = selectedCategoryKeys[1]
         return books.filter(
-            (b) => b.category.key === key_0 && b.category.child?.key === key_1
+            (b) => b.category.key === key_0 && b.category.child?.key === key_1,
         )
     } else if (selectedCategoryLength === 3) {
         const key_0 = selectedCategoryKeys[0]
@@ -126,7 +126,7 @@ export const selectBooksByCategory = (state: RootState) => {
             (b) =>
                 b.category.key === key_0 &&
                 b.category.child?.key === key_1 &&
-                b.category.child?.child?.key === key_2
+                b.category.child?.child?.key === key_2,
         )
     } else {
         console.error('不允许4层及以上 cateory')

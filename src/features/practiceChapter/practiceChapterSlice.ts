@@ -39,7 +39,7 @@ export const practiceChapterSlice = createSlice({
                 questionSetIndex: number
                 questionSetId: string
                 result: Result
-            }>
+            }>,
         ) => {
             const { questionSetIndex, questionSetId, result } = payload
             state.results[questionSetIndex] = { questionSetId, result }

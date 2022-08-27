@@ -17,7 +17,7 @@ export default function ResultBall({ questionSetResult, index }: Props) {
                     'bg-green-300': result === Result.Right,
                     'bg-red-300': result === Result.Wrong,
                     'bg-gray-300': result === Result.NoRecord,
-                }
+                },
             )}
         >
             {index + 1}

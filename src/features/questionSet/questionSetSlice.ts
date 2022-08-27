@@ -23,7 +23,7 @@ export const questionSetSlice = createSlice({
             }: PayloadAction<{
                 questionSetId: string
                 practiceMode: PracticeMode
-            }>
+            }>,
         ) => {
             state.questionSetId = payload.questionSetId
             state.practiceMode = payload.practiceMode
@@ -35,14 +35,14 @@ export const questionSetSlice = createSlice({
             action: PayloadAction<{
                 questionIndex: number
                 optionIndex: number
-            }>
+            }>,
         ) => {
             const { questionIndex, optionIndex } = action.payload
             state.optionsSelected[questionIndex] = optionIndex
         },
         fillOptions: (
             state,
-            { payload }: PayloadAction<{ questionLength: number }>
+            { payload }: PayloadAction<{ questionLength: number }>,
         ) => {
             state.optionsSelected = Array(payload.questionLength).fill(-1)
         },

@@ -38,7 +38,7 @@ function CategoryList({ categories, categoryLevel }: CategoryListProps) {
     const children = useAppSelector(selectChildrenByLevel(categoryLevel))
 
     const selectedCategoryKey = useAppSelector(
-        (state) => state.books.selectedCategoryKeys?.[categoryLevel]
+        (state) => state.books.selectedCategoryKeys?.[categoryLevel],
     )
 
     const handleClickCategory = (key: string) => {
@@ -53,7 +53,7 @@ function CategoryList({ categories, categoryLevel }: CategoryListProps) {
                         className={clsx(
                             selectedCategoryKey === category.key &&
                                 'bg-red-200',
-                            'm-2 p-2 hover:cursor-pointer hover:bg-red-200'
+                            'm-2 p-2 hover:cursor-pointer hover:bg-red-200',
                         )}
                         key={category.key}
                         onClick={() => handleClickCategory(category.key)}

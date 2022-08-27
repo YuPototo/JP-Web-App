@@ -115,7 +115,7 @@ export const selectNextInfo =
         const chapterLength = currentSection.chapters.length
 
         const chapterIndex = currentSection.chapters.findIndex(
-            (chapter) => chapter.id === chapterId
+            (chapter) => chapter.id === chapterId,
         )
 
         if (chapterIndex < chapterLength - 1) {
@@ -156,12 +156,12 @@ export const selectNextInfo =
 
 export const getCurrentSectionIndex = (
     chapterId: string,
-    content: ISection[]
+    content: ISection[],
 ): number => {
     for (let i = 0; i < content.length; i++) {
         const section = content[i] as ISection
         const chapter = section.chapters.find(
-            (chapter) => chapter.id === chapterId
+            (chapter) => chapter.id === chapterId,
         )
         if (chapter) {
             return i
