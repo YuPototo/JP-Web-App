@@ -5,6 +5,7 @@ import { splitApi } from './query/splitApi'
 import bookListReducer from '../features/books/booksSlice'
 import questionSetReducer from '../features/questionSet/questionSetSlice'
 import practiceChapterReducer from '../features/practiceChapter/practiceChapterSlice'
+import userReducer from '../features/user/userSlice'
 
 import listenerMiddleware from './listenerMiddleware'
 
@@ -13,6 +14,7 @@ const rootReducer = combineReducers({
     books: bookListReducer,
     practiceChapter: practiceChapterReducer,
     questionSet: questionSetReducer,
+    user: userReducer,
 })
 
 export const store = configureStore({

@@ -1,13 +1,14 @@
 import React from 'react'
+import config from '../../config/config'
 
-export default function TestWeChatLogin() {
-    const appID = 'wx7c49754840c637b5'
-    const redirectURL = encodeURI('https://riyu.love/app/debugPage')
+export default function WeChatLoginBtn() {
+    const appID = config.WX_APP_ID
+    const redirectURL = encodeURI(config.WX_REDIRECT_URL)
     const wxLoginURL = `https://open.weixin.qq.com/connect/qrconnect?appid=${appID}&redirect_uri=${redirectURL}&response_type=code&scope=snsapi_login#wechat_redirect`
 
     return (
         <div>
-            <button className="btn btn-primary px-4 py-1 ">
+            <button className="px-4 py-1 ">
                 <a className="flex justify-center gap-2" href={wxLoginURL}>
                     <span>
                         <svg

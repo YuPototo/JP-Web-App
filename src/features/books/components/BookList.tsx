@@ -4,6 +4,7 @@ import BookCard from './BookCard'
 import { useGetBooksQuery } from '../booksService'
 import { selectBooksByCategory } from '../booksSlice'
 import { useNavigate } from 'react-router-dom'
+import { routeBuilder } from '../../../routes/routeBuilder'
 
 export default function BookList() {
     useGetBooksQuery()
@@ -16,7 +17,9 @@ export default function BookList() {
                 books.map((book) => (
                     <div
                         key={book.id}
-                        onClick={() => navigate(`books/${book.id}`)}
+                        onClick={() =>
+                            navigate(routeBuilder.bookDetail(book.id))
+                        }
                     >
                         <BookCard book={book} />
                     </div>

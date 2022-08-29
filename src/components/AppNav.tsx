@@ -1,0 +1,47 @@
+import { ReactElement } from 'react'
+import { Link } from 'react-router-dom'
+import { useAppSelector } from '../store/hooks'
+import { PersonCircle } from 'react-bootstrap-icons'
+import WeChatLoginBtn from '../features/user/WeChatLoginBtn'
+import { selectIsLogin } from '../features/user/userSlice'
+import { routeBuilder } from '../routes/routeBuilder'
+
+export default function AppNav(): ReactElement {
+    const isLogin = useAppSelector(selectIsLogin)
+
+    return (
+        <div className="flex h-12 items-center justify-between px-3">
+            <div className="flex pl-2">
+                <Brand />
+            </div>
+
+            {isLogin ? (
+                <div className="flex items-center gap-4">
+                    <span className="">
+                        <Link to={routeBuilder.account()}>
+                            <div className="flex items-center gap-1">
+                                <PersonCircle className="icon text-gray-500" />
+                                <span className="text-gray-600">账号</span>
+                            </div>
+                        </Link>
+                    </span>
+                </div>
+            ) : (
+                <WeChatLoginBtn />
+            )}
+        </div>
+    )
+}
+
+function Brand(): ReactElement {
+    const iconImage = '/brand-icon.png' // 因为设置了 homepage 为 /app/
+
+    return (
+        <Link to={routeBuilder.home()} className="flex items-center ">
+            <div className="py-2">
+                <img className="mr-2 h-10" src={iconImage} alt="brand" />
+            </div>
+            <span className="text-gray-600">日语轻松考</span>
+        </Link>
+    )
+}

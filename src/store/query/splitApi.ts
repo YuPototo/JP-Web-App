@@ -4,7 +4,7 @@ import config from '../../config/config'
 export const splitApi = createApi({
     reducerPath: 'api',
     baseQuery: fetchBaseQuery({
-        baseUrl: config.BASE_URL,
+        baseUrl: config.API_URL,
     }),
     endpoints: () => ({}),
 })

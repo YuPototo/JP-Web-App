@@ -1,6 +1,7 @@
 import clsx from 'clsx'
 import React, { useState } from 'react'
 import { useNavigate } from 'react-router-dom'
+import { routeBuilder } from '../../../routes/routeBuilder'
 import { useGetBookContentQuery } from '../booksService'
 import type { IChapter, ISection } from '../booksTypes'
 
@@ -70,7 +71,9 @@ function Chapter({ chapter }: ChapterProps) {
             className={clsx(
                 'flex cursor-pointer justify-between bg-white p-2 hover:bg-yellow-100',
             )}
-            onClick={() => navigate(`/chapter/${chapter.id}/index/0`)}
+            onClick={() =>
+                navigate(routeBuilder.practiceChapter(chapter.id, 0))
+            }
         >
             <span className="pl-4">{chapter.title}</span>
         </div>

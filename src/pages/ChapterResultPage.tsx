@@ -7,6 +7,7 @@ import {
     booksApi,
 } from '../features/books/booksService'
 import ResultBall from '../features/practiceChapter/ResultBall'
+import { routeBuilder } from '../routes/routeBuilder'
 import { useAppDispatch, useAppSelector } from '../store/hooks'
 
 export default function ChapterResultPage() {
@@ -26,7 +27,7 @@ export default function ChapterResultPage() {
     useEffect(() => {
         if (!bookId) {
             console.log('没有 bookId，返回首页')
-            navigate('/')
+            navigate(routeBuilder.home())
         }
     }, [bookId, navigate])
 
@@ -39,7 +40,11 @@ export default function ChapterResultPage() {
                     <div
                         key={index}
                         onClick={() =>
-                            navigate(`/practiceReview/${result.questionSetId}`)
+                            navigate(
+                                routeBuilder.practiceReview(
+                                    result.questionSetId,
+                                ),
+                            )
                         }
                     >
                         <ResultBall questionSetResult={result} index={index} />
