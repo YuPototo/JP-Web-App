@@ -3,6 +3,7 @@ export const routeBuilder = {
     contact: () => '/contact',
     renderExample: () => '/renderExample',
     account: () => `/account`,
+    login: () => `/login`,
     bookDetail: (bookId: string) => `/books/${bookId}`,
     practiceChapter: (chapterId: string, questionSetIndex: number) =>
         `/chapter/${chapterId}/index/${questionSetIndex}`,

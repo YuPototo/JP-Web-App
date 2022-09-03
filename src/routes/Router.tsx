@@ -6,6 +6,7 @@ import BookDetail from '../pages/BookDetailPage'
 import ChapterResultPage from '../pages/ChapterResultPage'
 import ContactPage from '../pages/ContactPage'
 import Home from '../pages/HomePage'
+import LoginPage from '../pages/LoginPage'
 import PracticeChapterPage from '../pages/PracticeChapterPage'
 import PracticeReviewPage from '../pages/PracticeReviewPage'
 import RendererExample from '../pages/RendererExamplePage'
@@ -41,6 +42,7 @@ export default function Router({ children }: Props) {
                 <Route path="/contact" element={<ContactPage />} />
                 <Route path="/renderExample" element={<RendererExample />} />
                 <Route path="/account" element={<AccountPage />} />
+                <Route path="/login" element={<LoginPage />} />
             </Routes>
         </BrowserRouter>
     )

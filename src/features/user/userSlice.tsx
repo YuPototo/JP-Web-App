@@ -39,7 +39,7 @@ export const { setToken, setDisplayId } = userSlice.actions
 
 /* selectors */
 export const selectIsLogin = (state: RootState) => {
-    return state.user.token !== null
+    return state.user.token !== null && state.user.displayId !== null
 }
 
 export default userSlice.reducer
