@@ -41,3 +41,7 @@ export const {
     useGetChapterDoneQuery,
     useDeleteChapterDoneMutation,
 } = chapterDoneApi
+
+export const selectChapterDonesByBook = (bookId: string) => {
+    return chapterDoneApi.endpoints.getChapterDone.select(bookId)
+}

@@ -6,8 +6,8 @@ import { useAppSelector } from '../../../store/hooks'
 import { useGetChapterDoneQuery } from '../../chapterDone/chapterDoneService'
 import { selectIsLogin } from '../../user/userSlice'
 import { useGetBookContentQuery } from '../booksService'
+import { selectContentProgress } from '../booksSlice'
 import type { IChapter, ISection } from '../booksTypes'
-import { getOpenSection } from '../utils/getOpenSection'
 
 type Props = {
     bookId: string
@@ -15,9 +15,6 @@ type Props = {
 
 export default function Content({ bookId }: Props) {
     const [activeSectionIndex, setActiveSectionIndex] = useState(0)
-    const [nextChapterId, setNextChapterId] = useState<string | undefined>(
-        undefined,
-    )
 
     const { data: sections, isLoading } = useGetBookContentQuery(bookId)
 
@@ -27,16 +24,13 @@ export default function Content({ bookId }: Props) {
         skip: !isLogin,
     })
 
+    const { openSectionIndex, nextChapterId } = useAppSelector(
+        selectContentProgress,
+    )
+
     useEffect(() => {
-        if (sections && chaptersDone) {
-            const { openSectionIndex, nextChapterId } = getOpenSection(
-                sections,
-                chaptersDone,
-            )
-            setActiveSectionIndex(openSectionIndex)
-            setNextChapterId(nextChapterId)
-        }
-    }, [sections, chaptersDone])
+        setActiveSectionIndex(openSectionIndex)
+    }, [openSectionIndex])
 
     return (
         <div className="mx-auto mt-4 w-2/3">

@@ -1,7 +1,9 @@
 import { createSlice, PayloadAction } from '@reduxjs/toolkit'
 import type { RootState } from '../../store/store'
 import type { BooksState } from './booksTypes'
-import { booksApi } from './booksService'
+import { booksApi, selectContentByBook } from './booksService'
+import { getOpenSection } from './utils/getOpenSection'
+import { selectChapterDonesByBook } from '../chapterDone/chapterDoneService'
 
 const initialState: BooksState = {
     categories: [],
@@ -78,6 +80,28 @@ export const booksSlice = createSlice({
 export const { setCategoryKey, setCurrentBookId } = booksSlice.actions
 
 /* selectors */
+export const selectContentProgress = (
+    state: RootState,
+): { openSectionIndex: number; nextChapterId?: string } => {
+    const currentBookId = state.books.currentBookId
+
+    if (!currentBookId) {
+        return { openSectionIndex: 0 }
+    }
+
+    const bookContent = selectContentByBook(currentBookId)(state).data
+
+    if (!bookContent) {
+        return { openSectionIndex: 0 }
+    }
+
+    const chapterDones = selectChapterDonesByBook(currentBookId)(state).data
+    if (!chapterDones) {
+        return { openSectionIndex: 0 }
+    }
+
+    return getOpenSection(bookContent, chapterDones)
+}
 
 /**
  * 给定 Category level 和 state，返回被选中的 category 的 chidlren
