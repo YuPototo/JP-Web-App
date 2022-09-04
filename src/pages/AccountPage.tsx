@@ -1,18 +1,24 @@
 import React from 'react'
+import toast from 'react-hot-toast'
 import { useNavigate } from 'react-router-dom'
 import { logoutThunk } from '../features/user/userSlice'
 import { routeBuilder } from '../routes/routeBuilder'
 import { useAppDispatch, useAppSelector } from '../store/hooks'
 
+// todo: 应该有一个 authGuard
+
 export default function AccountPage() {
     const navigate = useNavigate()
     const dispatch = useAppDispatch()
+
     const displayId = useAppSelector((state) => state.user.displayId)
 
     const handleLogout = async () => {
         await dispatch(logoutThunk())
-        // todo：出现一个 toast 提示
-        navigate(routeBuilder.home())
+        toast.success('成功登出，即将回到首页')
+        setTimeout(() => {
+            navigate(routeBuilder.home())
+        }, 2000)
     }
 
     return (

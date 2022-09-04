@@ -17,6 +17,7 @@ export const bookFavApi = splitApi.injectEndpoints({
             }),
             invalidatesTags: (result, error, bookId) => [
                 { type: 'BookFav', id: bookId },
+                'BookFav',
             ],
         }),
         removeBookFav: build.mutation<void, string>({
@@ -26,7 +27,13 @@ export const bookFavApi = splitApi.injectEndpoints({
             }),
             invalidatesTags: (result, error, bookId) => [
                 { type: 'BookFav', id: bookId },
+                'BookFav',
             ],
+        }),
+        getBookFavs: build.query<string[], void>({
+            query: () => 'bookFav',
+            transformResponse: (res: { books: string[] }) => res.books,
+            providesTags: ['BookFav'],
         }),
     }),
 })
@@ -35,4 +42,5 @@ export const {
     useAddBookFavMutation,
     useRemoveBookFavMutation,
     useCheckBookFavQuery,
+    useGetBookFavsQuery,
 } = bookFavApi

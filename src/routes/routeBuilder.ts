@@ -4,6 +4,7 @@ export const routeBuilder = {
     renderExample: () => '/renderExample',
     account: () => `/account`,
     login: () => `/login`,
+    shelf: () => `/shelf`,
     bookDetail: (bookId: string) => `/books/${bookId}`,
     practiceChapter: (chapterId: string, questionSetIndex: number) =>
         `/chapter/${chapterId}/index/${questionSetIndex}`,

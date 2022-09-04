@@ -10,6 +10,7 @@ import LoginPage from '../pages/LoginPage'
 import PracticeChapterPage from '../pages/PracticeChapterPage'
 import PracticeReviewPage from '../pages/PracticeReviewPage'
 import RendererExample from '../pages/RendererExamplePage'
+import ShelfPage from '../pages/ShelfPage'
 import WeChatLoginResult from '../pages/WeChatLoginResult'
 
 type Props = {
@@ -43,6 +44,7 @@ export default function Router({ children }: Props) {
                 <Route path="/renderExample" element={<RendererExample />} />
                 <Route path="/account" element={<AccountPage />} />
                 <Route path="/login" element={<LoginPage />} />
+                <Route path="/shelf" element={<ShelfPage />} />
             </Routes>
         </BrowserRouter>
     )
