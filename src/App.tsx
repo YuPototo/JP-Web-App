@@ -4,6 +4,9 @@ import AppNav from './components/AppNav'
 import { getLocalUserInfo } from './features/user/userSlice'
 import Router from './routes/Router'
 import { useAppDispatch } from './store/hooks'
+import Modal from 'react-modal'
+
+Modal.setAppElement('#root')
 
 function App() {
     const dispatch = useAppDispatch()

@@ -3,7 +3,7 @@ import BookCard from '../features/books/components/BookCard'
 import Content from '../features/books/components/Content'
 import { useAppDispatch, useAppSelector } from '../store/hooks'
 import { selectBookById, setCurrentBookId } from '../features/books/booksSlice'
-import { useEffect } from 'react'
+import { useEffect, useState } from 'react'
 import {
     useAddBookFavMutation,
     useCheckBookFavQuery,
@@ -12,6 +12,9 @@ import {
 import { selectIsLogin } from '../features/user/userSlice'
 import toast from 'react-hot-toast'
 import { routeBuilder } from '../routes/routeBuilder'
+import { useGetChapterDoneQuery } from '../features/chapterDone/chapterDoneService'
+import DeleteChapterDoneModal from '../features/chapterDone/DeleteChapterDoneModal'
+import { useGetBooksQuery } from '../features/books/booksService'
 
 export default function BookDetail() {
     /** Tech debt
@@ -19,13 +22,40 @@ export default function BookDetail() {
      */
     const { bookId } = useParams() as { bookId: string }
     const dispatch = useAppDispatch()
-    const naviagte = useNavigate()
-
-    const book = useAppSelector(selectBookById(bookId))
 
     useEffect(() => {
         dispatch(setCurrentBookId(bookId))
     }, [bookId, dispatch])
+
+    return (
+        <div>
+            <BookCardWrapper bookId={bookId} />
+            <FavButton bookId={bookId} />
+            <ResetChapterDoneBtn bookId={bookId} />
+            <Content bookId={bookId} />
+        </div>
+    )
+}
+
+/**
+ * show book card
+ */
+function BookCardWrapper({ bookId }: { bookId: string }) {
+    const book = useAppSelector(selectBookById(bookId))
+    useGetBooksQuery(undefined, { skip: !!book })
+
+    if (!book) {
+        return <div>获取书籍中...</div>
+    }
+
+    return <BookCard book={book} />
+}
+
+/**
+ * Feature：收藏和取消收藏
+ */
+function FavButton({ bookId }: { bookId: string }) {
+    const naviagte = useNavigate()
 
     const isLogin = useAppSelector(selectIsLogin)
 
@@ -36,6 +66,10 @@ export default function BookDetail() {
     const [addBookFav, { isLoading: isAdding }] = useAddBookFavMutation()
     const [removeBookFav, { isLoading: isRemoving }] =
         useRemoveBookFavMutation()
+
+    const disableAddFav = isLoading || isAdding || isRemoving
+
+    const isUpdating = isAdding || isRemoving
 
     const toggleBookFav = async () => {
         if (!isLogin) {
@@ -52,29 +86,46 @@ export default function BookDetail() {
             await mutation(bookId).unwrap()
             toast.success(toastText)
         } catch (err: any) {
-            // todo: use a middleware to handle request error
+            // todo: process error at servicw
             toast.error(JSON.stringify(err))
         }
     }
 
-    const disableAddFav = isLoading || isAdding || isRemoving
-
-    const isUpdating = isAdding || isRemoving
-
     return (
         <div>
-            <div>
-                {book ? (
-                    <BookCard book={book} />
-                ) : (
-                    <div>Store 里找不到 id 为 {bookId} 的 book</div>
-                )}
-
-                <button onClick={toggleBookFav} disabled={disableAddFav}>
-                    {isFav ? '取消收藏' : '收藏'} {isUpdating && '中...'}
-                </button>
-                <Content bookId={bookId} />
-            </div>
+            <button onClick={toggleBookFav} disabled={disableAddFav}>
+                {isFav ? '取消收藏' : '收藏'} {isUpdating && '中...'}
+            </button>
         </div>
+    )
+}
+
+/**
+ * Feature: 重置 chapter dones
+ */
+function ResetChapterDoneBtn({ bookId }: { bookId: string }) {
+    const [isDeleteModalOpen, setIsDeleteModalOpen] = useState(false)
+
+    const isLogin = useAppSelector(selectIsLogin)
+
+    const { data: chaptersDone } = useGetChapterDoneQuery(bookId, {
+        skip: !isLogin,
+    })
+
+    const hasChapterDones = chaptersDone && chaptersDone.length > 0
+
+    return (
+        <>
+            <DeleteChapterDoneModal
+                bookId={bookId}
+                isOpen={isDeleteModalOpen}
+                closeModal={() => setIsDeleteModalOpen(false)}
+            />
+            {hasChapterDones && (
+                <button onClick={() => setIsDeleteModalOpen(true)}>
+                    重置进度
+                </button>
+            )}
+        </>
     )
 }

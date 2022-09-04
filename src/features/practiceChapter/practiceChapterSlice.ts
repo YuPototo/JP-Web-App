@@ -2,6 +2,8 @@ import { createSlice, PayloadAction } from '@reduxjs/toolkit'
 import { chapterApi, selectChapterQuetionSetIds } from './chapterSerivce'
 import { PracticeChapterState } from './practiceChapterTypes'
 import type { AppThunk, RootState } from '../../store/store'
+import { selectIsLogin } from '../user/userSlice'
+import { chapterDoneApi } from '../chapterDone/chapterDoneService'
 
 export enum Result {
     Right,
@@ -92,8 +94,24 @@ export const doneInChapter =
         }
 
         const questionSetIndex = questionSetIds.indexOf(questionSetId)
-
         dispatch(setResult({ questionSetIndex, questionSetId, result }))
+
+        /* 如果是最后一个 questionSet，就发送 chapterDone 的请求 */
+        const isLogin = selectIsLogin(state)
+        if (!isLogin) return
+        if (questionSetIndex === questionSetIds.length - 1) {
+            const bookId = state.books.currentBookId
+            if (!bookId) {
+                console.error('doneInChapter: bookId is null')
+            } else {
+                dispatch(
+                    chapterDoneApi.endpoints.addChapterDone.initiate({
+                        bookId,
+                        chapterId,
+                    }),
+                )
+            }
+        }
     }
 
 export default practiceChapterSlice.reducer

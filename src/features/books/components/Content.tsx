@@ -1,9 +1,13 @@
 import clsx from 'clsx'
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { routeBuilder } from '../../../routes/routeBuilder'
+import { useAppSelector } from '../../../store/hooks'
+import { useGetChapterDoneQuery } from '../../chapterDone/chapterDoneService'
+import { selectIsLogin } from '../../user/userSlice'
 import { useGetBookContentQuery } from '../booksService'
 import type { IChapter, ISection } from '../booksTypes'
+import { getOpenSection } from '../utils/getOpenSection'
 
 type Props = {
     bookId: string
@@ -11,7 +15,28 @@ type Props = {
 
 export default function Content({ bookId }: Props) {
     const [activeSectionIndex, setActiveSectionIndex] = useState(0)
+    const [nextChapterId, setNextChapterId] = useState<string | undefined>(
+        undefined,
+    )
+
     const { data: sections, isLoading } = useGetBookContentQuery(bookId)
+
+    const isLogin = useAppSelector(selectIsLogin)
+
+    const { data: chaptersDone } = useGetChapterDoneQuery(bookId, {
+        skip: !isLogin,
+    })
+
+    useEffect(() => {
+        if (sections && chaptersDone) {
+            const { openSectionIndex, nextChapterId } = getOpenSection(
+                sections,
+                chaptersDone,
+            )
+            setActiveSectionIndex(openSectionIndex)
+            setNextChapterId(nextChapterId)
+        }
+    }, [sections, chaptersDone])
 
     return (
         <div className="mx-auto mt-4 w-2/3">
@@ -20,6 +45,8 @@ export default function Content({ bookId }: Props) {
                 sections.map((section, index) => (
                     <div className="my-1" key={section.id}>
                         <Section
+                            chaptersDone={chaptersDone}
+                            nextChapterId={nextChapterId}
                             section={section}
                             showChapter={index === activeSectionIndex}
                             onClickTitle={() => setActiveSectionIndex(index)}
@@ -33,10 +60,18 @@ export default function Content({ bookId }: Props) {
 type SectionProps = {
     section: ISection
     showChapter: boolean
+    nextChapterId?: string
+    chaptersDone?: string[]
     onClickTitle: () => void
 }
 
-function Section({ section, showChapter = false, onClickTitle }: SectionProps) {
+function Section({
+    section,
+    nextChapterId,
+    showChapter = false,
+    chaptersDone = [],
+    onClickTitle,
+}: SectionProps) {
     const { title, chapters } = section
 
     return (
@@ -50,9 +85,12 @@ function Section({ section, showChapter = false, onClickTitle }: SectionProps) {
             {showChapter ? (
                 <div className="">
                     {chapters.map((chapter) => (
-                        <div key={chapter.id}>
-                            <Chapter chapter={chapter} />
-                        </div>
+                        <Chapter
+                            chapter={chapter}
+                            isDone={chaptersDone?.includes(chapter.id)}
+                            isNext={chapter.id === nextChapterId}
+                            key={chapter.id}
+                        />
                     ))}
                 </div>
             ) : null}
@@ -61,21 +99,26 @@ function Section({ section, showChapter = false, onClickTitle }: SectionProps) {
 }
 
 type ChapterProps = {
+    isNext: boolean
+    isDone: boolean
     chapter: IChapter
 }
 
-function Chapter({ chapter }: ChapterProps) {
+function Chapter({ chapter, isDone, isNext }: ChapterProps) {
     const navigate = useNavigate()
+
     return (
         <div
             className={clsx(
-                'flex cursor-pointer justify-between bg-white p-2 hover:bg-yellow-100',
+                'flex cursor-pointer justify-between  p-2 hover:bg-yellow-100',
+                [isNext ? 'bg-yellow-100' : 'bg-white'],
             )}
             onClick={() =>
                 navigate(routeBuilder.practiceChapter(chapter.id, 0))
             }
         >
-            <span className="pl-4">{chapter.title}</span>
+            <span className="pl-4">{chapter.title}</span>{' '}
+            {isDone && <span>完成</span>}
         </div>
     )
 }

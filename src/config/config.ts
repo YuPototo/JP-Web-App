@@ -19,8 +19,10 @@ const config = {
     WX_REDIRECT_URL,
 }
 
+const isTesting = process.env.NODE_ENV === 'test'
+
 for (const [key, value] of Object.entries(config)) {
-    if (value === undefined) {
+    if (value === undefined && !isTesting) {
         throw Error(`Env Var ${key} is undefined`)
     }
 }
