@@ -1,12 +1,12 @@
 import clsx from 'clsx'
 import { useAppDispatch, useAppSelector } from '../../../store/hooks'
 import { selectChildrenByLevel, setCategoryKey } from '../booksSlice'
-import { useGetCategoriyesQuery } from '../booksService'
+import { useGetCategoriesQuery } from '../booksService'
 import type { ICategory } from '../booksTypes'
 import { extractQueyError } from '../../../store/utils/errorHandling'
 
 export default function CategoryNav() {
-    const { isLoading, error } = useGetCategoriyesQuery()
+    const { isLoading, error } = useGetCategoriesQuery()
 
     const topCategories = useAppSelector((state) => state.books.categories)
 

@@ -1,10 +1,11 @@
+import toast from 'react-hot-toast'
 import { splitApi } from '../../store/query/splitApi'
 import { RootState } from '../../store/store'
 import type { ICategory, IBook, IChapter, ISection } from './booksTypes'
 
 export const booksApi = splitApi.injectEndpoints({
     endpoints: (build) => ({
-        getCategoriyes: build.query<ICategory[], void>({
+        getCategories: build.query<ICategory[], void>({
             query: () => 'categories',
             transformResponse: (res: { categories: ICategory[] }) =>
                 res.categories,
@@ -24,7 +25,7 @@ export const booksApi = splitApi.injectEndpoints({
 })
 
 export const {
-    useGetCategoriyesQuery,
+    useGetCategoriesQuery,
     useGetBooksQuery,
     useGetBookContentQuery,
 } = booksApi

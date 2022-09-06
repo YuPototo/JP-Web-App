@@ -63,7 +63,7 @@ export const booksSlice = createSlice({
     extraReducers: (builder) => {
         builder
             .addMatcher(
-                booksApi.endpoints.getCategoriyes.matchFulfilled,
+                booksApi.endpoints.getCategories.matchFulfilled,
                 (state, { payload }) => {
                     state.categories = payload
                 },
