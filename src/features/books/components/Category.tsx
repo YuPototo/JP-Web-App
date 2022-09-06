@@ -1,9 +1,9 @@
 import clsx from 'clsx'
 import { useAppDispatch, useAppSelector } from '../../../store/hooks'
-import stringifyRtkQuerryError from '../../../store/storeUtils/stringifyRtkQuerryError'
 import { selectChildrenByLevel, setCategoryKey } from '../booksSlice'
 import { useGetCategoriyesQuery } from '../booksService'
 import type { ICategory } from '../booksTypes'
+import { extractQueyError } from '../../../store/utils/errorHandling'
 
 export default function CategoryNav() {
     const { isLoading, error } = useGetCategoriyesQuery()
@@ -20,7 +20,7 @@ export default function CategoryNav() {
 
             {error && (
                 <span className="text-red-500">
-                    {`获取内容分类出错：${stringifyRtkQuerryError(error)}`}
+                    {`获取内容分类出错：${extractQueyError(error)}`}
                 </span>
             )}
         </div>
