@@ -1,6 +1,7 @@
 import { configureStore, ThunkAction, Action } from '@reduxjs/toolkit'
 import { combineReducers } from 'redux'
 import { splitApi } from './query/splitApi'
+import { authRejectionMiddleware } from './middleware/authRejectionMiddleware'
 
 import bookListReducer from '../features/books/booksSlice'
 import questionSetReducer from '../features/questionSet/questionSetSlice'
@@ -22,7 +23,7 @@ export const store = configureStore({
     middleware: (getDefaultMiddleware) =>
         getDefaultMiddleware()
             .prepend(listenerMiddleware.middleware)
-            .concat(splitApi.middleware),
+            .concat(splitApi.middleware, authRejectionMiddleware),
 })
 
 export type AppDispatch = typeof store.dispatch
