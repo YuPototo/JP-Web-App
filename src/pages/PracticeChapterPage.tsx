@@ -4,10 +4,7 @@ import QuestionSet from '../features/questionSet/components/QuestionSet'
 import { useGetChapterQuery } from '../features/practiceChapter/chapterSerivce'
 import QuestionSetSkeleton from '../features/questionSet/components/QuestionSetSkeleton'
 import { useAppDispatch, useAppSelector } from '../store/hooks'
-import {
-    fillOptionsThunk,
-    selectIsDone,
-} from '../features/questionSet/questionSetSlice'
+import { selectIsDone } from '../features/questionSet/questionSetSlice'
 import { useEffect } from 'react'
 import {
     initResults,
@@ -17,6 +14,7 @@ import {
 import { PracticeMode } from '../features/questionSet/questionSetTypes'
 import { useGetQuestionSetQuery } from '../features/questionSet/questionSetService'
 import { routes } from '../routes/routeBuilder'
+import { fillOptionsThunk } from '../features/questionSet/questionSetThunks'
 
 export default function PracticeChapterPage() {
     const dispatch = useAppDispatch()

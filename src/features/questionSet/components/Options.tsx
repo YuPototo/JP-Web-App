@@ -1,11 +1,8 @@
 import clsx from 'clsx'
 import RichTextRenderer from 'jp_to_react'
 import { useAppDispatch, useAppSelector } from '../../../store/hooks'
-import {
-    pickOptionThunk,
-    selectPickedIndex,
-    selectIsDone,
-} from '../questionSetSlice'
+import { selectPickedIndex, selectIsDone } from '../questionSetSlice'
+import { pickOptionThunk } from '../questionSetThunks'
 
 export default function Options({
     options,

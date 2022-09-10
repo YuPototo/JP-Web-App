@@ -1,7 +1,7 @@
 import { createSlice, PayloadAction } from '@reduxjs/toolkit'
 import { AppStartListening } from '../../store/listenerMiddleware'
-import { AppThunk, RootState } from '../../store/store'
-import { doneInChapter } from '../practiceChapter/practiceChapterSlice'
+import { RootState } from '../../store/store'
+import { finishQuestionSet } from '../practiceChapter/practiceChapterThunks'
 import { questionSetApi } from './questionSetService'
 import { PracticeMode, QuestionSetState } from './questionSetTypes'
 
@@ -118,53 +118,9 @@ export const selectIsDone = (state: RootState) => {
     return nonEmptySelection.length === questionSet.questions.length
 }
 
-/* thunks */
-export const fillOptionsThunk = (): AppThunk => (dispatch, getState) => {
-    const state = getState()
-
-    const questionLength = selectQuetionsLength(state)
-
-    if (!questionLength) {
-        console.error('questionLengths 为 undefined 或 0')
-    } else {
-        dispatch(fillOptions({ questionLength }))
-    }
-
-    // set result
-    const questionSetId = selectCurrentQuestionSet(state)?.id
-
-    if (!questionSetId) {
-        console.error('questionSetId 为 undefined')
-        return
-    }
-
-    dispatch(doneInChapter(questionSetId, false))
-}
-
-export const pickOptionThunk =
-    ({
-        questionIndex,
-        optionIndex,
-    }: {
-        questionIndex: number
-        optionIndex: number
-    }): AppThunk =>
-    async (dispatch, getState) => {
-        const stateBefore = getState()
-        const isDoneBefore = selectIsDone(stateBefore)
-
-        if (isDoneBefore) {
-            console.log('已完成该题，无法再选择')
-            return
-        }
-
-        dispatch(setOptionSelected({ questionIndex, optionIndex }))
-    }
-
 export default questionSetSlice.reducer
 
 /* listenerMiddleware */
-
 export const addQuestionSetListeners = (startListening: AppStartListening) => {
     startListening({
         actionCreator: setOptionSelected,
@@ -186,7 +142,7 @@ export const addQuestionSetListeners = (startListening: AppStartListening) => {
 
             switch (practiceMode) {
                 case PracticeMode.Chapter:
-                    dispatch(doneInChapter(questionSetId, isRight))
+                    dispatch(finishQuestionSet({ questionSetId, isRight }))
                     break
                 default:
                     console.log(`unhandled practice mode: ${practiceMode}`)
