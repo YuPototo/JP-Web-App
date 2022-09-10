@@ -81,8 +81,13 @@ function FavButton({ bookId }: { bookId: string }) {
 
         const mutation = isFav ? removeBookFav : addBookFav
         const toastText = isFav ? '取消收藏成功' : '收藏成功'
-        await mutation(bookId)
-        toast.success(toastText)
+
+        try {
+            await mutation(bookId).unwrap()
+            toast.success(toastText)
+        } catch (err) {
+            // handled by middlware
+        }
     }
 
     return (

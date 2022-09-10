@@ -35,7 +35,7 @@ export default function DeleteChapterDoneModal({
                 closeModal()
             }, 1000)
         } catch (err) {
-            toast.error(JSON.stringify(err))
+            // handled by middleware
         }
     }
 
