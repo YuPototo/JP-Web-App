@@ -11,7 +11,7 @@ import PracticeChapterPage from '../pages/PracticeChapterPage'
 import PracticeReviewPage from '../pages/PracticeReviewPage'
 import RendererExample from '../pages/RendererExamplePage'
 import ShelfPage from '../pages/ShelfPage'
-import WeChatLoginResult from '../pages/WeChatLoginResult'
+import WeChatLoginResult from '../pages/WxLoginResultPage'
 
 type Props = {
     children: React.ReactElement

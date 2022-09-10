@@ -1,4 +1,4 @@
-export const routeBuilder = {
+export const routes = {
     home: () => '/',
     contact: () => '/contact',
     renderExample: () => '/renderExample',

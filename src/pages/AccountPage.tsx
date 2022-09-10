@@ -2,7 +2,7 @@ import React from 'react'
 import toast from 'react-hot-toast'
 import { useNavigate } from 'react-router-dom'
 import { logoutThunk } from '../features/user/userSlice'
-import { routeBuilder } from '../routes/routeBuilder'
+import { routes } from '../routes/routeBuilder'
 import { useAppDispatch, useAppSelector } from '../store/hooks'
 
 // todo: 应该有一个 authGuard
@@ -17,7 +17,7 @@ export default function AccountPage() {
         await dispatch(logoutThunk())
         toast.success('成功登出，即将回到首页')
         setTimeout(() => {
-            navigate(routeBuilder.home())
+            navigate(routes.home())
         }, 2000)
     }
 

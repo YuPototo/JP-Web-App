@@ -11,7 +11,7 @@ import {
 } from '../features/bookFav/bookFavService'
 import { selectIsLogin } from '../features/user/userSlice'
 import toast from 'react-hot-toast'
-import { routeBuilder } from '../routes/routeBuilder'
+import { routes } from '../routes/routeBuilder'
 import { useGetChapterDoneQuery } from '../features/chapterDone/chapterDoneService'
 import DeleteChapterDoneModal from '../features/chapterDone/DeleteChapterDoneModal'
 import { useGetBooksQuery } from '../features/books/booksService'
@@ -75,7 +75,7 @@ function FavButton({ bookId }: { bookId: string }) {
         if (!isLogin) {
             toast.error('请登录')
             setTimeout(() => {
-                naviagte(routeBuilder.login())
+                naviagte(routes.login())
             }, 2000)
         }
 

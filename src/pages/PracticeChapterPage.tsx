@@ -16,7 +16,7 @@ import {
 } from '../features/practiceChapter/practiceChapterSlice'
 import { PracticeMode } from '../features/questionSet/questionSetTypes'
 import { useGetQuestionSetQuery } from '../features/questionSet/questionSetService'
-import { routeBuilder } from '../routes/routeBuilder'
+import { routes } from '../routes/routeBuilder'
 
 export default function PracticeChapterPage() {
     const dispatch = useAppDispatch()
@@ -95,25 +95,19 @@ export default function PracticeChapterPage() {
     const disableBtnArea = isFetchingQuestionSet
 
     const handleToNext = () => {
-        navigate(
-            routeBuilder.practiceChapter(chapterId, questionSetIndex + 1),
-            {
-                replace: true,
-            },
-        )
+        navigate(routes.practiceChapter(chapterId, questionSetIndex + 1), {
+            replace: true,
+        })
     }
 
     const handleToLast = () => {
-        navigate(
-            routeBuilder.practiceChapter(chapterId, questionSetIndex - 1),
-            {
-                replace: true,
-            },
-        )
+        navigate(routes.practiceChapter(chapterId, questionSetIndex - 1), {
+            replace: true,
+        })
     }
 
     const handleFinishChapter = () => {
-        navigate(routeBuilder.chapterResult(chapterId), { replace: true })
+        navigate(routes.chapterResult(chapterId), { replace: true })
     }
 
     return (

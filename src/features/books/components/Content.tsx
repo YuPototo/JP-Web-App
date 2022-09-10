@@ -1,7 +1,7 @@
 import clsx from 'clsx'
 import React, { useEffect, useState } from 'react'
 import { useNavigate } from 'react-router-dom'
-import { routeBuilder } from '../../../routes/routeBuilder'
+import { routes } from '../../../routes/routeBuilder'
 import { useAppSelector } from '../../../store/hooks'
 import { useGetChapterDoneQuery } from '../../chapterDone/chapterDoneService'
 import { selectIsLogin } from '../../user/userSlice'
@@ -107,9 +107,7 @@ function Chapter({ chapter, isDone, isNext }: ChapterProps) {
                 'flex cursor-pointer justify-between  p-2 hover:bg-yellow-100',
                 [isNext ? 'bg-yellow-100' : 'bg-white'],
             )}
-            onClick={() =>
-                navigate(routeBuilder.practiceChapter(chapter.id, 0))
-            }
+            onClick={() => navigate(routes.practiceChapter(chapter.id, 0))}
         >
             <span className="pl-4">{chapter.title}</span>{' '}
             {isDone && <span>完成</span>}

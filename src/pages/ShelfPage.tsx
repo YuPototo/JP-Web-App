@@ -2,7 +2,7 @@ import { useGetBookFavsQuery } from '../features/bookFav/bookFavService'
 import { useAppSelector } from '../store/hooks'
 import { selectBookById } from '../features/books/booksSlice'
 import BookCard from '../features/books/components/BookCard'
-import { routeBuilder } from '../routes/routeBuilder'
+import { routes } from '../routes/routeBuilder'
 import { useNavigate } from 'react-router-dom'
 import useAuthGuard from '../features/user/useAuthGuard'
 
@@ -17,7 +17,7 @@ export default function ShelfPage() {
             {data?.map((bookId) => (
                 <div
                     key={bookId}
-                    onClick={() => navigate(routeBuilder.bookDetail(bookId))}
+                    onClick={() => navigate(routes.bookDetail(bookId))}
                 >
                     <BookWrapper bookId={bookId} />
                 </div>

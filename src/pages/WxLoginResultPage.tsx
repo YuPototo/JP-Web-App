@@ -2,7 +2,7 @@ import React, { useEffect } from 'react'
 import { Link, useNavigate, useSearchParams } from 'react-router-dom'
 import { useLoginMutation } from '../features/user/userService'
 import WeChatLoginBtn from '../features/user/WeChatLoginBtn'
-import { routeBuilder } from '../routes/routeBuilder'
+import { routes } from '../routes/routeBuilder'
 
 export default function WeChatLoginResult() {
     const [searchParams] = useSearchParams()
@@ -20,7 +20,7 @@ export default function WeChatLoginResult() {
 
     useEffect(() => {
         if (isSuccess) {
-            const timer = setTimeout(() => navigate(routeBuilder.home()), 2000)
+            const timer = setTimeout(() => navigate(routes.home()), 2000)
             return () => clearTimeout(timer)
         }
     }, [isSuccess, navigate])
@@ -37,7 +37,7 @@ export default function WeChatLoginResult() {
                     <div>
                         再次登陆：
                         <WeChatLoginBtn />
-                        <Link to={routeBuilder.contact()}>联系开发者</Link>
+                        <Link to={routes.contact()}>联系开发者</Link>
                     </div>
                 </div>
             )}

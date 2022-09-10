@@ -4,7 +4,7 @@ import { splitApi } from './query/splitApi'
 import { authRejectionMiddleware } from './middleware/authRejectionMiddleware'
 import { queryErrorMiddleware } from './middleware/queryErrorMiddleware'
 
-import bookListReducer from '../features/books/booksSlice'
+import booksReducer from '../features/books/booksSlice'
 import questionSetReducer from '../features/questionSet/questionSetSlice'
 import practiceChapterReducer from '../features/practiceChapter/practiceChapterSlice'
 import userReducer from '../features/user/userSlice'
@@ -13,7 +13,7 @@ import listenerMiddleware from './listenerMiddleware'
 
 export const rootReducer = combineReducers({
     [splitApi.reducerPath]: splitApi.reducer,
-    books: bookListReducer,
+    books: booksReducer,
     practiceChapter: practiceChapterReducer,
     questionSet: questionSetReducer,
     user: userReducer,
