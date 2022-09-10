@@ -4,8 +4,8 @@ import { useAppDispatch, useAppSelector } from '../../../store/hooks'
 import {
     selectIsRight,
     selectIsDone,
-    initQuestionSet,
-    setIsError,
+    newQuestionSetInitiated,
+    errorOccured,
 } from '../questionSetSlice'
 
 import { useEffect } from 'react'
@@ -36,12 +36,12 @@ export default function QuestionSet({ questionSetId, practiceMode }: Props) {
 
     // init question set
     useEffect(() => {
-        dispatch(initQuestionSet({ questionSetId, practiceMode }))
+        dispatch(newQuestionSetInitiated({ questionSetId, practiceMode }))
     }, [questionSetId, dispatch, practiceMode])
 
     // set error
     useEffect(() => {
-        isError && dispatch(setIsError(isError))
+        isError && dispatch(errorOccured(isError))
     }, [isError, dispatch])
 
     const isDone = useAppSelector(selectIsDone)

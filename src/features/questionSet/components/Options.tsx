@@ -2,7 +2,7 @@ import clsx from 'clsx'
 import RichTextRenderer from 'jp_to_react'
 import { useAppDispatch, useAppSelector } from '../../../store/hooks'
 import { selectPickedIndex, selectIsDone } from '../questionSetSlice'
-import { pickOptionThunk } from '../questionSetThunks'
+import { pickOption } from '../questionSetThunks'
 
 export default function Options({
     options,
@@ -46,7 +46,7 @@ function Option({
         <div
             onClick={() =>
                 dispatch(
-                    pickOptionThunk({
+                    pickOption({
                         questionIndex,
                         optionIndex,
                     }),

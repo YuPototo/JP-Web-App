@@ -1,6 +1,5 @@
 import { createSlice, PayloadAction } from '@reduxjs/toolkit'
-import type { AppThunk, RootState } from '../../store/store'
-import storageService from '../../utils/storageService'
+import type { RootState } from '../../store/store'
 import { userApi } from './userService'
 
 export interface UserSliceState {
@@ -17,11 +16,16 @@ export const userSlice = createSlice({
     name: 'users',
     initialState,
     reducers: {
-        setToken: (state, action: PayloadAction<string | null>) => {
-            state.token = action.payload
+        userLoggedIn: (
+            state,
+            { payload }: PayloadAction<{ token: string; displayId: string }>,
+        ) => {
+            state.token = payload.token
+            state.displayId = payload.displayId
         },
-        setDisplayId: (state, action: PayloadAction<string | null>) => {
-            state.displayId = action.payload
+        userLoggedOut: (state) => {
+            state.token = null
+            state.displayId = null
         },
     },
     extraReducers: (builder) => {
@@ -35,7 +39,7 @@ export const userSlice = createSlice({
     },
 })
 
-export const { setToken, setDisplayId } = userSlice.actions
+export const { userLoggedIn, userLoggedOut } = userSlice.actions
 
 /* selectors */
 export const selectIsLogin = (state: RootState) => {
@@ -43,19 +47,3 @@ export const selectIsLogin = (state: RootState) => {
 }
 
 export default userSlice.reducer
-
-/* thunks */
-export const getLocalUserInfo = (): AppThunk => (dispatch) => {
-    const result = storageService.getUserInfo()
-
-    if (result) {
-        dispatch(setToken(result.token))
-        dispatch(setDisplayId(result.displayId))
-    }
-}
-
-export const logoutThunk = (): AppThunk => (dispatch) => {
-    storageService.removeUserInfo()
-    dispatch(setToken(null))
-    dispatch(setDisplayId(null))
-}

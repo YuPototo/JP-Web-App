@@ -1,10 +1,10 @@
 import { RootState } from '../../../store/store'
 import bookSliceReducer, {
     selectChildrenByLevel,
-    setCategoryKey,
+    categoryPicked,
     selectBooksByCategory,
+    BooksState,
 } from '../booksSlice'
-import { BooksState } from '../booksTypes'
 import {
     categories,
     jlptChildren,
@@ -13,7 +13,7 @@ import {
     books,
 } from './testData'
 
-describe('reducer: setCategoryKey', () => {
+describe('reducer: categoryPicked', () => {
     it('should set 1st level category key', () => {
         const initialState: BooksState = {
             categories,
@@ -25,7 +25,7 @@ describe('reducer: setCategoryKey', () => {
         expect(
             bookSliceReducer(
                 initialState,
-                setCategoryKey({ categoryLevel: 0, key: 'jlpt' }),
+                categoryPicked({ categoryLevel: 0, key: 'jlpt' }),
             ),
         ).toMatchObject({
             selectedCategoryKeys: ['jlpt'],
@@ -43,7 +43,7 @@ describe('reducer: setCategoryKey', () => {
         expect(
             bookSliceReducer(
                 initialState,
-                setCategoryKey({ categoryLevel: 1, key: 'n1' }),
+                categoryPicked({ categoryLevel: 1, key: 'n1' }),
             ),
         ).toMatchObject({
             selectedCategoryKeys: ['jlpt', 'n1'],
@@ -61,7 +61,7 @@ describe('reducer: setCategoryKey', () => {
         expect(
             bookSliceReducer(
                 initialState,
-                setCategoryKey({ categoryLevel: 2, key: 'reading' }),
+                categoryPicked({ categoryLevel: 2, key: 'reading' }),
             ),
         ).toMatchObject({
             selectedCategoryKeys: ['jlpt', 'n1', 'reading'],
@@ -79,7 +79,7 @@ describe('reducer: setCategoryKey', () => {
         expect(
             bookSliceReducer(
                 initialState,
-                setCategoryKey({ categoryLevel: 0, key: 'study' }),
+                categoryPicked({ categoryLevel: 0, key: 'study' }),
             ),
         ).toMatchObject({
             selectedCategoryKeys: ['study'],
@@ -97,7 +97,7 @@ describe('reducer: setCategoryKey', () => {
         expect(
             bookSliceReducer(
                 initialState,
-                setCategoryKey({ categoryLevel: 1, key: 'n2' }),
+                categoryPicked({ categoryLevel: 1, key: 'n2' }),
             ),
         ).toMatchObject({
             selectedCategoryKeys: ['jlpt', 'n2'],
@@ -115,7 +115,7 @@ describe('reducer: setCategoryKey', () => {
         expect(
             bookSliceReducer(
                 initialState,
-                setCategoryKey({ categoryLevel: 1, key: 'n1' }),
+                categoryPicked({ categoryLevel: 1, key: 'n1' }),
             ),
         ).toEqual(initialState)
     })

@@ -1,5 +1,5 @@
 import { createSlice, PayloadAction } from '@reduxjs/toolkit'
-import { PracticeChapterState } from './practiceChapterTypes'
+import { QuestionSetResult } from './practiceChapterTypes'
 import type { RootState } from '../../store/store'
 
 export enum Result {
@@ -8,9 +8,15 @@ export enum Result {
     NoRecord,
 }
 
+export interface PracticeChapterState {
+    chapterId: string | null
+    currentQuestionSetIndex: number // 正在做的题目的 index
+    results: QuestionSetResult[]
+}
+
 const initialState: PracticeChapterState = {
     chapterId: null,
-    questionSetIndex: 0,
+    currentQuestionSetIndex: 0,
     results: [],
 }
 
@@ -18,19 +24,16 @@ export const practiceChapterSlice = createSlice({
     name: 'practiceChapter',
     initialState,
     reducers: {
-        setQuestionSetIndex: (state, { payload }: PayloadAction<number>) => {
-            state.questionSetIndex = payload
+        questionSetChanged: (state, { payload }: PayloadAction<number>) => {
+            state.currentQuestionSetIndex = payload
         },
-        incQuestionSetIndex: (state, { payload }: PayloadAction<number>) => {
-            state.questionSetIndex += payload
-        },
-        setChapterId: (state, { payload }: PayloadAction<string>) => {
+        chapterUsed: (state, { payload }: PayloadAction<string>) => {
             state.chapterId = payload
         },
         initResults: (state, { payload }: PayloadAction<number>) => {
             state.results = Array(payload).fill(Result.NoRecord)
         },
-        setResult: (
+        resultChanged: (
             state,
             {
                 payload,
@@ -46,13 +49,8 @@ export const practiceChapterSlice = createSlice({
     },
 })
 
-export const {
-    setResult,
-    initResults,
-    setChapterId,
-    setQuestionSetIndex,
-    incQuestionSetIndex,
-} = practiceChapterSlice.actions
+export const { resultChanged, initResults, chapterUsed, questionSetChanged } =
+    practiceChapterSlice.actions
 
 // selectors
 export const selectChapterId = (state: RootState) =>

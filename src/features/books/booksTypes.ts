@@ -1,10 +1,3 @@
-export interface BooksState {
-    categories: ICategory[]
-    selectedCategoryKeys: CategoryKey[]
-    books: IBook[]
-    currentBookId: string | null
-}
-
 /* cateogry */
 export type CategoryKey = string
 

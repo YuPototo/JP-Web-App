@@ -2,7 +2,7 @@ import { useNavigate, useParams } from 'react-router-dom'
 import BookCard from '../features/books/components/BookCard'
 import Content from '../features/books/components/Content'
 import { useAppDispatch, useAppSelector } from '../store/hooks'
-import { selectBookById, setCurrentBookId } from '../features/books/booksSlice'
+import { selectBookById, bookViewed } from '../features/books/booksSlice'
 import { useEffect, useState } from 'react'
 import {
     useAddBookFavMutation,
@@ -24,7 +24,7 @@ export default function BookDetail() {
     const dispatch = useAppDispatch()
 
     useEffect(() => {
-        dispatch(setCurrentBookId(bookId))
+        dispatch(bookViewed(bookId))
     }, [bookId, dispatch])
 
     return (

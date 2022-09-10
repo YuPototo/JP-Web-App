@@ -1,10 +1,10 @@
 import { useEffect } from 'react'
 import { Toaster } from 'react-hot-toast'
 import AppNav from './components/AppNav'
-import { getLocalUserInfo } from './features/user/userSlice'
 import Router from './routes/Router'
 import { useAppDispatch } from './store/hooks'
 import Modal from 'react-modal'
+import { getLocalUserInfo } from './features/user/userThunks'
 
 Modal.setAppElement('#root')
 

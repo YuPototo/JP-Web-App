@@ -1,7 +1,7 @@
 import { isRejectedWithValue, Middleware } from '@reduxjs/toolkit'
 import toast from 'react-hot-toast'
-import { logoutThunk } from '../../features/user/userSlice'
 import { RootState } from '../store'
+import { logout } from '../../features/user/userThunks'
 
 export const authRejectionMiddleware: Middleware<{}, RootState> =
     (storeApi) => (next) => (action) => {
@@ -25,7 +25,7 @@ export const authRejectionMiddleware: Middleware<{}, RootState> =
              *  If I use Middleware<{}, RootState, AppDispatch>, circular import would happen
              */
             // @ts-ignore
-            storeApi.dispatch(logoutThunk())
+            storeApi.dispatch(logout())
 
             // todo: 跳转到登录页面
             // 需要获取 react-router 的 navigate 对象

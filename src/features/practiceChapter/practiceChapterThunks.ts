@@ -1,7 +1,7 @@
 import type { AppThunk } from '../../store/store'
 import { chapterApi, selectChapterQuetionSetIds } from './chapterSerivce'
 import { finishChapter } from '../chapterDone/chapterDoneThunks'
-import { Result, selectChapterId, setResult } from './practiceChapterSlice'
+import { Result, selectChapterId, resultChanged } from './practiceChapterSlice'
 
 /**
  * 获取某个 chapter 的 questionSetIds
@@ -62,7 +62,7 @@ export const finishQuestionSet =
 
         // 记录这道题的做题正误情况
         const questionSetIndex = questionSetIds.indexOf(questionSetId)
-        dispatch(setResult({ questionSetIndex, questionSetId, result }))
+        dispatch(resultChanged({ questionSetIndex, questionSetId, result }))
 
         // 如果是最后一个 questionSet，就发送 chapterDone 的请求
         if (questionSetIndex === questionSetIds.length - 1) {

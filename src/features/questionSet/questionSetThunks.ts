@@ -3,17 +3,17 @@
 import { AppThunk } from '../../store/store'
 import { finishQuestionSet } from '../practiceChapter/practiceChapterThunks'
 import {
-    fillOptions,
+    answerShown,
     selectCurrentQuestionSet,
     selectIsDone,
     selectQuetionsLength,
-    setOptionSelected,
+    optionSelected,
 } from './questionSetSlice'
 
 /**
- * 直接选择答案
+ * 直接展示答案
  */
-export const fillOptionsThunk = (): AppThunk => (dispatch, getState) => {
+export const showAnswer = (): AppThunk => (dispatch, getState) => {
     const state = getState()
 
     const questionLength = selectQuetionsLength(state)
@@ -21,7 +21,7 @@ export const fillOptionsThunk = (): AppThunk => (dispatch, getState) => {
     if (!questionLength) {
         console.error('questionLengths 为 undefined 或 0')
     } else {
-        dispatch(fillOptions({ questionLength }))
+        dispatch(answerShown({ questionLength }))
     }
 
     // set result
@@ -38,7 +38,7 @@ export const fillOptionsThunk = (): AppThunk => (dispatch, getState) => {
 /**
  * 选择某个选项
  */
-export const pickOptionThunk =
+export const pickOption =
     ({
         questionIndex,
         optionIndex,
@@ -55,5 +55,5 @@ export const pickOptionThunk =
             return
         }
 
-        dispatch(setOptionSelected({ questionIndex, optionIndex }))
+        dispatch(optionSelected({ questionIndex, optionIndex }))
     }

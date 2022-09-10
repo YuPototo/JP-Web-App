@@ -8,13 +8,13 @@ import { selectIsDone } from '../features/questionSet/questionSetSlice'
 import { useEffect } from 'react'
 import {
     initResults,
-    setChapterId,
-    setQuestionSetIndex,
+    chapterUsed,
+    questionSetChanged,
 } from '../features/practiceChapter/practiceChapterSlice'
 import { PracticeMode } from '../features/questionSet/questionSetTypes'
 import { useGetQuestionSetQuery } from '../features/questionSet/questionSetService'
 import { routes } from '../routes/routeBuilder'
-import { fillOptionsThunk } from '../features/questionSet/questionSetThunks'
+import { showAnswer } from '../features/questionSet/questionSetThunks'
 
 export default function PracticeChapterPage() {
     const dispatch = useAppDispatch()
@@ -26,11 +26,11 @@ export default function PracticeChapterPage() {
     }
 
     useEffect(() => {
-        dispatch(setChapterId(chapterId))
+        dispatch(chapterUsed(chapterId))
     }, [chapterId, dispatch])
 
     useEffect(() => {
-        dispatch(setQuestionSetIndex(parseInt(qSetIndexString)))
+        dispatch(questionSetChanged(parseInt(qSetIndexString)))
     }, [qSetIndexString, dispatch])
 
     const {
@@ -42,7 +42,7 @@ export default function PracticeChapterPage() {
     } = useGetChapterQuery(chapterId)
 
     const questionSetIndex = useAppSelector(
-        (state) => state.practiceChapter.questionSetIndex,
+        (state) => state.practiceChapter.currentQuestionSetIndex,
     )
 
     const questionSets = chapterInfo?.questionSets || []
@@ -202,7 +202,7 @@ function OperationArea({
                     invisible: isDone,
                 })}
                 disabled={disabled}
-                onClick={() => dispatch(fillOptionsThunk())}
+                onClick={() => dispatch(showAnswer())}
             >
                 答案
             </button>

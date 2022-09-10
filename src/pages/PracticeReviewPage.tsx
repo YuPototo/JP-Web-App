@@ -1,6 +1,6 @@
 import { useNavigate, useParams } from 'react-router-dom'
 import QuestionSet from '../features/questionSet/components/QuestionSet'
-import { fillOptionsThunk } from '../features/questionSet/questionSetThunks'
+import { showAnswer } from '../features/questionSet/questionSetThunks'
 import { PracticeMode } from '../features/questionSet/questionSetTypes'
 import { useAppDispatch } from '../store/hooks'
 
@@ -25,7 +25,7 @@ export default function PracticeReviewPage() {
             <div>
                 <button
                     className="m-2 bg-green-100 p-2"
-                    onClick={() => dispatch(fillOptionsThunk())}
+                    onClick={() => dispatch(showAnswer())}
                 >
                     显示答案
                 </button>
