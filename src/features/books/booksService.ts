@@ -1,4 +1,3 @@
-import toast from 'react-hot-toast'
 import { splitApi } from '../../store/query/splitApi'
 import { RootState } from '../../store/store'
 import type { ICategory, IBook, IChapter, ISection } from './booksTypes'
