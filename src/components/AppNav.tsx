@@ -16,6 +16,7 @@ export default function AppNav(): ReactElement {
             </div>
 
             <Link to={routes.shelf()}>我的书架</Link>
+            <Link to={routes.notebookList()}>笔记本</Link>
 
             {isLogin ? (
                 <div className="flex items-center gap-4">

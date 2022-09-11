@@ -8,6 +8,7 @@ import booksReducer from '../features/books/booksSlice'
 import questionSetReducer from '../features/questionSet/questionSetSlice'
 import practiceChapterReducer from '../features/practiceChapter/practiceChapterSlice'
 import userReducer from '../features/user/userSlice'
+import notebookReducer from '../features/notebook/notebookSlice'
 
 import listenerMiddleware from './listenerMiddleware'
 
@@ -17,6 +18,7 @@ export const rootReducer = combineReducers({
     practiceChapter: practiceChapterReducer,
     questionSet: questionSetReducer,
     user: userReducer,
+    notebook: notebookReducer,
 })
 
 export const store = configureStore({

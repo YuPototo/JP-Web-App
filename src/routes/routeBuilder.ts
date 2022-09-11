@@ -10,4 +10,5 @@ export const routes = {
         `/chapter/${chapterId}/index/${questionSetIndex}`,
     chapterResult: (chapterId: string) => `/chapterResult/${chapterId}`,
     practiceReview: (chapterId: string) => `/practiceReview/${chapterId}`,
+    notebookList: () => '/notebooks',
 }

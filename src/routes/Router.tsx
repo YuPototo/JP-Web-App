@@ -1,5 +1,6 @@
 import React from 'react'
 import { BrowserRouter, Routes, Route } from 'react-router-dom'
+import Page404 from '../pages/404Page'
 import AccountPage from '../pages/AccountPage'
 
 import BookDetail from '../pages/BookDetailPage'
@@ -7,6 +8,7 @@ import ChapterResultPage from '../pages/ChapterResultPage'
 import ContactPage from '../pages/ContactPage'
 import Home from '../pages/HomePage'
 import LoginPage from '../pages/LoginPage'
+import NotebookListPage from '../pages/NotebookListPage'
 import PracticeChapterPage from '../pages/PracticeChapterPage'
 import PracticeReviewPage from '../pages/PracticeReviewPage'
 import RendererExample from '../pages/RendererExamplePage'
@@ -22,6 +24,8 @@ export default function Router({ children }: Props) {
         <BrowserRouter>
             {children}
             <Routes>
+                <Route path="*" element={<Page404 />} />
+
                 <Route path="/" element={<Home />} />
                 <Route path="/books/:bookId" element={<BookDetail />} />
                 <Route
@@ -45,6 +49,7 @@ export default function Router({ children }: Props) {
                 <Route path="/account" element={<AccountPage />} />
                 <Route path="/login" element={<LoginPage />} />
                 <Route path="/shelf" element={<ShelfPage />} />
+                <Route path="/notebooks" element={<NotebookListPage />} />
             </Routes>
         </BrowserRouter>
     )
