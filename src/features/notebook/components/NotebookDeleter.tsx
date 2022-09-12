@@ -1,6 +1,6 @@
 import React, { useState } from 'react'
 import DeleteNotebookModal from './DeleteNotebookModal'
-import { INotebook } from './notebookTypes'
+import { INotebook } from '../notebookTypes'
 
 type Props = {
     notebook: INotebook

@@ -1,6 +1,7 @@
 import React from 'react'
 import { useParams } from 'react-router-dom'
-import NotebookDeleter from '../features/notebook/NotebookDeleter'
+import NotebookDeleter from '../features/notebook/components/NotebookDeleter'
+import NotebookUpdator from '../features/notebook/components/NotebookUpdator'
 import { useGetNotebooksQuery } from '../features/notebook/notebookService'
 import useAuthGuard from '../features/user/useAuthGuard'
 
@@ -24,7 +25,7 @@ export default function NotebookPage() {
             <h1>{notebook.title}</h1>
             {notebook.isDefault || (
                 <div>
-                    <button>改名</button>
+                    <NotebookUpdator notebook={notebook} />
                     <NotebookDeleter notebook={notebook} />
                 </div>
             )}

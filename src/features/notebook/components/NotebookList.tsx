@@ -1,11 +1,11 @@
 import clsx from 'clsx'
 import React, { useMemo } from 'react'
 import { Link } from 'react-router-dom'
-import { routes } from '../../routes/routeBuilder'
-import { useAppSelector } from '../../store/hooks'
-import { selectIsLogin } from '../user/userSlice'
-import { useGetNotebooksQuery } from './notebookService'
-import { INotebook } from './notebookTypes'
+import { routes } from '../../../routes/routeBuilder'
+import { useAppSelector } from '../../../store/hooks'
+import { selectIsLogin } from '../../user/userSlice'
+import { useGetNotebooksQuery } from '../notebookService'
+import { INotebook } from '../notebookTypes'
 
 export default function NotebookList() {
     const isLogin = useAppSelector(selectIsLogin)

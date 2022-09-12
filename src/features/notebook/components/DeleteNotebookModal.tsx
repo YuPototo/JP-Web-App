@@ -1,11 +1,11 @@
 import React from 'react'
-import Spinner from '../../components/Spinner'
+import Spinner from '../../../components/Spinner'
 import toast from 'react-hot-toast'
-import { useDeleteNotebookMutation } from './notebookService'
-import { INotebook } from './notebookTypes'
+import { useDeleteNotebookMutation } from '../notebookService'
+import { INotebook } from '../notebookTypes'
 import { useNavigate } from 'react-router-dom'
-import { routes } from '../../routes/routeBuilder'
-import MyModal from '../../components/MyModal'
+import { routes } from '../../../routes/routeBuilder'
+import MyModal from '../../../components/MyModal'
 
 type Props = {
     notebook: INotebook
