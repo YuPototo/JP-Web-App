@@ -21,7 +21,18 @@ export const notebookApi = splitApi.injectEndpoints({
             transformResponse: (res: { notebook: INotebook }) => res.notebook,
             invalidatesTags: ['Notebook'],
         }),
+        deleteNotebook: build.mutation<void, string>({
+            query: (notebookId) => ({
+                url: `/notebooks/${notebookId}`,
+                method: 'DELETE',
+            }),
+            invalidatesTags: ['Notebook'],
+        }),
     }),
 })
 
-export const { useGetNotebooksQuery, useCreateNotebookMutation } = notebookApi
+export const {
+    useGetNotebooksQuery,
+    useCreateNotebookMutation,
+    useDeleteNotebookMutation,
+} = notebookApi

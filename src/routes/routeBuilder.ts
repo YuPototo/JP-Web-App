@@ -11,4 +11,5 @@ export const routes = {
     chapterResult: (chapterId: string) => `/chapterResult/${chapterId}`,
     practiceReview: (chapterId: string) => `/practiceReview/${chapterId}`,
     notebookList: () => '/notebooks',
+    notebook: (notebookId: string) => `/notebooks/${notebookId}`,
 }

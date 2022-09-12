@@ -1,26 +1,16 @@
 import React from 'react'
-import Modal from 'react-modal'
 import { useFormik } from 'formik'
 import { useCreateNotebookMutation } from './notebookService'
 import Spinner from '../../components/Spinner'
 import toast from 'react-hot-toast'
+import MyModal from '../../components/MyModal'
 
 type Props = {
     isOpen: boolean
     onModalClosed: () => void
 }
 
-const customStyles = {
-    content: {
-        top: '20%',
-        left: '25%',
-        right: '25%',
-        bottom: 'auto',
-        padding: '25px',
-    },
-}
-
-export default function NotebookCreateModal({ isOpen, onModalClosed }: Props) {
+export default function CreateNotebookModal({ isOpen, onModalClosed }: Props) {
     const [createNotebook, { isLoading }] = useCreateNotebookMutation()
 
     const formik = useFormik({
@@ -47,12 +37,7 @@ export default function NotebookCreateModal({ isOpen, onModalClosed }: Props) {
     })
 
     return (
-        <Modal
-            isOpen={isOpen}
-            onRequestClose={onModalClosed}
-            shouldCloseOnOverlayClick={true}
-            style={customStyles}
-        >
+        <MyModal isOpen={isOpen} onModalClosed={onModalClosed}>
             <form onSubmit={formik.handleSubmit}>
                 <input
                     className="rounded border"
@@ -78,6 +63,6 @@ export default function NotebookCreateModal({ isOpen, onModalClosed }: Props) {
                     </button>
                 </div>
             </form>
-        </Modal>
+        </MyModal>
     )
 }

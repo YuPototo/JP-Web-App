@@ -1,5 +1,7 @@
 import clsx from 'clsx'
 import React, { useMemo } from 'react'
+import { Link } from 'react-router-dom'
+import { routes } from '../../routes/routeBuilder'
 import { useAppSelector } from '../../store/hooks'
 import { selectIsLogin } from '../user/userSlice'
 import { useGetNotebooksQuery } from './notebookService'
@@ -27,14 +29,18 @@ function Notebooks({ notebooks }: { notebooks: INotebook[] }) {
     return (
         <div>
             {reordered.map((notebook) => (
-                <div
-                    className={clsx('my-2', {
-                        'bg-green-200': newNotebook === notebook.id,
-                    })}
+                <Link
+                    to={routes.notebook(notebook.id)}
+                    className={clsx(
+                        'my-2 block rounded p-2 hover:cursor-pointer hover:bg-green-100',
+                        {
+                            'bg-green-200': newNotebook === notebook.id,
+                        },
+                    )}
                     key={notebook.id}
                 >
                     {notebook.title}
-                </div>
+                </Link>
             ))}
         </div>
     )

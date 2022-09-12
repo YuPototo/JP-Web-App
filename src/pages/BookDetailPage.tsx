@@ -118,7 +118,7 @@ function ResetChapterDoneBtn({ bookId }: { bookId: string }) {
             <DeleteChapterDoneModal
                 bookId={bookId}
                 isOpen={isDeleteModalOpen}
-                closeModal={() => setIsDeleteModalOpen(false)}
+                onModalClosed={() => setIsDeleteModalOpen(false)}
             />
             {hasChapterDones && (
                 <button onClick={() => setIsDeleteModalOpen(true)}>
