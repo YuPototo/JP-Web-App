@@ -15,7 +15,7 @@ import Explanation from './Explanation'
 import Questions from './Questions'
 import Transcription from './Transcription'
 import AudioPlayer from './AudioPlayer'
-import FavButton from '../../questionSetFav/FavButton'
+import FavButton from '../../notebook/components/FavButton'
 
 type Props = {
     questionSetId: string

@@ -1,7 +1,7 @@
 import React from 'react'
-import MyModal from '../../components/MyModal'
-import NotebookCreator from '../notebook/components/NotebookCreator'
-import NotebookListInModal from '../notebook/components/NotebookListInModal'
+import MyModal from '../../../components/MyModal'
+import NotebookCreator from './NotebookCreator'
+import NotebookListInModal from './NotebookListInModal'
 
 type Props = {
     isOpen: boolean

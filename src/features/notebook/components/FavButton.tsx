@@ -1,11 +1,11 @@
-import React, { useState } from 'react'
+import { useState } from 'react'
 import { Star, StarFill } from 'react-bootstrap-icons'
 import toast from 'react-hot-toast'
-import Spinner from '../../components/Spinner'
-import { useAppDispatch } from '../../store/hooks'
-import { updateQuestionSetFav } from '../questionSet/questionSetService'
+import Spinner from '../../../components/Spinner'
+import { useAppDispatch } from '../../../store/hooks'
+import { updateQuestionSetFav } from '../../questionSet/questionSetService'
+import { useDeleteQuestionSetMutation } from '../notebookService'
 import NotebookModal from './PickNotebookModal'
-import { useDeleteQuestionSetMutation } from './questionSetFavService'
 
 interface Props {
     questionSetId: string

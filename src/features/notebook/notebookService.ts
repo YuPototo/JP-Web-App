@@ -39,6 +39,22 @@ export const notebookApi = splitApi.injectEndpoints({
             }),
             invalidatesTags: ['Notebook'],
         }),
+        saveQuestionSet: build.mutation<
+            void,
+            { notebookId: string; questionSetId: string }
+        >({
+            query: (arg) => ({
+                url: 'questionSetFav',
+                method: 'POST',
+                body: arg,
+            }),
+        }),
+        deleteQuestionSet: build.mutation<void, string>({
+            query: (questionDetId) => ({
+                url: `questionSetFav/${questionDetId}`,
+                method: 'DELETE',
+            }),
+        }),
     }),
 })
 
@@ -47,4 +63,6 @@ export const {
     useCreateNotebookMutation,
     useDeleteNotebookMutation,
     useUpdateNotebookMutation,
+    useSaveQuestionSetMutation,
+    useDeleteQuestionSetMutation,
 } = notebookApi
