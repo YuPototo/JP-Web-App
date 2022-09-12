@@ -43,15 +43,14 @@ export const notebookApi = splitApi.injectEndpoints({
             void,
             { notebookId: string; questionSetId: string }
         >({
-            query: (arg) => ({
-                url: 'questionSetFav',
+            query: ({ notebookId, questionSetId }) => ({
+                url: `notebooks/${notebookId}/questionSets/${questionSetId}`,
                 method: 'POST',
-                body: arg,
             }),
         }),
         deleteQuestionSet: build.mutation<void, string>({
             query: (questionDetId) => ({
-                url: `questionSetFav/${questionDetId}`,
+                url: `notebooks/questionSets/${questionDetId}`,
                 method: 'DELETE',
             }),
         }),
