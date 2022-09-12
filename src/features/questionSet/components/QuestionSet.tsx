@@ -15,6 +15,7 @@ import Explanation from './Explanation'
 import Questions from './Questions'
 import Transcription from './Transcription'
 import AudioPlayer from './AudioPlayer'
+import FavButton from '../../questionSetFav/FavButton'
 
 type Props = {
     questionSetId: string
@@ -23,7 +24,7 @@ type Props = {
 
 export default function QuestionSet({ questionSetId, practiceMode }: Props) {
     const {
-        data: questionSet,
+        data,
         isLoading, // 第1次请求
         isFetching, // 正在请求
         isError,
@@ -31,6 +32,8 @@ export default function QuestionSet({ questionSetId, practiceMode }: Props) {
     } = useGetQuestionSetQuery(questionSetId!, {
         skip: questionSetId === undefined,
     })
+
+    const { questionSet, isFav } = data || {}
 
     const dispatch = useAppDispatch()
 
@@ -62,11 +65,15 @@ export default function QuestionSet({ questionSetId, practiceMode }: Props) {
                     <Body body={questionSet.body} />
                     <Questions questions={questionSet.questions} />
                     <Explanation explanation={questionSet.explanation} />
+
                     {isDone && (
                         <Transcription
                             transcription={questionSet.audio?.transcription}
                         />
                     )}
+
+                    <FavButton questionSetId={questionSetId} isFav={isFav} />
+
                     {isDone &&
                         (isRight ? (
                             <div className="bg-green-100 p-4 text-lg">正确</div>

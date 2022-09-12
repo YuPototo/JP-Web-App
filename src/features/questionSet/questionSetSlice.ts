@@ -72,10 +72,10 @@ export const selectCurrentQuestionSet = (state: RootState) => {
         return
     }
 
-    const { data: questionSet } =
+    const { data } =
         questionSetApi.endpoints.getQuestionSet.select(questionSetId)(state)
 
-    return questionSet
+    return data?.questionSet
 }
 
 // 当前的 questionSet 里有多少个 questions

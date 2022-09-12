@@ -5,19 +5,26 @@ type Props = {
     isOpen: boolean
     onModalClosed: () => void
     children: React.ReactNode
+    bottom?: string
 }
 
-const customStyles = {
-    content: {
-        top: '20%',
-        left: '25%',
-        right: '25%',
-        bottom: 'auto',
-        padding: '25px',
-    },
-}
+export default function MyModal({
+    isOpen,
+    onModalClosed,
+    children,
+    bottom, // 如果设置为 auto，那么 modal 高度会根据内容自动调整。否则固定高度
+}: Props) {
+    const customStyles = {
+        content: {
+            top: '50%',
+            left: '50%',
+            right: 'auto',
+            bottom: 'auto',
+            marginRight: '-50%',
+            transform: 'translate(-50%, -50%)',
+        },
+    }
 
-export default function MyModal({ isOpen, onModalClosed, children }: Props) {
     return (
         <Modal
             isOpen={isOpen}

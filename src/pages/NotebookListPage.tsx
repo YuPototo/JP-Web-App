@@ -1,5 +1,5 @@
 import NotebookCreator from '../features/notebook/components/NotebookCreator'
-import NotebookList from '../features/notebook/components/NotebookList'
+import NotebookList from '../features/notebook/components/NotebookListInPage'
 import useAuthGuard from '../features/user/useAuthGuard'
 
 export default function NotebookListPage() {
