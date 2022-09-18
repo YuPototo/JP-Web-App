@@ -1,3 +1,4 @@
+// todo: move to user feature
 const setUserInfo = (token: string, displayId: string) => {
     localStorage.setItem('token', token)
     localStorage.setItem('displayId', displayId)

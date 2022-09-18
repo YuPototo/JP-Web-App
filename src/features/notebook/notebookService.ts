@@ -54,6 +54,12 @@ export const notebookApi = splitApi.injectEndpoints({
                 method: 'DELETE',
             }),
         }),
+        getNotebookContent: build.query<string[], string>({
+            query: (notebookId) => `notebooks/${notebookId}/questionSets`,
+            transformResponse: (res: { questionSets: string[] }) => {
+                return res.questionSets
+            },
+        }),
     }),
 })
 
@@ -64,4 +70,5 @@ export const {
     useUpdateNotebookMutation,
     useSaveQuestionSetMutation,
     useDeleteQuestionSetMutation,
+    useGetNotebookContentQuery,
 } = notebookApi
