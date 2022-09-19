@@ -27,7 +27,7 @@ export const notebookApi = splitApi.injectEndpoints({
         >({
             query: ({ notebookId, title }) => ({
                 url: `/notebooks/${notebookId}`,
-                method: 'PATCH',
+                method: 'POST',
                 body: { title },
             }),
             invalidatesTags: ['Notebook'],
