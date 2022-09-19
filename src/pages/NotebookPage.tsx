@@ -42,6 +42,8 @@ export default function NotebookPage() {
 
     const isEmptyNotebook = questionSetIds?.length === 0
 
+    const notebookDoable = !isEmptyNotebook && questionSetIds !== undefined
+
     const hasFinished = questionSetIds
         ? notebookProgress >= questionSetIds?.length
         : false
@@ -69,7 +71,7 @@ export default function NotebookPage() {
                 </div>
             )}
 
-            {!isEmptyNotebook && questionSetIds && (
+            {notebookDoable && (
                 <>
                     <div>收藏了{questionSetIds.length}题</div>
 
