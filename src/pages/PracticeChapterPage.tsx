@@ -1,10 +1,8 @@
-import clsx from 'clsx'
 import { useNavigate, useParams } from 'react-router-dom'
 import QuestionSet from '../features/questionSet/components/QuestionSet'
 import { useGetChapterQuery } from '../features/practiceChapter/chapterSerivce'
 import QuestionSetSkeleton from '../features/questionSet/components/QuestionSetSkeleton'
 import { useAppDispatch, useAppSelector } from '../store/hooks'
-import { selectIsDone } from '../features/questionSet/questionSetSlice'
 import { useEffect } from 'react'
 import {
     initResults,
@@ -14,7 +12,7 @@ import {
 import { PracticeMode } from '../features/questionSet/questionSetTypes'
 import { useGetQuestionSetQuery } from '../features/questionSet/questionSetService'
 import { routes } from '../routes/routeBuilder'
-import { showAnswer } from '../features/questionSet/questionSetThunks'
+import QuestionSetListOperator from '../components/QuestionSetListOperator'
 
 export default function PracticeChapterPage() {
     const dispatch = useAppDispatch()
@@ -125,13 +123,13 @@ export default function PracticeChapterPage() {
             )}
 
             {showBtnArea && (
-                <OperationArea
-                    questionSetIndex={questionSetIndex}
-                    questionSets={questionSets}
+                <QuestionSetListOperator
+                    index={questionSetIndex}
+                    questionSetCount={questionSets.length}
                     disabled={disableBtnArea}
-                    handleToLast={handleToLast}
-                    handleToNext={handleToNext}
-                    handleFinishChapter={handleFinishChapter}
+                    onToLast={handleToLast}
+                    onToNext={handleToNext}
+                    onFinish={handleFinishChapter}
                 />
             )}
         </div>
@@ -154,73 +152,4 @@ function ChapterInfo({ title, desc }: { title: string; desc?: string }) {
             {desc && <div>{desc}</div>}
         </div>
     )
-}
-
-function OperationArea({
-    questionSetIndex,
-    questionSets,
-    disabled,
-    handleToLast,
-    handleToNext,
-    handleFinishChapter,
-}: {
-    questionSetIndex: number
-    questionSets: string[]
-    disabled: boolean
-    handleToLast: () => void
-    handleToNext: () => void
-    handleFinishChapter: () => void
-}) {
-    const dispatch = useAppDispatch()
-    const isDone = useAppSelector(selectIsDone)
-
-    const isQuestionSetError = useAppSelector(
-        (state) => state.questionSet.isError,
-    )
-
-    const hasNext = questionSetIndex < questionSets.length - 1
-    const hasPreviousQuestionSet = questionSetIndex > 0
-
-    const handleContinue = () => {
-        hasNext ? handleToNext() : handleFinishChapter()
-    }
-
-    return (
-        <>
-            <button
-                className={clsx('m-2 bg-green-100 p-2', {
-                    invisible: !hasPreviousQuestionSet,
-                })}
-                disabled={disabled}
-                onClick={handleToLast}
-            >
-                上一题
-            </button>
-
-            <button
-                className={clsx('m-2 bg-green-100 p-2', {
-                    invisible: isDone,
-                })}
-                disabled={disabled}
-                onClick={() => dispatch(showAnswer())}
-            >
-                答案
-            </button>
-
-            <button
-                className={clsx('m-2 bg-green-100 p-2', {
-                    invisible: !showNextBtn(isDone, isQuestionSetError),
-                })}
-                disabled={disabled}
-                onClick={handleContinue}
-            >
-                {hasNext ? '下一题' : '完成本节'}
-            </button>
-        </>
-    )
-}
-
-function showNextBtn(isDone: boolean, isQuestionSetError: boolean) {
-    if (isQuestionSetError) return true
-    return isDone
 }
