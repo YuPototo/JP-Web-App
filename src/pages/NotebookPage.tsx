@@ -52,6 +52,10 @@ export default function NotebookPage() {
         ? '已完成'
         : `第${notebookProgress + 1}题`
 
+    const handleStart = () => {
+        navigate(routes.practiceNotebook(notebookId, notebookProgress))
+    }
+
     return (
         <div>
             <h1>{notebook.title}</h1>
@@ -79,7 +83,7 @@ export default function NotebookPage() {
 
                     {!hasFinished && (
                         <div>
-                            <button>
+                            <button onClick={handleStart}>
                                 {notebookProgress > 0 ? '继续' : '开始'}复习
                             </button>
                         </div>

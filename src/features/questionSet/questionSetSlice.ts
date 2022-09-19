@@ -1,6 +1,7 @@
 import { createSlice, PayloadAction } from '@reduxjs/toolkit'
 import { AppStartListening } from '../../store/listenerMiddleware'
 import { RootState } from '../../store/store'
+import { finishNotebookQuestionSet } from '../notebook/notebookSlice'
 import { finishQuestionSet } from '../practiceChapter/practiceChapterThunks'
 import { questionSetApi } from './questionSetService'
 import { PracticeMode, QuestionSetState } from './questionSetTypes'
@@ -147,6 +148,9 @@ export const addQuestionSetListeners = (startListening: AppStartListening) => {
             switch (practiceMode) {
                 case PracticeMode.Chapter:
                     dispatch(finishQuestionSet({ questionSetId, isRight }))
+                    break
+                case PracticeMode.Notebook:
+                    dispatch(finishNotebookQuestionSet(questionSetId))
                     break
                 default:
                     console.log(`unhandled practice mode: ${practiceMode}`)

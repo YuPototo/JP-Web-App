@@ -15,6 +15,7 @@ import RendererExample from '../pages/RendererExamplePage'
 import ShelfPage from '../pages/ShelfPage'
 import WeChatLoginResult from '../pages/WxLoginResultPage'
 import NotebookPage from '../pages/NotebookPage'
+import PracticeNotebookPage from '../pages/PracticeNotebookPage'
 
 type Props = {
     children: React.ReactElement
@@ -54,6 +55,10 @@ export default function Router({ children }: Props) {
                 <Route
                     path="/notebooks/:notebookId"
                     element={<NotebookPage />}
+                />
+                <Route
+                    path="/notebooks/:notebookId/index/:questionSetIndex"
+                    element={<PracticeNotebookPage />}
                 />
             </Routes>
         </BrowserRouter>

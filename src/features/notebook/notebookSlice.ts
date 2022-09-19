@@ -6,11 +6,15 @@ import notebookStorageService from './notebookStorage'
 interface NotebookState {
     newNotebook: string | null
     notebookProgress: Record<string, number>
+    currentNotebook: string | null
+    questionSetIds: string[]
 }
 
 const initialState: NotebookState = {
     newNotebook: null,
     notebookProgress: {},
+    currentNotebook: null,
+    questionSetIds: [],
 }
 
 export const notebookSlice = createSlice({
@@ -20,12 +24,18 @@ export const notebookSlice = createSlice({
         notebookCreated: (state, action: PayloadAction<string>) => {
             state.newNotebook = action.payload
         },
+        questionSetIdsAdded: (state, action: PayloadAction<string[]>) => {
+            state.questionSetIds = action.payload
+        },
         notebookProgressUpdated: (
             state,
             action: PayloadAction<{ notebookId: string; index: number }>,
         ) => {
             state.notebookProgress[action.payload.notebookId] =
                 action.payload.index
+        },
+        notebookUsed: (state, action: PayloadAction<string>) => {
+            state.currentNotebook = action.payload
         },
     },
     extraReducers: (builder) => {
@@ -38,8 +48,12 @@ export const notebookSlice = createSlice({
     },
 })
 
-export const { notebookCreated, notebookProgressUpdated } =
-    notebookSlice.actions
+export const {
+    notebookCreated,
+    notebookProgressUpdated,
+    notebookUsed,
+    questionSetIdsAdded,
+} = notebookSlice.actions
 
 export default notebookSlice.reducer
 
@@ -63,4 +77,25 @@ export const setNotebookProgress =
     (dispatch) => {
         notebookStorageService.setProgress(notebookId, index)
         dispatch(notebookProgressUpdated({ notebookId, index: 0 }))
+    }
+
+export const finishNotebookQuestionSet =
+    (questionSetId: string): AppThunk =>
+    (dispatch, getState) => {
+        const state = getState()
+        const currentNotebook = state.notebook.currentNotebook
+        if (!currentNotebook) {
+            console.error('找不到 current notebook')
+            return
+        }
+
+        const questionSetIds = state.notebook.questionSetIds
+
+        const index = questionSetIds.indexOf(questionSetId)
+        if (index === -1) {
+            console.error(
+                `在 state.notebook.questionSetIds 里找不到 questionSetId ${questionSetId}`,
+            )
+        }
+        dispatch(setNotebookProgress(currentNotebook, index + 1))
     }
