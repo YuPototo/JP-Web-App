@@ -7,9 +7,15 @@ import { selectIsLogin } from './userSlice'
 
 export default function useAuthGuard() {
     const navigate = useNavigate()
+
+    const hasFetcedLocalUser = useAppSelector(
+        (state) => state.user.hasFetcedLocalUser,
+    )
     const isLogin = useAppSelector(selectIsLogin)
 
     useEffect(() => {
+        if (!hasFetcedLocalUser) return
+
         let timer: NodeJS.Timeout | null = null
         if (!isLogin) {
             toast('请登录')
@@ -23,7 +29,7 @@ export default function useAuthGuard() {
                 clearTimeout(timer)
             }
         }
-    }, [isLogin, navigate])
+    }, [hasFetcedLocalUser, isLogin, navigate])
 
-    return { isLogin }
+    return isLogin
 }

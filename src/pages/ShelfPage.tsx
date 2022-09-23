@@ -8,7 +8,7 @@ import useAuthGuard from '../features/user/useAuthGuard'
 
 export default function ShelfPage() {
     const navigate = useNavigate()
-    const { isLogin } = useAuthGuard()
+    const isLogin = useAuthGuard()
     const { data } = useGetBookFavsQuery(undefined, { skip: !isLogin })
 
     return (

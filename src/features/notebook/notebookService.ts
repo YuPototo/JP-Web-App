@@ -47,18 +47,21 @@ export const notebookApi = splitApi.injectEndpoints({
                 url: `notebooks/${notebookId}/questionSets/${questionSetId}`,
                 method: 'POST',
             }),
+            invalidatesTags: ['QuestionSetFav'],
         }),
         deleteQuestionSet: build.mutation<void, string>({
             query: (questionDetId) => ({
                 url: `notebooks/questionSets/${questionDetId}`,
                 method: 'DELETE',
             }),
+            invalidatesTags: ['QuestionSetFav'],
         }),
         getNotebookContent: build.query<string[], string>({
             query: (notebookId) => `notebooks/${notebookId}/questionSets`,
             transformResponse: (res: { questionSets: string[] }) => {
                 return res.questionSets
             },
+            providesTags: ['QuestionSetFav'],
         }),
     }),
 })

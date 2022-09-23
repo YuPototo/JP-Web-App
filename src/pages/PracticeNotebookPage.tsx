@@ -3,90 +3,78 @@ import { useNavigate, useParams } from 'react-router-dom'
 import QuestionSetListOperator from '../components/QuestionSetListOperator'
 import { useGetNotebookContentQuery } from '../features/notebook/notebookService'
 import {
-    notebookUsed,
+    noteBookPracticeStarted,
     questionSetIdsAdded,
 } from '../features/notebook/notebookSlice'
 import QuestionSet from '../features/questionSet/components/QuestionSet'
-import { useGetQuestionSetQuery } from '../features/questionSet/questionSetService'
+import { useGetQuestionSetLoadingInfo } from '../features/questionSet/hooks/useGetQuestionSetLoadingInfo'
 import { PracticeMode } from '../features/questionSet/questionSetTypes'
 import { routes } from '../routes/routeBuilder'
-import { useAppDispatch } from '../store/hooks'
+import { useAppDispatch, useAppSelector } from '../store/hooks'
 
 export default function PracticeNotebookPage() {
-    const { notebookId, questionSetIndex: qSetIndexString } = useParams() as {
-        notebookId: string
-        questionSetIndex: string
-    }
     const navigate = useNavigate()
-    const dispatch = useAppDispatch()
 
-    const questionSetIndex = parseInt(qSetIndexString)
+    // init practice notebook page
+    const { notebookId, questionSetId, questionSetIds, questionSetIndex } =
+        useInitNotebookPractice()
 
-    useEffect(() => {
-        dispatch(notebookUsed(notebookId))
-    }, [notebookId, dispatch])
+    // get question set loading info
+    const { isLoadingQuestionSet, isFetchingQuestionSet } =
+        useGetQuestionSetLoadingInfo(questionSetId)
 
-    const { data: questionSetIds } = useGetNotebookContentQuery(notebookId)
-
-    useEffect(() => {
-        questionSetIds && dispatch(questionSetIdsAdded(questionSetIds))
-    }, [dispatch, questionSetIds])
-
-    const questionSets = questionSetIds || []
-    const questionSetId = questionSets[questionSetIndex]
-
-    const {
-        isFetching: isFetchingQuestionSet,
-        isLoading: isLoadingQuestionSet,
-    } = useGetQuestionSetQuery(questionSetId!, {
-        skip: questionSetId === undefined,
-    })
-
-    const foundQuestionSetId = questionSetId !== undefined
-
-    if (!foundQuestionSetId) {
+    // state 1：错误，找不到 questionSet
+    if (questionSetId === undefined) {
         return (
             <div>
-                出错了：chapter.questionSetIds 里找不到第{questionSetIndex}个
-                element
+                出错了 notebookSlice.questionSetIds 里找不到第{questionSetIndex}
+                个 element
             </div>
         )
     }
 
-    const showBtnArea = !isLoadingQuestionSet
-    const showQuestionSet = foundQuestionSetId
-    const disableBtnArea = isFetchingQuestionSet
-
     const handleToNext = () => {
-        navigate(routes.practiceNotebook(notebookId, questionSetIndex + 1), {
-            replace: true,
-        })
+        const nextQuestionSetIndex = questionSetIndex + 1
+        const nextQuestionSetId = questionSetIds[nextQuestionSetIndex]
+        if (nextQuestionSetId !== undefined) {
+            navigate(routes.practiceNotebook(notebookId, nextQuestionSetId), {
+                replace: true,
+            })
+        } else {
+            console.error('没有下一个 questionSet 了')
+        }
     }
 
     const handleToLast = () => {
-        navigate(routes.practiceNotebook(notebookId, questionSetIndex - 1), {
-            replace: true,
-        })
+        const lastQuestionSetIndex = questionSetIndex - 1
+        const lastQuestionSetId = questionSetIds[lastQuestionSetIndex]
+        if (lastQuestionSetId) {
+            navigate(routes.practiceNotebook(notebookId, lastQuestionSetId), {
+                replace: true,
+            })
+        } else {
+            console.error('没有上一个 questionSet 了')
+        }
     }
 
     const handleFinish = () => {
-        navigate(routes.notebook(notebookId), { replace: true })
+        navigate(-1)
     }
 
     return (
         <div>
-            {showQuestionSet && (
+            {questionSetId !== undefined && (
                 <QuestionSet
                     questionSetId={questionSetId}
                     practiceMode={PracticeMode.Notebook}
                 />
             )}
 
-            {showBtnArea && (
+            {!isLoadingQuestionSet && (
                 <QuestionSetListOperator
                     index={questionSetIndex}
-                    questionSetCount={questionSets.length}
-                    disabled={disableBtnArea}
+                    questionSetCount={questionSetIds.length}
+                    disabled={isFetchingQuestionSet}
                     onToLast={handleToLast}
                     onToNext={handleToNext}
                     onFinish={handleFinish}
@@ -94,4 +82,36 @@ export default function PracticeNotebookPage() {
             )}
         </div>
     )
+}
+
+function useInitNotebookPractice() {
+    const dispatch = useAppDispatch()
+
+    const { notebookId, questionSetId } = useParams() as {
+        notebookId: string
+        questionSetId: string
+    }
+
+    useEffect(() => {
+        dispatch(noteBookPracticeStarted(notebookId))
+    }, [notebookId, dispatch])
+
+    const { data } = useGetNotebookContentQuery(notebookId)
+    useEffect(() => {
+        data && dispatch(questionSetIdsAdded(data))
+    }, [dispatch, notebookId, data])
+
+    // 从 store 里获取 questionSetIds，因为在做题过程中，可能会添加新的 questionSet 到 notebook 里，这时候 query 里的 questionSets 是最新的。但我不需要最新的 questionSets。
+    const questionSetIds = useAppSelector(
+        (state) => state.notebook.questionSetIds,
+    )
+
+    const questionSetIndex = questionSetIds.indexOf(questionSetId)
+
+    return {
+        notebookId,
+        questionSetId,
+        questionSetIds,
+        questionSetIndex,
+    }
 }

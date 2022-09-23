@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react'
+import { useEffect } from 'react'
 import { useNavigate, useParams } from 'react-router-dom'
 import NotebookDeleter from '../features/notebook/components/NotebookDeleter'
 import NotebookReseter from '../features/notebook/components/NotebookReseter'
@@ -9,7 +9,7 @@ import {
 } from '../features/notebook/notebookService'
 import {
     getNotebookProgress,
-    selectNotebokProgress,
+    selectNotebokProgressIndex,
 } from '../features/notebook/notebookSlice'
 import useAuthGuard from '../features/user/useAuthGuard'
 import { routes } from '../routes/routeBuilder'
@@ -18,7 +18,9 @@ import { useAppDispatch, useAppSelector } from '../store/hooks'
 export default function NotebookPage() {
     const { notebookId } = useParams() as { notebookId: string }
     const dispatch = useAppDispatch()
+
     const isLogin = useAuthGuard()
+
     const navigate = useNavigate()
 
     const { data: notebooks } = useGetNotebooksQuery(undefined, {
@@ -34,7 +36,8 @@ export default function NotebookPage() {
     }, [notebookId, dispatch])
 
     const notebook = notebooks?.find((el) => el.id === notebookId)
-    const notebookProgress = useAppSelector(selectNotebokProgress(notebookId))
+    const notebookProgress = useAppSelector(selectNotebokProgressIndex)
+    const nextQuestionSetId = questionSetIds?.[notebookProgress]
 
     if (!notebook) {
         return <div>加载中...</div>
@@ -44,16 +47,14 @@ export default function NotebookPage() {
 
     const notebookDoable = !isEmptyNotebook && questionSetIds !== undefined
 
-    const hasFinished = questionSetIds
-        ? notebookProgress >= questionSetIds?.length
-        : false
-
-    const studyProgressText = hasFinished
-        ? '已完成'
-        : `第${notebookProgress + 1}题`
+    const progress = questionSetIds
+        ? notebookProgress / questionSetIds.length
+        : 0
 
     const handleStart = () => {
-        navigate(routes.practiceNotebook(notebookId, notebookProgress))
+        if (nextQuestionSetId !== undefined) {
+            navigate(routes.practiceNotebook(notebookId, nextQuestionSetId))
+        }
     }
 
     return (
@@ -79,9 +80,9 @@ export default function NotebookPage() {
                 <>
                     <div>收藏了{questionSetIds.length}题</div>
 
-                    <div>复习进度：{studyProgressText}</div>
+                    <div>复习进度：{progress}</div>
 
-                    {!hasFinished && (
+                    {progress < 1 && (
                         <div>
                             <button onClick={handleStart}>
                                 {notebookProgress > 0 ? '继续' : '开始'}复习

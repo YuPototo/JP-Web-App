@@ -57,7 +57,7 @@ export default function Router({ children }: Props) {
                     element={<NotebookPage />}
                 />
                 <Route
-                    path="/notebooks/:notebookId/index/:questionSetIndex"
+                    path="/notebooks/:notebookId/questionSet/:questionSetId"
                     element={<PracticeNotebookPage />}
                 />
             </Routes>

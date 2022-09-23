@@ -1,7 +1,7 @@
 import React from 'react'
 import MyModal from '../../../components/MyModal'
 import { useAppDispatch } from '../../../store/hooks'
-import { setNotebookProgress } from '../notebookSlice'
+import { resetNotebookProgress } from '../notebookSlice'
 import { INotebook } from '../notebookTypes'
 
 type Props = {
@@ -17,7 +17,7 @@ export default function ResetNotebookProgressModal({
 }: Props) {
     const dispatch = useAppDispatch()
     const handleResetProgress = () => {
-        dispatch(setNotebookProgress(notebook.id, 0))
+        dispatch(resetNotebookProgress(notebook.id))
     }
 
     return (

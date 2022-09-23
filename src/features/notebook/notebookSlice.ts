@@ -3,16 +3,21 @@ import { AppThunk, RootState } from '../../store/store'
 import { notebookApi } from './notebookService'
 import notebookStorageService from './notebookStorage'
 
+type ProgressType =
+    | string // questionSet 的 id
+    | 0 // 没有进度
+    | 1 // 已完成
+
 interface NotebookState {
     newNotebook: string | null
-    notebookProgress: Record<string, number>
+    currentNotebookProgress: ProgressType
     currentNotebook: string | null
     questionSetIds: string[]
 }
 
 const initialState: NotebookState = {
     newNotebook: null,
-    notebookProgress: {},
+    currentNotebookProgress: 0,
     currentNotebook: null,
     questionSetIds: [],
 }
@@ -24,18 +29,22 @@ export const notebookSlice = createSlice({
         notebookCreated: (state, action: PayloadAction<string>) => {
             state.newNotebook = action.payload
         },
-        questionSetIdsAdded: (state, action: PayloadAction<string[]>) => {
-            state.questionSetIds = action.payload
+        questionSetIdsAdded: (state, { payload }: PayloadAction<string[]>) => {
+            // 只有在没有questionSetIds的时候才允许添加
+            // 这里涉及一个 edge case：做题过程中不允许改变questionSetIds
+            if (state.questionSetIds.length === 0) {
+                state.questionSetIds = payload
+            }
         },
         notebookProgressUpdated: (
             state,
-            action: PayloadAction<{ notebookId: string; index: number }>,
+            { payload }: PayloadAction<string | 0 | 1>,
         ) => {
-            state.notebookProgress[action.payload.notebookId] =
-                action.payload.index
+            state.currentNotebookProgress = payload
         },
-        notebookUsed: (state, action: PayloadAction<string>) => {
+        noteBookPracticeStarted: (state, action: PayloadAction<string>) => {
             state.currentNotebook = action.payload
+            state.questionSetIds = []
         },
     },
     extraReducers: (builder) => {
@@ -51,32 +60,52 @@ export const notebookSlice = createSlice({
 export const {
     notebookCreated,
     notebookProgressUpdated,
-    notebookUsed,
     questionSetIdsAdded,
+    noteBookPracticeStarted,
 } = notebookSlice.actions
 
 export default notebookSlice.reducer
 
 /* selectors */
-export const selectNotebokProgress =
-    (notebookId: string) => (state: RootState) => {
-        const progress = state.notebook.notebookProgress[notebookId]
-        return progress ? progress : 0
+
+/**
+ * 笔记本进度对应笔记本内的第几题
+ */
+export const selectNotebokProgressIndex = (state: RootState): number => {
+    const { currentNotebookProgress, questionSetIds } = state.notebook
+    if (!currentNotebookProgress) {
+        return 0
     }
+
+    if (currentNotebookProgress === 1) {
+        return questionSetIds.length
+    }
+
+    const index = questionSetIds.indexOf(currentNotebookProgress)
+    return index === -1 ? 0 : index
+}
 
 /* thunks */
 export const getNotebookProgress =
     (notebookId: string): AppThunk =>
     (dispatch) => {
-        const progress = notebookStorageService.getProgress(notebookId)
-        dispatch(notebookProgressUpdated({ notebookId, index: progress }))
+        const questionSetId = notebookStorageService.getProgress(notebookId)
+        const payload = questionSetId ? questionSetId : 0
+        dispatch(notebookProgressUpdated(payload as ProgressType))
     }
 
 export const setNotebookProgress =
-    (notebookId: string, index: number): AppThunk =>
+    (notebookId: string, progress: string | 0 | 1): AppThunk =>
     (dispatch) => {
-        notebookStorageService.setProgress(notebookId, index)
-        dispatch(notebookProgressUpdated({ notebookId, index: 0 }))
+        notebookStorageService.setProgress(notebookId, progress)
+        dispatch(notebookProgressUpdated(progress))
+    }
+
+export const resetNotebookProgress =
+    (notebookId: string): AppThunk =>
+    (dispatch) => {
+        notebookStorageService.resetProgress(notebookId)
+        dispatch(notebookProgressUpdated(0))
     }
 
 export const finishNotebookQuestionSet =
@@ -96,6 +125,16 @@ export const finishNotebookQuestionSet =
             console.error(
                 `在 state.notebook.questionSetIds 里找不到 questionSetId ${questionSetId}`,
             )
+            return
         }
-        dispatch(setNotebookProgress(currentNotebook, index + 1))
+
+        if (index === questionSetIds.length - 1) {
+            dispatch(setNotebookProgress(currentNotebook, 1))
+            return
+        }
+
+        const nextQuestionSetId = questionSetIds[index + 1]
+        if (nextQuestionSetId) {
+            dispatch(setNotebookProgress(currentNotebook, nextQuestionSetId))
+        }
     }

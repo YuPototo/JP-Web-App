@@ -8,9 +8,6 @@ export default function PracticeReviewPage() {
     const dispatch = useAppDispatch()
     const navigate = useNavigate()
 
-    /** tech debt
-     *  * 不使用 as
-     */
     const { questionSetId } = useParams() as {
         questionSetId: string
     }

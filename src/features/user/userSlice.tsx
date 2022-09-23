@@ -5,11 +5,13 @@ import { userApi } from './userService'
 export interface UserSliceState {
     token: string | null
     displayId: string | null
+    hasFetcedLocalUser: boolean
 }
 
 const initialState: UserSliceState = {
     token: null,
     displayId: null,
+    hasFetcedLocalUser: false,
 }
 
 export const userSlice = createSlice({
@@ -27,6 +29,9 @@ export const userSlice = createSlice({
             state.token = null
             state.displayId = null
         },
+        localUserFetched: (state) => {
+            state.hasFetcedLocalUser = true
+        },
     },
     extraReducers: (builder) => {
         builder.addMatcher(
@@ -39,7 +44,8 @@ export const userSlice = createSlice({
     },
 })
 
-export const { userLoggedIn, userLoggedOut } = userSlice.actions
+export const { userLoggedIn, userLoggedOut, localUserFetched } =
+    userSlice.actions
 
 /* selectors */
 export const selectIsLogin = (state: RootState) => {

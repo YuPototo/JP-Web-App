@@ -12,6 +12,6 @@ export const routes = {
     practiceReview: (chapterId: string) => `/practiceReview/${chapterId}`,
     notebookList: () => '/notebooks',
     notebook: (notebookId: string) => `/notebooks/${notebookId}`,
-    practiceNotebook: (notebookId: string, questionSetIndex: number) =>
-        `/notebooks/${notebookId}/index/${questionSetIndex}`,
+    practiceNotebook: (notebookId: string, questionSetId: string) =>
+        `/notebooks/${notebookId}/questionSet/${questionSetId}`,
 }

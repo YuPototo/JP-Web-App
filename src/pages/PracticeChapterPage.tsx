@@ -2,110 +2,84 @@ import { useNavigate, useParams } from 'react-router-dom'
 import QuestionSet from '../features/questionSet/components/QuestionSet'
 import { useGetChapterQuery } from '../features/practiceChapter/chapterSerivce'
 import QuestionSetSkeleton from '../features/questionSet/components/QuestionSetSkeleton'
-import { useAppDispatch, useAppSelector } from '../store/hooks'
+import { useAppDispatch } from '../store/hooks'
 import { useEffect } from 'react'
 import {
     initResults,
     chapterUsed,
-    questionSetChanged,
 } from '../features/practiceChapter/practiceChapterSlice'
 import { PracticeMode } from '../features/questionSet/questionSetTypes'
-import { useGetQuestionSetQuery } from '../features/questionSet/questionSetService'
 import { routes } from '../routes/routeBuilder'
 import QuestionSetListOperator from '../components/QuestionSetListOperator'
+import { useGetQuestionSetLoadingInfo } from '../features/questionSet/hooks/useGetQuestionSetLoadingInfo'
 
 export default function PracticeChapterPage() {
     const dispatch = useAppDispatch()
     const navigate = useNavigate()
 
-    const { chapterId, questionSetIndex: qSetIndexString } = useParams() as {
-        chapterId: string
-        questionSetIndex: string
-    }
+    // init page
+    const { chapterId, questionSetIndex } = useInitChapterPractice()
 
-    useEffect(() => {
-        dispatch(chapterUsed(chapterId))
-    }, [chapterId, dispatch])
-
-    useEffect(() => {
-        dispatch(questionSetChanged(parseInt(qSetIndexString)))
-    }, [qSetIndexString, dispatch])
-
+    // get question set ids
     const {
         data: chapterInfo,
         isLoading: isLoadingChapterInfo,
-        isError: isQueryError,
-        isSuccess: isQuerySuccess,
+        isError: isGettingChapterInfoError,
+        isSuccess: isGettingChapterInfoSuccess,
         error,
     } = useGetChapterQuery(chapterId)
-
-    const questionSetIndex = useAppSelector(
-        (state) => state.practiceChapter.currentQuestionSetIndex,
-    )
-
     const questionSets = chapterInfo?.questionSets || []
-    const questionSetId = questionSets[questionSetIndex]
 
-    // init results
+    // init queston set results for review feature
     useEffect(() => {
-        if (isQuerySuccess) {
+        if (isGettingChapterInfoSuccess) {
             dispatch(initResults(questionSets.length))
         }
-    }, [dispatch, chapterId, isQuerySuccess, questionSets.length])
+    }, [dispatch, chapterId, isGettingChapterInfoSuccess, questionSets.length])
 
-    const {
-        isFetching: isFetchingQuestionSet,
-        isLoading: isLoadingQuestionSet,
-    } = useGetQuestionSetQuery(questionSetId!, {
-        skip: questionSetId === undefined,
-    })
+    const questionSetId = questionSets[questionSetIndex]
 
+    // get question set loading info
+    const { isLoadingQuestionSet, isFetchingQuestionSet } =
+        useGetQuestionSetLoadingInfo(questionSetId)
+
+    // 页面状态1：正在加载章节信息
     if (isLoadingChapterInfo) {
         return (
             <>
-                <QuestionInfoSkeleton />
-
+                <ChapterInfoSkeleton />
                 <QuestionSetSkeleton />
             </>
         )
     }
 
-    if (isQueryError) {
+    // 页面状态2：加载 chapter 信息失败
+    if (isGettingChapterInfoError) {
         return <div>获取 chapter 信息出错：{JSON.stringify(error)}</div>
     }
 
-    const foundQuestionSetId = questionSetId !== undefined
-
-    if (!foundQuestionSetId) {
+    // 页面状态3：无法从 chapter.questionSetIds 里获取 index 对应的 questionSetId
+    if (questionSetId === undefined) {
         return (
             <div>
-                出错了：chapter.questionSetIds 里找不到第{questionSetIndex}个
+                出错了：chapter.questionSetIds 里找不到第 {questionSetIndex} 个
                 element
             </div>
         )
     }
 
-    const showBtnArea = isQuerySuccess && !isLoadingQuestionSet
-    const showChapterInfo = chapterInfo && questionSetIndex === 0
-    const showQuestionSet = isQuerySuccess && foundQuestionSetId
-    const disableBtnArea = isFetchingQuestionSet
+    const showChapterInfo = chapterInfo !== undefined && questionSetIndex === 0
+    const showBtnArea = isGettingChapterInfoSuccess && !isLoadingQuestionSet
+    const showQuestionSet =
+        isGettingChapterInfoSuccess && questionSetId !== undefined
 
-    const handleToNext = () => {
-        navigate(routes.practiceChapter(chapterId, questionSetIndex + 1), {
+    const navigateQuestionSet = (delta: 1 | -1) => {
+        navigate(routes.practiceChapter(chapterId, questionSetIndex + delta), {
             replace: true,
         })
     }
 
-    const handleToLast = () => {
-        navigate(routes.practiceChapter(chapterId, questionSetIndex - 1), {
-            replace: true,
-        })
-    }
-
-    const handleFinishChapter = () => {
-        navigate(routes.chapterResult(chapterId), { replace: true })
-    }
-
+    // 页面状态4：展示可能存在的题目
     return (
         <div>
             {showChapterInfo && (
@@ -126,17 +100,21 @@ export default function PracticeChapterPage() {
                 <QuestionSetListOperator
                     index={questionSetIndex}
                     questionSetCount={questionSets.length}
-                    disabled={disableBtnArea}
-                    onToLast={handleToLast}
-                    onToNext={handleToNext}
-                    onFinish={handleFinishChapter}
+                    disabled={isFetchingQuestionSet}
+                    onToLast={() => navigateQuestionSet(-1)}
+                    onToNext={() => navigateQuestionSet(1)}
+                    onFinish={() =>
+                        navigate(routes.chapterResult(chapterId), {
+                            replace: true,
+                        })
+                    }
                 />
             )}
         </div>
     )
 }
 
-function QuestionInfoSkeleton() {
+function ChapterInfoSkeleton() {
     return (
         <div>
             <div className="skeleton my-2 h-6 w-12"></div>
@@ -152,4 +130,24 @@ function ChapterInfo({ title, desc }: { title: string; desc?: string }) {
             {desc && <div>{desc}</div>}
         </div>
     )
+}
+
+/**
+ * Init chapter pracitce
+ */
+function useInitChapterPractice() {
+    const dispatch = useAppDispatch()
+    const { chapterId, questionSetIndex } = useParams() as {
+        chapterId: string
+        questionSetIndex: string
+    }
+
+    useEffect(() => {
+        dispatch(chapterUsed(chapterId))
+    }, [chapterId, dispatch])
+
+    return {
+        chapterId: chapterId,
+        questionSetIndex: parseInt(questionSetIndex),
+    }
 }

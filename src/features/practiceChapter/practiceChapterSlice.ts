@@ -10,13 +10,11 @@ export enum Result {
 
 export interface PracticeChapterState {
     chapterId: string | null
-    currentQuestionSetIndex: number // 正在做的题目的 index
     results: QuestionSetResult[]
 }
 
 const initialState: PracticeChapterState = {
     chapterId: null,
-    currentQuestionSetIndex: 0,
     results: [],
 }
 
@@ -24,9 +22,6 @@ export const practiceChapterSlice = createSlice({
     name: 'practiceChapter',
     initialState,
     reducers: {
-        questionSetChanged: (state, { payload }: PayloadAction<number>) => {
-            state.currentQuestionSetIndex = payload
-        },
         chapterUsed: (state, { payload }: PayloadAction<string>) => {
             state.chapterId = payload
         },
@@ -49,7 +44,7 @@ export const practiceChapterSlice = createSlice({
     },
 })
 
-export const { resultChanged, initResults, chapterUsed, questionSetChanged } =
+export const { resultChanged, initResults, chapterUsed } =
     practiceChapterSlice.actions
 
 // selectors
