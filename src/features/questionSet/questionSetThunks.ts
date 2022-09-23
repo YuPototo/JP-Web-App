@@ -1,6 +1,7 @@
 /* thunks */
 
 import { AppThunk } from '../../store/store'
+import { finishNotebookQuestionSet } from '../notebook/notebookSlice'
 import { finishQuestionSet } from '../practiceChapter/practiceChapterThunks'
 import {
     answerShown,
@@ -9,6 +10,7 @@ import {
     selectQuetionsLength,
     optionSelected,
 } from './questionSetSlice'
+import { PracticeMode } from './questionSetTypes'
 
 /**
  * 直接展示答案
@@ -32,7 +34,18 @@ export const showAnswer = (): AppThunk => (dispatch, getState) => {
         return
     }
 
-    dispatch(finishQuestionSet({ questionSetId, isRight: false }))
+    const practiceMode = state.questionSet.practiceMode
+
+    switch (practiceMode) {
+        case PracticeMode.Chapter:
+            dispatch(finishQuestionSet({ questionSetId, isRight: false }))
+            break
+        case PracticeMode.Notebook:
+            dispatch(finishNotebookQuestionSet(questionSetId))
+            break
+        default:
+            console.log(`unhandled practice mode: ${practiceMode}`)
+    }
 }
 
 /**

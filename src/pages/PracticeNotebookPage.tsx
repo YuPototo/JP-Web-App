@@ -69,7 +69,7 @@ export default function PracticeNotebookPage() {
         })
     }
 
-    const handleFinishChapter = () => {
+    const handleFinish = () => {
         navigate(routes.notebook(notebookId), { replace: true })
     }
 
@@ -89,7 +89,7 @@ export default function PracticeNotebookPage() {
                     disabled={disableBtnArea}
                     onToLast={handleToLast}
                     onToNext={handleToNext}
-                    onFinish={handleFinishChapter}
+                    onFinish={handleFinish}
                 />
             )}
         </div>

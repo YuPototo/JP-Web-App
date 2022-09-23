@@ -1,5 +1,4 @@
 import clsx from 'clsx'
-import React from 'react'
 import { Link } from 'react-router-dom'
 import { routes } from '../../../routes/routeBuilder'
 import { useAppSelector } from '../../../store/hooks'
@@ -8,7 +7,7 @@ import { useGetNotebooksQuery } from '../notebookService'
 import { INotebook } from '../notebookTypes'
 import { useOrderNotebooks } from '../useOrderNotebooks'
 
-export default function NotebookList() {
+export default function NotebookListInPage() {
     const isLogin = useAppSelector(selectIsLogin)
 
     const { data, isLoading } = useGetNotebooksQuery(undefined, {
