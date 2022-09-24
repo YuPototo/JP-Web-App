@@ -2,6 +2,8 @@ import type { AppThunk } from '../../store/store'
 import { chapterApi, selectChapterQuetionSetIds } from './chapterSerivce'
 import { finishChapter } from '../chapterDone/chapterDoneThunks'
 import { Result, selectChapterId, resultChanged } from './practiceChapterSlice'
+import { sendWrongRecord } from '../wrongRecord/wrongRecordService'
+import { setProgress } from '../progress/progressThunks'
 
 /**
  * 获取某个 chapter 的 questionSetIds
@@ -32,7 +34,7 @@ export const getQuestionSetIds =
 /*
  * 做完了 chapter 里的题目
  */
-export const finishQuestionSet =
+export const finishChapterQuestionSet =
     ({
         questionSetId,
         isRight,
@@ -63,6 +65,12 @@ export const finishQuestionSet =
         // 记录这道题的做题正误情况
         const questionSetIndex = questionSetIds.indexOf(questionSetId)
         dispatch(resultChanged({ questionSetIndex, questionSetId, result }))
+
+        // 如果做错了，就发送错误记录
+        isRight || dispatch(sendWrongRecord(questionSetId))
+
+        // 记录做题进度
+        dispatch(setProgress())
 
         // 如果是最后一个 questionSet，就发送 chapterDone 的请求
         if (questionSetIndex === questionSetIds.length - 1) {

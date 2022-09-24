@@ -2,11 +2,8 @@ import { createSlice, PayloadAction } from '@reduxjs/toolkit'
 import { AppStartListening } from '../../store/listenerMiddleware'
 import { RootState } from '../../store/store'
 import { finishNotebookQuestionSet } from '../notebook/notebookSlice'
-import { finishQuestionSet } from '../practiceChapter/practiceChapterThunks'
-import {
-    removeWrongRecord,
-    sendWrongRecord,
-} from '../wrongRecord/wrongRecordService'
+import { finishChapterQuestionSet } from '../practiceChapter/practiceChapterThunks'
+import { removeWrongRecord } from '../wrongRecord/wrongRecordService'
 import { questionSetApi } from './questionSetService'
 import { PracticeMode, QuestionSetState } from './questionSetTypes'
 
@@ -151,8 +148,9 @@ export const addQuestionSetListeners = (startListening: AppStartListening) => {
 
             switch (practiceMode) {
                 case PracticeMode.Chapter:
-                    dispatch(finishQuestionSet({ questionSetId, isRight }))
-                    isRight || dispatch(sendWrongRecord(questionSetId))
+                    dispatch(
+                        finishChapterQuestionSet({ questionSetId, isRight }),
+                    )
                     break
                 case PracticeMode.Notebook:
                     dispatch(finishNotebookQuestionSet(questionSetId))

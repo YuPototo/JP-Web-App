@@ -2,8 +2,7 @@
 
 import { AppThunk } from '../../store/store'
 import { finishNotebookQuestionSet } from '../notebook/notebookSlice'
-import { finishQuestionSet } from '../practiceChapter/practiceChapterThunks'
-import { sendWrongRecord } from '../wrongRecord/wrongRecordService'
+import { finishChapterQuestionSet } from '../practiceChapter/practiceChapterThunks'
 import {
     answerShown,
     selectCurrentQuestionSet,
@@ -39,8 +38,9 @@ export const showAnswer = (): AppThunk => (dispatch, getState) => {
 
     switch (practiceMode) {
         case PracticeMode.Chapter:
-            dispatch(finishQuestionSet({ questionSetId, isRight: false }))
-            dispatch(sendWrongRecord(questionSetId))
+            dispatch(
+                finishChapterQuestionSet({ questionSetId, isRight: false }),
+            )
             break
         case PracticeMode.Notebook:
             dispatch(finishNotebookQuestionSet(questionSetId))
