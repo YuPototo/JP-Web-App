@@ -16,6 +16,8 @@ import ShelfPage from '../pages/ShelfPage'
 import WeChatLoginResult from '../pages/WxLoginResultPage'
 import NotebookPage from '../pages/NotebookPage'
 import PracticeNotebookPage from '../pages/PracticeNotebookPage'
+import WrongNotebookPage from '../pages/WrongNotebookPage'
+import PracticeWrongRecordPage from '../pages/PracticeWrongRecordPage'
 
 type Props = {
     children: React.ReactElement
@@ -59,6 +61,11 @@ export default function Router({ children }: Props) {
                 <Route
                     path="/notebooks/:notebookId/questionSet/:questionSetId"
                     element={<PracticeNotebookPage />}
+                />
+                <Route path="/wrongNotebook" element={<WrongNotebookPage />} />
+                <Route
+                    path="/practiceWrongRecord"
+                    element={<PracticeWrongRecordPage />}
                 />
             </Routes>
         </BrowserRouter>

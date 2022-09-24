@@ -14,4 +14,6 @@ export const routes = {
     notebook: (notebookId: string) => `/notebooks/${notebookId}`,
     practiceNotebook: (notebookId: string, questionSetId: string) =>
         `/notebooks/${notebookId}/questionSet/${questionSetId}`,
+    wrontNotebook: () => '/wrongNotebook',
+    practiceWrongRecord: () => '/practiceWrongRecord',
 }

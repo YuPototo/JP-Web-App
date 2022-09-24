@@ -9,6 +9,7 @@ import questionSetReducer from '../features/questionSet/questionSetSlice'
 import practiceChapterReducer from '../features/practiceChapter/practiceChapterSlice'
 import userReducer from '../features/user/userSlice'
 import notebookReducer from '../features/notebook/notebookSlice'
+import wrongRecordReducer from '../features/wrongRecord/wrongRecordSlice'
 
 import listenerMiddleware from './listenerMiddleware'
 
@@ -19,6 +20,7 @@ export const rootReducer = combineReducers({
     questionSet: questionSetReducer,
     user: userReducer,
     notebook: notebookReducer,
+    wrongRecord: wrongRecordReducer,
 })
 
 export const store = configureStore({
