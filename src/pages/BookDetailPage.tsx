@@ -15,6 +15,7 @@ import { routes } from '../routes/routeBuilder'
 import { useGetChapterDoneQuery } from '../features/chapterDone/chapterDoneService'
 import DeleteChapterDoneModal from '../features/chapterDone/DeleteChapterDoneModal'
 import { useGetBooksQuery } from '../features/books/booksService'
+import { useBookProgress } from '../features/progress/hooks/useWorkingBook'
 
 export default function BookDetail() {
     /** Tech debt
@@ -30,6 +31,7 @@ export default function BookDetail() {
     return (
         <div>
             <BookCardWrapper bookId={bookId} />
+            <WorkingProgress bookId={bookId} />
             <FavButton bookId={bookId} />
             <ResetChapterDoneBtn bookId={bookId} />
             <Content bookId={bookId} />
@@ -126,5 +128,25 @@ function ResetChapterDoneBtn({ bookId }: { bookId: string }) {
                 </button>
             )}
         </>
+    )
+}
+
+/**
+ * Feature: 做题进度
+ */
+function WorkingProgress({ bookId }: { bookId: string }) {
+    const { isDone, questionSetIndex, chapterTitle, sectionTitle } =
+        useBookProgress(bookId)
+
+    if (isDone) return <div>做完了！</div>
+
+    return (
+        <div className="m-2 bg-red-100 p-2">
+            <div>{sectionTitle}</div>
+            <div>{chapterTitle}</div>
+            {questionSetIndex !== undefined && (
+                <div>第{questionSetIndex + 1}题</div>
+            )}
+        </div>
     )
 }

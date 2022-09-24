@@ -11,11 +11,13 @@ export enum Result {
 export interface PracticeChapterState {
     chapterId: string | null
     results: QuestionSetResult[]
+    questionSetIndex: number
 }
 
 const initialState: PracticeChapterState = {
     chapterId: null,
     results: [],
+    questionSetIndex: 0,
 }
 
 export const practiceChapterSlice = createSlice({
@@ -41,11 +43,21 @@ export const practiceChapterSlice = createSlice({
             const { questionSetIndex, questionSetId, result } = payload
             state.results[questionSetIndex] = { questionSetId, result }
         },
+        questionSetIndexChanged: (
+            state,
+            { payload }: PayloadAction<number>,
+        ) => {
+            state.questionSetIndex = payload
+        },
     },
 })
 
-export const { resultChanged, initResults, chapterUsed } =
-    practiceChapterSlice.actions
+export const {
+    resultChanged,
+    initResults,
+    chapterUsed,
+    questionSetIndexChanged,
+} = practiceChapterSlice.actions
 
 // selectors
 export const selectChapterId = (state: RootState) =>

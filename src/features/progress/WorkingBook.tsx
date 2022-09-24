@@ -1,14 +1,13 @@
-import React, { useEffect, useState } from 'react'
-import { useAppSelector } from '../../store/hooks'
-import progressStorage from './progressStorage'
-import { selectBookById } from '../books/booksSlice'
 import BookCard from '../books/components/BookCard'
 import { useNavigate } from 'react-router-dom'
 import { routes } from '../../routes/routeBuilder'
+import { useWorkingBook } from './hooks/useWorkingBook'
 
 export default function WorkingBook(): JSX.Element {
     const navigate = useNavigate()
-    const book = useWorkingBook()
+
+    const { book, isDone, sectionTitle, chapterTitle, questionSetIndex } =
+        useWorkingBook()
 
     if (!book) return <></>
 
@@ -19,19 +18,18 @@ export default function WorkingBook(): JSX.Element {
         >
             <div>working book</div>
             <BookCard book={book} />
+
+            {isDone ? (
+                <div>这本书做完了</div>
+            ) : (
+                <div>
+                    <div>{sectionTitle}</div>
+                    <div>{chapterTitle}</div>
+                    {questionSetIndex !== undefined && (
+                        <div>第{questionSetIndex + 1}题</div>
+                    )}
+                </div>
+            )}
         </div>
     )
-}
-
-function useWorkingBook() {
-    const [workingBookId, setWorkingBookId] = useState<string | undefined>()
-
-    useEffect(() => {
-        const bookId = progressStorage.getWorkingBook()
-        setWorkingBookId(bookId ? bookId : undefined)
-    }, [])
-
-    const book = useAppSelector(selectBookById(workingBookId))
-
-    return book
 }

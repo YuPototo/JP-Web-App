@@ -169,4 +169,62 @@ export const selectBookById = (bookId?: string) => (state: RootState) => {
     return state.books.books.find((book) => book.id === bookId)
 }
 
+export const selectSectionAndChapterTitle =
+    (bookId?: string, sectionId?: string, chapterId?: string) =>
+    (state: RootState) => {
+        if (!bookId || !sectionId || !chapterId) {
+            return
+        }
+
+        const sections = selectContentByBook(bookId)(state).data
+
+        if (!sections) {
+            return
+        }
+
+        const section = sections.find((section) => section.id === sectionId)
+
+        if (!section) {
+            console.error('selectSectionTitle: 找不到 section')
+            return
+        }
+
+        const chapter = section.chapters.find(
+            (chapter) => chapter.id === chapterId,
+        )
+
+        if (!chapter) {
+            console.error('selectSectionTitle: 找不到 chapter')
+            return
+        }
+
+        return { sectionTitle: section.title, chapterTitle: chapter.title }
+    }
+
+export const selectSectionByChapterId =
+    (chapterId: string) => (state: RootState) => {
+        const bookId = state.books.currentBookId
+
+        if (!bookId) {
+            console.error('selectSectionByChapterId: currentBookId is null')
+            return
+        }
+
+        const sections = selectContentByBook(bookId)(state).data
+
+        if (!sections) {
+            return
+        }
+
+        for (const section of sections) {
+            const chapter = section.chapters.find(
+                (chapter) => chapter.id === chapterId,
+            )
+
+            if (chapter) {
+                return section
+            }
+        }
+    }
+
 export default booksSlice.reducer

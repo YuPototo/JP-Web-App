@@ -7,6 +7,7 @@ import { useEffect } from 'react'
 import {
     initResults,
     chapterUsed,
+    questionSetIndexChanged,
 } from '../features/practiceChapter/practiceChapterSlice'
 import { PracticeMode } from '../features/questionSet/questionSetTypes'
 import { routes } from '../routes/routeBuilder'
@@ -145,6 +146,10 @@ function useInitChapterPractice() {
     useEffect(() => {
         dispatch(chapterUsed(chapterId))
     }, [chapterId, dispatch])
+
+    useEffect(() => {
+        dispatch(questionSetIndexChanged(parseInt(questionSetIndex)))
+    }, [dispatch, questionSetIndex])
 
     return {
         chapterId: chapterId,
