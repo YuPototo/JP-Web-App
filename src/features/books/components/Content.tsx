@@ -24,9 +24,9 @@ export default function Content({ bookId }: Props) {
         skip: !isLogin,
     })
 
-    const { openSectionIndex, nextChapterId } = useAppSelector(
-        selectContentProgress,
-    )
+    const contentProgress = useAppSelector(selectContentProgress(bookId))
+    const openSectionIndex = contentProgress?.openSectionIndex ?? 0
+    const nextChapterId = contentProgress?.nextChapterId
 
     useEffect(() => {
         setActiveSectionIndex(openSectionIndex)

@@ -4,6 +4,7 @@ import { booksApi, selectContentByBook } from './booksService'
 import { getOpenSection } from './utils/getOpenSection'
 import { selectChapterDonesByBook } from '../chapterDone/chapterDoneService'
 import { CategoryKey, IBook, ICategory } from './booksTypes'
+import { selectProgressByBook } from '../progress/progressSlice'
 
 export interface BooksState {
     categories: ICategory[]
@@ -87,28 +88,48 @@ export const booksSlice = createSlice({
 export const { categoryPicked, bookViewed } = booksSlice.actions
 
 /* selectors */
-export const selectContentProgress = (
-    state: RootState,
-): { openSectionIndex: number; nextChapterId?: string } => {
-    const currentBookId = state.books.currentBookId
+export const selectContentProgress =
+    (bookId: string) =>
+    (
+        state: RootState,
+        //@ts-ignore
+    ): { openSectionIndex: number; nextChapterId?: string } | undefined => {
+        const sections = selectContentByBook(bookId)(state).data
 
-    if (!currentBookId) {
-        return { openSectionIndex: 0 }
+        if (!sections) {
+            // cache 可能已经被删掉。出现的概率不高。
+            // tech debt
+            console.error('selectContentProgress: 找不到 sections')
+            return
+        }
+
+        // 如果有 progress，优先返回 progress
+        const progress = selectProgressByBook(bookId)(state)
+        if (progress) {
+            if (progress === 1) {
+                // case 1: 做完 book 了
+                return
+            } else {
+                // case 2：有进度
+                const sectionId = progress.sectionId
+                const sectionIndex = sections.findIndex(
+                    (section) => section.id === sectionId,
+                )
+                return {
+                    openSectionIndex: sectionIndex,
+                    nextChapterId: progress.chapterId,
+                }
+            }
+        }
+
+        // 没有 progress，返回第1个没做完的 chapter 及其所在的 section
+        const chapterDones = selectChapterDonesByBook(bookId)(state).data
+        if (!chapterDones) {
+            return { openSectionIndex: 0 }
+        }
+
+        return getOpenSection(sections, chapterDones)
     }
-
-    const bookContent = selectContentByBook(currentBookId)(state).data
-
-    if (!bookContent) {
-        return { openSectionIndex: 0 }
-    }
-
-    const chapterDones = selectChapterDonesByBook(currentBookId)(state).data
-    if (!chapterDones) {
-        return { openSectionIndex: 0 }
-    }
-
-    return getOpenSection(bookContent, chapterDones)
-}
 
 /**
  * 给定 Category level 和 state，返回被选中的 category 的 chidlren
