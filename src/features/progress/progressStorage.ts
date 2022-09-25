@@ -22,11 +22,16 @@ const setProgressDetail = (bookId: string, progressDetail: AllProgressType) => {
     )
 }
 
+const removeProgressDetail = (bookId: string) => {
+    localStorage.removeItem(`bookProgress_${bookId}`)
+}
+
 const progressStorage = {
     setWorkingBook,
     getWorkingBook,
     getProgressDetail,
     setProgressDetail,
+    removeProgressDetail,
 }
 
 export default progressStorage

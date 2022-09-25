@@ -1,6 +1,8 @@
 import React from 'react'
 import toast from 'react-hot-toast'
 import MyModal from '../../components/MyModal'
+import { useAppDispatch } from '../../store/hooks'
+import { resetProgress } from '../progress/progressThunks'
 import { useDeleteChapterDoneMutation } from './chapterDoneService'
 
 interface Props {
@@ -9,16 +11,18 @@ interface Props {
     onModalClosed: () => void
 }
 
-export default function DeleteChapterDoneModal({
+export default function ResetProgressModal({
     bookId,
     isOpen,
     onModalClosed,
 }: Props) {
+    const dispatch = useAppDispatch()
     const [removeChapterDone, { isLoading, isSuccess }] =
         useDeleteChapterDoneMutation()
 
     const handleConfirm = async () => {
         try {
+            dispatch(resetProgress(bookId))
             await removeChapterDone(bookId).unwrap()
             toast.success('已重置进度')
             setTimeout(() => {
@@ -33,10 +37,9 @@ export default function DeleteChapterDoneModal({
 
     return (
         <MyModal isOpen={isOpen} onModalClosed={onModalClosed}>
-            <h2 className="mb-3 text-lg text-red-600">重置做题记录</h2>
+            <h2 className="mb-3 text-lg text-red-600">重置进度</h2>
             <div className="mb-3 ml-2">
-                <p className="">删除这个习题集里的章节完成记录。</p>
-                <p className="">确定要删除吗？</p>
+                <p className="">确定要重置吗？</p>
             </div>
 
             <div className="flex gap-4">

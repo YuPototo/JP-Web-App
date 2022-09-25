@@ -13,14 +13,12 @@ import { selectIsLogin } from '../features/user/userSlice'
 import toast from 'react-hot-toast'
 import { routes } from '../routes/routeBuilder'
 import { useGetChapterDoneQuery } from '../features/chapterDone/chapterDoneService'
-import DeleteChapterDoneModal from '../features/chapterDone/DeleteChapterDoneModal'
+import ResetProgressModal from '../features/chapterDone/DeleteChapterDoneModal'
 import { useGetBooksQuery } from '../features/books/booksService'
 import { useBookProgress } from '../features/progress/hooks/useWorkingBook'
+import { selectHasProgress } from '../features/progress/progressSlice'
 
 export default function BookDetail() {
-    /** Tech debt
-     * * remove as keyword
-     */
     const { bookId } = useParams() as { bookId: string }
     const dispatch = useAppDispatch()
 
@@ -33,7 +31,7 @@ export default function BookDetail() {
             <BookCardWrapper bookId={bookId} />
             <WorkingProgress bookId={bookId} />
             <FavButton bookId={bookId} />
-            <ResetChapterDoneBtn bookId={bookId} />
+            <ResetProgresssButton bookId={bookId} />
             <Content bookId={bookId} />
         </div>
     )
@@ -104,7 +102,7 @@ function FavButton({ bookId }: { bookId: string }) {
 /**
  * Feature: 重置 chapter dones
  */
-function ResetChapterDoneBtn({ bookId }: { bookId: string }) {
+function ResetProgresssButton({ bookId }: { bookId: string }) {
     const [isDeleteModalOpen, setIsDeleteModalOpen] = useState(false)
 
     const isLogin = useAppSelector(selectIsLogin)
@@ -115,14 +113,18 @@ function ResetChapterDoneBtn({ bookId }: { bookId: string }) {
 
     const hasChapterDones = chaptersDone && chaptersDone.length > 0
 
+    const hasProgress = useAppSelector(selectHasProgress(bookId))
+
+    const showBtn = hasChapterDones || hasProgress
+
     return (
         <>
-            <DeleteChapterDoneModal
+            <ResetProgressModal
                 bookId={bookId}
                 isOpen={isDeleteModalOpen}
                 onModalClosed={() => setIsDeleteModalOpen(false)}
             />
-            {hasChapterDones && (
+            {showBtn && (
                 <button onClick={() => setIsDeleteModalOpen(true)}>
                     重置进度
                 </button>
