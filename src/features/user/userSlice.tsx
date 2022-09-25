@@ -6,14 +6,14 @@ export interface UserSliceState {
     token: string | null
     displayId: string | null
     hasFetcedLocalUser: boolean // 是否已经从 localStorage 获取登录信息
-    touristQuizChance: number
+    touristQuizChance: number // 如果没有登录，可以做几道题
 }
 
 const initialState: UserSliceState = {
     token: null,
     displayId: null,
     hasFetcedLocalUser: false,
-    touristQuizChance: 5,
+    touristQuizChance: 10,
 }
 
 export const userSlice = createSlice({
