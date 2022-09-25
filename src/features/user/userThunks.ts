@@ -2,7 +2,7 @@ import { AppThunk } from '../../store/store'
 import userStorage from './userStorage'
 import {
     localUserFetched,
-    quizChanceChangedBy,
+    quizChanceConsumed,
     touristQuizChanceChangedBy,
     touristQuizChanceChangedTo,
     userLoggedIn,
@@ -44,6 +44,6 @@ export const reduceTouristChance = (): AppThunk => (dispatch, getState) => {
 }
 
 export const reduceQuizChance = (): AppThunk => (dispatch, getState) => {
-    dispatch(quizChanceChangedBy(-1))
+    dispatch(quizChanceConsumed())
     dispatch(userApi.endpoints.reduceQuizChance.initiate())
 }

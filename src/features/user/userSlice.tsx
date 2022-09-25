@@ -50,8 +50,9 @@ export const userSlice = createSlice({
         ) => {
             state.touristQuizChance = payload
         },
-        quizChanceChangedBy: (state, { payload }: PayloadAction<number>) => {
-            state.quizChance += payload
+        quizChanceConsumed: (state) => {
+            state.quizChance =
+                state.quizChance - 1 < 0 ? 0 : state.quizChance - 1
         },
     },
     extraReducers: (builder) => {
@@ -79,7 +80,7 @@ export const {
     localUserFetched,
     touristQuizChanceChangedBy,
     touristQuizChanceChangedTo,
-    quizChanceChangedBy,
+    quizChanceConsumed,
 } = userSlice.actions
 
 /* selectors */
