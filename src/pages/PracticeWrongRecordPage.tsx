@@ -4,7 +4,7 @@ import QuestionSetListOperator from '../components/QuestionSetListOperator'
 import QuestionSet from '../features/questionSet/components/QuestionSet'
 import { useGetQuestionSetLoadingInfo } from '../features/questionSet/hooks/useGetQuestionSetLoadingInfo'
 import { PracticeMode } from '../features/questionSet/questionSetTypes'
-import useAuthGuard from '../features/user/useAuthGuard'
+import useAuthGuard from '../features/user/hooks/useAuthGuard'
 import { useGetWrongRecordQuery } from '../features/wrongRecord/wrongRecordService'
 import {
     wrongbookPracticeStarted,

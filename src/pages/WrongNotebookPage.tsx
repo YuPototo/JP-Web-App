@@ -1,5 +1,5 @@
 import { useNavigate } from 'react-router-dom'
-import useAuthGuard from '../features/user/useAuthGuard'
+import useAuthGuard from '../features/user/hooks/useAuthGuard'
 import { useGetWrongRecordQuery } from '../features/wrongRecord/wrongRecordService'
 import { routes } from '../routes/routeBuilder'
 

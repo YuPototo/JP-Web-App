@@ -13,10 +13,13 @@ import { PracticeMode } from '../features/questionSet/questionSetTypes'
 import { routes } from '../routes/routeBuilder'
 import QuestionSetListOperator from '../components/QuestionSetListOperator'
 import { useGetQuestionSetLoadingInfo } from '../features/questionSet/hooks/useGetQuestionSetLoadingInfo'
+import { useTouristChanceGuard } from '../features/user/hooks/useTouristChanceGuard'
 
 export default function PracticeChapterPage() {
     const dispatch = useAppDispatch()
     const navigate = useNavigate()
+
+    useTouristChanceGuard()
 
     // init page
     const { chapterId, questionSetIndex } = useInitChapterPractice()

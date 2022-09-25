@@ -1,9 +1,9 @@
 import { useEffect } from 'react'
 import toast from 'react-hot-toast'
 import { useNavigate } from 'react-router-dom'
-import { routes } from '../../routes/routeBuilder'
-import { useAppSelector } from '../../store/hooks'
-import { selectIsLogin } from './userSlice'
+import { routes } from '../../../routes/routeBuilder'
+import { useAppSelector } from '../../../store/hooks'
+import { selectIsLogin } from '../userSlice'
 
 export default function useAuthGuard() {
     const navigate = useNavigate()

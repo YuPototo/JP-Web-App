@@ -1,6 +1,6 @@
 import { splitApi } from '../../store/query/splitApi'
 import { IUser } from './userTypes'
-import storageService from '../../utils/storageService'
+import userStorage from './userStorage'
 
 interface LoginRes {
     token: string
@@ -17,7 +17,7 @@ export const userApi = splitApi.injectEndpoints({
             }),
             async onQueryStarted(_, { queryFulfilled }) {
                 const { data } = await queryFulfilled
-                storageService.setUserInfo(data.token, data.user.displayId)
+                userStorage.setUserInfo(data.token, data.user.displayId)
             },
         }),
     }),

@@ -1,6 +1,5 @@
 import { splitApi } from '../../store/query/splitApi'
 import { AppThunk } from '../../store/store'
-import { selectIsLogin } from '../user/userSlice'
 
 export const wrongRecordApi = splitApi.injectEndpoints({
     endpoints: (build) => ({
@@ -36,14 +35,10 @@ export const {
 /* thunks */
 export const sendWrongRecord =
     (questionSetId: string): AppThunk =>
-    (dispatch, getState) => {
-        const isLogin = selectIsLogin(getState())
-
-        if (isLogin) {
-            dispatch(
-                wrongRecordApi.endpoints.addWrongRecord.initiate(questionSetId),
-            )
-        }
+    (dispatch) => {
+        dispatch(
+            wrongRecordApi.endpoints.addWrongRecord.initiate(questionSetId),
+        )
     }
 
 export const removeWrongRecord =

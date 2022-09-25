@@ -4,7 +4,7 @@ import { selectBookById } from '../features/books/booksSlice'
 import BookCard from '../features/books/components/BookCard'
 import { routes } from '../routes/routeBuilder'
 import { useNavigate } from 'react-router-dom'
-import useAuthGuard from '../features/user/useAuthGuard'
+import useAuthGuard from '../features/user/hooks/useAuthGuard'
 
 export default function ShelfPage() {
     const navigate = useNavigate()

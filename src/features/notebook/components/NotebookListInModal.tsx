@@ -4,7 +4,7 @@ import toast from 'react-hot-toast'
 import Spinner from '../../../components/Spinner'
 import { useAppDispatch, useAppSelector } from '../../../store/hooks'
 import { updateQuestionSetFav } from '../../questionSet/questionSetService'
-import useAuthGuard from '../../user/useAuthGuard'
+import useAuthGuard from '../../user/hooks/useAuthGuard'
 import {
     useGetNotebooksQuery,
     useSaveQuestionSetMutation,

@@ -1,7 +1,7 @@
 import { Link } from 'react-router-dom'
 import NotebookCreator from '../features/notebook/components/NotebookCreator'
 import NotebookList from '../features/notebook/components/NotebookListInPage'
-import useAuthGuard from '../features/user/useAuthGuard'
+import useAuthGuard from '../features/user/hooks/useAuthGuard'
 import { routes } from '../routes/routeBuilder'
 
 export default function NotebookListPage() {

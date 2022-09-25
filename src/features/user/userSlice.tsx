@@ -5,13 +5,15 @@ import { userApi } from './userService'
 export interface UserSliceState {
     token: string | null
     displayId: string | null
-    hasFetcedLocalUser: boolean
+    hasFetcedLocalUser: boolean // 是否已经从 localStorage 获取登录信息
+    touristQuizChance: number
 }
 
 const initialState: UserSliceState = {
     token: null,
     displayId: null,
     hasFetcedLocalUser: false,
+    touristQuizChance: 5,
 }
 
 export const userSlice = createSlice({
@@ -32,6 +34,18 @@ export const userSlice = createSlice({
         localUserFetched: (state) => {
             state.hasFetcedLocalUser = true
         },
+        touristQuizChanceChangedBy: (
+            state,
+            { payload }: PayloadAction<number>,
+        ) => {
+            state.touristQuizChance += payload
+        },
+        touristQuizChanceChangedTo: (
+            state,
+            { payload }: PayloadAction<number>,
+        ) => {
+            state.touristQuizChance = payload
+        },
     },
     extraReducers: (builder) => {
         builder.addMatcher(
@@ -44,8 +58,13 @@ export const userSlice = createSlice({
     },
 })
 
-export const { userLoggedIn, userLoggedOut, localUserFetched } =
-    userSlice.actions
+export const {
+    userLoggedIn,
+    userLoggedOut,
+    localUserFetched,
+    touristQuizChanceChangedBy,
+    touristQuizChanceChangedTo,
+} = userSlice.actions
 
 /* selectors */
 export const selectIsLogin = (state: RootState) => {

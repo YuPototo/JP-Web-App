@@ -11,7 +11,7 @@ import {
     getNotebookProgress,
     selectNotebokProgressIndex,
 } from '../features/notebook/notebookSlice'
-import useAuthGuard from '../features/user/useAuthGuard'
+import useAuthGuard from '../features/user/hooks/useAuthGuard'
 import { routes } from '../routes/routeBuilder'
 import { useAppDispatch, useAppSelector } from '../store/hooks'
 

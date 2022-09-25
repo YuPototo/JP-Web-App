@@ -1,10 +1,16 @@
 import { AppThunk } from '../../store/store'
-import storageService from '../../utils/storageService'
-import { localUserFetched, userLoggedIn, userLoggedOut } from './userSlice'
+import userStorage from './userStorage'
+import {
+    localUserFetched,
+    touristQuizChanceChangedBy,
+    touristQuizChanceChangedTo,
+    userLoggedIn,
+    userLoggedOut,
+} from './userSlice'
 
 /* thunks */
 export const getLocalUserInfo = (): AppThunk => (dispatch) => {
-    const result = storageService.getUserInfo()
+    const result = userStorage.getUserInfo()
 
     if (result) {
         dispatch(userLoggedIn(result))
@@ -14,6 +20,23 @@ export const getLocalUserInfo = (): AppThunk => (dispatch) => {
 }
 
 export const logout = (): AppThunk => (dispatch) => {
-    storageService.removeUserInfo()
+    userStorage.removeUserInfo()
     dispatch(userLoggedOut())
+}
+
+export const getTouristChance = (): AppThunk => (dispatch) => {
+    const chance = userStorage.getTouristQuizChance()
+    if (chance !== undefined) {
+        dispatch(touristQuizChanceChangedTo(chance))
+    }
+}
+
+export const reduceTouristChance = (): AppThunk => (dispatch, getState) => {
+    dispatch(touristQuizChanceChangedBy(-1))
+
+    const state = getState()
+
+    const touristChance = state.user.touristQuizChance
+
+    userStorage.setTouristQuizChance(touristChance)
 }
