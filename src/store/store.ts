@@ -10,6 +10,7 @@ import practiceChapterReducer from '../features/practiceChapter/practiceChapterS
 import userReducer from '../features/user/userSlice'
 import notebookReducer from '../features/notebook/notebookSlice'
 import wrongRecordReducer from '../features/wrongRecord/wrongRecordSlice'
+import progressReducer from '../features/progress/progressSlice'
 
 import listenerMiddleware from './listenerMiddleware'
 
@@ -21,6 +22,7 @@ export const rootReducer = combineReducers({
     user: userReducer,
     notebook: notebookReducer,
     wrongRecord: wrongRecordReducer,
+    progress: progressReducer,
 })
 
 export const store = configureStore({

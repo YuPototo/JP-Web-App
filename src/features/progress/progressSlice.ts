@@ -1,3 +1,4 @@
+import { createSlice, PayloadAction } from '@reduxjs/toolkit'
 import { RootState } from '../../store/store'
 import {
     getCurrentSectionByChapterId,
@@ -9,6 +10,49 @@ export interface ProgressDetail {
     chapterId: string
     questionSetIndex: number
 }
+
+export type AllProgressType = ProgressDetail | 1
+
+interface ProgressState {
+    workingBook?: string
+    progressByBook: Record<string, AllProgressType> // 1 表示做完了
+}
+
+const initialState: ProgressState = {
+    workingBook: undefined,
+    progressByBook: {},
+}
+
+export const progressSlice = createSlice({
+    name: 'progress',
+    initialState,
+    reducers: {
+        workingBookChanged: (state, { payload }: PayloadAction<string>) => {
+            state.workingBook = payload
+        },
+        progressChanged: (
+            state,
+            {
+                payload,
+            }: PayloadAction<{ progress: AllProgressType; bookId: string }>,
+        ) => {
+            const { bookId, progress } = payload
+            state.progressByBook[bookId] = progress
+        },
+    },
+})
+
+export const { workingBookChanged, progressChanged } = progressSlice.actions
+export default progressSlice.reducer
+
+/* selectors */
+
+export const selectProgressByBook =
+    (bookId?: string | null) => (state: RootState) => {
+        if (bookId) {
+            return state.progress.progressByBook[bookId]
+        }
+    }
 
 /**
  * 获取下一题的进度

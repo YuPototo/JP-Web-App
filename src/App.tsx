@@ -5,6 +5,7 @@ import Router from './routes/Router'
 import { useAppDispatch } from './store/hooks'
 import Modal from 'react-modal'
 import { getLocalUserInfo } from './features/user/userThunks'
+import { getWorkingProgress } from './features/progress/progressThunks'
 
 Modal.setAppElement('#root')
 
@@ -13,6 +14,7 @@ function App() {
 
     useEffect(() => {
         dispatch(getLocalUserInfo())
+        dispatch(getWorkingProgress())
     }, [dispatch])
 
     return (
