@@ -1,7 +1,7 @@
 import React, { useEffect } from 'react'
 import { Link, useNavigate, useSearchParams } from 'react-router-dom'
 import { useLoginMutation } from '../features/user/userService'
-import WeChatLoginBtn from '../features/user/WeChatLoginBtn'
+import WeChatLoginBtn from '../features/user/components/WeChatLoginBtn'
 import { routes } from '../routes/routeBuilder'
 
 export default function WeChatLoginResult() {

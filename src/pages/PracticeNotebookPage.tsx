@@ -9,11 +9,15 @@ import {
 import QuestionSet from '../features/questionSet/components/QuestionSet'
 import { useGetQuestionSetLoadingInfo } from '../features/questionSet/hooks/useGetQuestionSetLoadingInfo'
 import { PracticeMode } from '../features/questionSet/questionSetTypes'
+import PayWall from '../features/user/components/PayWall'
+import { useChanceGuard } from '../features/user/hooks/useChanceGuard'
 import { routes } from '../routes/routeBuilder'
 import { useAppDispatch, useAppSelector } from '../store/hooks'
 
 export default function PracticeNotebookPage() {
     const navigate = useNavigate()
+
+    const showNoMoreChanceModal = useChanceGuard()
 
     // init practice notebook page
     const { notebookId, questionSetId, questionSetIds, questionSetIndex } =
@@ -63,6 +67,11 @@ export default function PracticeNotebookPage() {
 
     return (
         <div>
+            <PayWall
+                isOpen={showNoMoreChanceModal}
+                onModalClosed={() => console.log('不支持关闭')}
+            />
+
             {questionSetId !== undefined && (
                 <QuestionSet
                     questionSetId={questionSetId}

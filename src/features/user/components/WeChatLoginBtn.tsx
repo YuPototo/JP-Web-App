@@ -1,5 +1,5 @@
 import React from 'react'
-import config from '../../config/config'
+import config from '../../../config/config'
 
 export default function WeChatLoginBtn() {
     const appID = config.WX_APP_ID

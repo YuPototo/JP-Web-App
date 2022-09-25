@@ -2,7 +2,7 @@ import { ReactElement } from 'react'
 import { Link } from 'react-router-dom'
 import { useAppSelector } from '../store/hooks'
 import { PersonCircle } from 'react-bootstrap-icons'
-import WeChatLoginBtn from '../features/user/WeChatLoginBtn'
+import WeChatLoginBtn from '../features/user/components/WeChatLoginBtn'
 import { selectIsLogin } from '../features/user/userSlice'
 import { routes } from '../routes/routeBuilder'
 

@@ -5,7 +5,7 @@ import { Result, selectChapterId, resultChanged } from './practiceChapterSlice'
 import { sendWrongRecord } from '../wrongRecord/wrongRecordService'
 import { setProgress } from '../progress/progressThunks'
 import { selectIsLogin } from '../user/userSlice'
-import { reduceTouristChance } from '../user/userThunks'
+import { reduceQuizChance, reduceTouristChance } from '../user/userThunks'
 
 /**
  * 获取某个 chapter 的 questionSetIds
@@ -73,16 +73,24 @@ export const finishChapterQuestionSet =
 
         const isLogin = selectIsLogin(state)
 
-        if (isLogin) {
-            // 如果做错了，就发送错误记录
-            isRight || dispatch(sendWrongRecord(questionSetId))
-
-            // 如果是最后一个 questionSet，就发送 chapterDone 的请求
-            if (questionSetIndex === questionSetIds.length - 1) {
-                dispatch(finishChapter(chapterId))
-            }
-        } else {
+        if (!isLogin) {
             // 游客：减少游客做题次数
             dispatch(reduceTouristChance())
+            return
+        }
+
+        // 对已经登录的用户
+        // 如果做错了，就发送错误记录
+
+        isRight || dispatch(sendWrongRecord(questionSetId))
+
+        // 如果是最后一个 questionSet，就发送 chapterDone 的请求
+        if (questionSetIndex === questionSetIds.length - 1) {
+            dispatch(finishChapter(chapterId))
+        }
+
+        const isMember = state.user.isMember
+        if (!isMember) {
+            dispatch(reduceQuizChance())
         }
     }

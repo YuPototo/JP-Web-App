@@ -14,12 +14,16 @@ import { routes } from '../routes/routeBuilder'
 import QuestionSetListOperator from '../components/QuestionSetListOperator'
 import { useGetQuestionSetLoadingInfo } from '../features/questionSet/hooks/useGetQuestionSetLoadingInfo'
 import { useTouristChanceGuard } from '../features/user/hooks/useTouristChanceGuard'
+import { useChanceGuard } from '../features/user/hooks/useChanceGuard'
+import PayWall from '../features/user/components/PayWall'
 
 export default function PracticeChapterPage() {
     const dispatch = useAppDispatch()
     const navigate = useNavigate()
 
     useTouristChanceGuard()
+
+    const showNoMoreChanceModal = useChanceGuard()
 
     // init page
     const { chapterId, questionSetIndex } = useInitChapterPractice()
@@ -86,6 +90,11 @@ export default function PracticeChapterPage() {
     // 页面状态4：展示可能存在的题目
     return (
         <div>
+            <PayWall
+                isOpen={showNoMoreChanceModal}
+                onModalClosed={() => console.log('不支持关闭')}
+            />
+
             {showChapterInfo && (
                 <ChapterInfo
                     title={chapterInfo.title}

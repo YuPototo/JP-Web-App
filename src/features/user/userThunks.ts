@@ -2,11 +2,13 @@ import { AppThunk } from '../../store/store'
 import userStorage from './userStorage'
 import {
     localUserFetched,
+    quizChanceChangedBy,
     touristQuizChanceChangedBy,
     touristQuizChanceChangedTo,
     userLoggedIn,
     userLoggedOut,
 } from './userSlice'
+import { userApi } from './userService'
 
 /* thunks */
 export const getLocalUserInfo = (): AppThunk => (dispatch) => {
@@ -39,4 +41,9 @@ export const reduceTouristChance = (): AppThunk => (dispatch, getState) => {
     const touristChance = state.user.touristQuizChance
 
     userStorage.setTouristQuizChance(touristChance)
+}
+
+export const reduceQuizChance = (): AppThunk => (dispatch, getState) => {
+    dispatch(quizChanceChangedBy(-1))
+    dispatch(userApi.endpoints.reduceQuizChance.initiate())
 }

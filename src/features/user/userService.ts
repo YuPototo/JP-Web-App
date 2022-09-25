@@ -20,7 +20,17 @@ export const userApi = splitApi.injectEndpoints({
                 userStorage.setUserInfo(data.token, data.user.displayId)
             },
         }),
+        getUser: build.query<IUser, void>({
+            query: () => '/users',
+            transformResponse: (res: { user: IUser }) => res.user,
+        }),
+        reduceQuizChance: build.mutation<void, void>({
+            query: () => ({
+                url: '/users/reduceQuizChance',
+                method: 'PUT',
+            }),
+        }),
     }),
 })
 
-export const { useLoginMutation } = userApi
+export const { useLoginMutation, useGetUserQuery } = userApi

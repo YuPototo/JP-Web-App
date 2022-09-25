@@ -5,13 +5,14 @@ import { logout } from '../features/user/userThunks'
 import { routes } from '../routes/routeBuilder'
 import { useAppDispatch, useAppSelector } from '../store/hooks'
 
-// todo: 应该有一个 authGuard
-
 export default function AccountPage() {
     const navigate = useNavigate()
     const dispatch = useAppDispatch()
 
     const displayId = useAppSelector((state) => state.user.displayId)
+
+    const quizChance = useAppSelector((state) => state.user.quizChance)
+    const isMember = useAppSelector((state) => state.user.isMember)
 
     const handleLogout = async () => {
         await dispatch(logout())
@@ -25,6 +26,9 @@ export default function AccountPage() {
         <div>
             <h1>AccountPage</h1>
             <div>id: {displayId}</div>
+
+            <div>会员状态：{isMember ? '是' : '否'}</div>
+            <div>做题机会：{quizChance}</div>
 
             <button onClick={handleLogout}>登出</button>
         </div>
