@@ -1,13 +1,14 @@
 import { useEffect } from 'react'
 import { Toaster } from 'react-hot-toast'
 import AppNav from './components/AppNav'
-import Router from './routes/Router'
 import { useAppDispatch, useAppSelector } from './store/hooks'
 import Modal from 'react-modal'
 import { getLocalUserInfo, getTouristChance } from './features/user/userThunks'
 import { getWorkingProgress } from './features/progress/progressThunks'
 import { selectIsLogin } from './features/user/userSlice'
 import { useGetUserQuery } from './features/user/userService'
+import AppContent from './components/layout/AppContent'
+import PageRoutes from './routes/PageRoutes'
 
 Modal.setAppElement('#root')
 
@@ -27,13 +28,10 @@ function App() {
     return (
         <>
             <Toaster />
-            <div className="min-h-screen bg-gray-200 pt-5">
-                <div className="mx-auto max-w-4xl">
-                    <Router>
-                        <AppNav />
-                    </Router>
-                </div>
-            </div>
+            <AppNav />
+            <AppContent>
+                <PageRoutes></PageRoutes>
+            </AppContent>
         </>
     )
 }

@@ -10,28 +10,26 @@ export default function AppNav(): ReactElement {
     const isLogin = useAppSelector(selectIsLogin)
 
     return (
-        <div className="flex h-12 items-center justify-between px-3">
-            <div className="flex pl-2">
-                <Brand />
-            </div>
+        <div className="flex h-12 items-center gap-5 px-5">
+            <Brand />
 
-            <Link to={routes.shelf()}>我的书架</Link>
-            <Link to={routes.notebookList()}>笔记本</Link>
+            <Link
+                className="hidden p-2 hover:text-green-800 md:ml-20 md:inline"
+                to={routes.home()}
+            >
+                首页
+            </Link>
+            <Link className="p-2 hover:text-green-800" to={routes.shelf()}>
+                书架
+            </Link>
+            <Link
+                className="p-2 hover:text-green-800"
+                to={routes.notebookList()}
+            >
+                笔记本
+            </Link>
 
-            {isLogin ? (
-                <div className="flex items-center gap-4">
-                    <span className="">
-                        <Link to={routes.account()}>
-                            <div className="flex items-center gap-1">
-                                <PersonCircle className="icon text-gray-500" />
-                                <span className="text-gray-600">账号</span>
-                            </div>
-                        </Link>
-                    </span>
-                </div>
-            ) : (
-                <WeChatLoginBtn />
-            )}
+            <AccountButton isLogin={isLogin} className="ml-auto" />
         </div>
     )
 }
@@ -42,9 +40,36 @@ function Brand(): ReactElement {
     return (
         <Link to={routes.home()} className="flex items-center ">
             <div className="py-2">
-                <img className="mr-2 h-10" src={iconImage} alt="brand" />
+                <img className="h-8 md:h-10" src={iconImage} alt="brand" />
             </div>
-            <span className="text-gray-600">日语轻松考</span>
+            <span className="ml-2 hidden text-gray-600 md:inline">
+                日语轻松考
+            </span>
         </Link>
+    )
+}
+
+function AccountButton({
+    isLogin,
+    className,
+}: {
+    isLogin: boolean
+    className?: string
+}) {
+    return (
+        <div className={className}>
+            {isLogin ? (
+                <div className="flex items-center gap-4">
+                    <Link to={routes.account()}>
+                        <div className="flex items-center gap-1">
+                            <PersonCircle className="icon text-gray-500" />
+                            <span className="text-gray-600">账号</span>
+                        </div>
+                    </Link>
+                </div>
+            ) : (
+                <WeChatLoginBtn />
+            )}
+        </div>
     )
 }

@@ -12,7 +12,7 @@ export default function BookList() {
     let navigate = useNavigate()
 
     return (
-        <div>
+        <div className="flex flex-wrap gap-4">
             {books.length > 0 ? (
                 books.map((book) => (
                     <div
