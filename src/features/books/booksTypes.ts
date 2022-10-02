@@ -25,6 +25,7 @@ export interface IBook {
 export type IChapter = {
     id: string
     title: string
+    desc?: string
 }
 
 export type ISection = {

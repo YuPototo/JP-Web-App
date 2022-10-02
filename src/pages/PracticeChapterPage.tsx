@@ -16,6 +16,7 @@ import { useGetQuestionSetLoadingInfo } from '../features/questionSet/hooks/useG
 import { useTouristChanceGuard } from '../features/user/hooks/useTouristChanceGuard'
 import { useChanceGuard } from '../features/user/hooks/useChanceGuard'
 import PayWall from '../features/user/components/PayWall'
+import Skeleton from '../components/ui/Skeleton'
 
 export default function PracticeChapterPage() {
     const dispatch = useAppDispatch()
@@ -129,9 +130,9 @@ export default function PracticeChapterPage() {
 
 function ChapterInfoSkeleton() {
     return (
-        <div>
-            <div className="skeleton my-2 h-6 w-12"></div>
-            <div className="skeleton my-2 h-6 w-12"></div>
+        <div className="mb-6 flex flex-col gap-2">
+            <Skeleton />
+            <Skeleton w="w-12" />
         </div>
     )
 }

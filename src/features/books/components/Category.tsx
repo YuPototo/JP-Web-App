@@ -4,6 +4,7 @@ import { selectChildrenByLevel, categoryPicked } from '../booksSlice'
 import { useGetCategoriesQuery } from '../booksService'
 import type { ICategory } from '../booksTypes'
 import { extractQueyError } from '../../../store/utils/errorHandling'
+import Skeleton from '../../../components/ui/Skeleton'
 
 export default function CategoryNav() {
     const { isLoading, error } = useGetCategoriesQuery()
@@ -13,7 +14,7 @@ export default function CategoryNav() {
     return (
         <div className="my-4">
             {isLoading ? (
-                <div className="skeleton mb-4 h-6  w-60"></div>
+                <CategorySkeleton />
             ) : (
                 <CategoryList categories={topCategories} categoryLevel={0} />
             )}
@@ -71,5 +72,14 @@ function CategoryList({ categories, categoryLevel }: CategoryListProps) {
                 )}
             </div>
         </>
+    )
+}
+
+function CategorySkeleton() {
+    return (
+        <div className="flex gap-4">
+            <Skeleton w="w-16" />
+            <Skeleton w="w-16" />
+        </div>
     )
 }
