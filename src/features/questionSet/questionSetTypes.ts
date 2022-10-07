@@ -1,3 +1,5 @@
+import { INode } from 'jp_to_react/dist/type'
+
 export interface QuestionSetState {
     questionSetId: string | null
     practiceMode: PracticeMode | null
@@ -12,9 +14,9 @@ export enum PracticeMode {
 }
 
 export interface IQuestion {
-    body?: string
-    explanation?: string
-    options: string[]
+    body?: RichText
+    explanation?: RichText
+    options: RichText[]
     answer: number
 }
 
@@ -25,8 +27,10 @@ export interface IAudio {
 
 export interface IQuestionSet {
     id: string
-    body?: string
+    body?: RichText
     questions: IQuestion[]
-    explanation?: string
+    explanation?: RichText
     audio?: IAudio
 }
+
+export type RichText = INode[]

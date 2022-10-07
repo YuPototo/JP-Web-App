@@ -40,7 +40,7 @@ export default function RendererExample() {
     //     },
     // ]
 
-    const baseData = [
+    const data = [
         {
             type: 'paragraph',
             children: [
@@ -50,8 +50,6 @@ export default function RendererExample() {
             ],
         },
     ]
-
-    const data = JSON.stringify(baseData)
 
     return (
         <div>

@@ -3,12 +3,13 @@ import RichTextRenderer from 'jp_to_react'
 import { useAppDispatch, useAppSelector } from '../../../store/hooks'
 import { selectPickedIndex, selectIsDone } from '../questionSetSlice'
 import { pickOption } from '../questionSetThunks'
+import { RichText } from '../questionSetTypes'
 
 export default function Options({
     options,
     questionIndex,
 }: {
-    options: string[]
+    options: RichText[]
     questionIndex: number
 }) {
     const pickedIndex = useAppSelector(selectPickedIndex(questionIndex))
@@ -33,7 +34,7 @@ function Option({
     optionIndex,
     picked,
 }: {
-    option: string
+    option: RichText
     questionIndex: number
     optionIndex: number
     picked: boolean

@@ -5702,10 +5702,10 @@ jest@^27.4.3:
     import-local "^3.0.2"
     jest-cli "^27.5.1"
 
-jp_to_react@^1.2.0:
-  version "1.2.0"
-  resolved "https://registry.npmmirror.com/jp_to_react/-/jp_to_react-1.2.0.tgz#382bd40d8e4ec10a2ff24f480516825175ceabcd"
-  integrity sha512-JLCunP81/DMxiEj218LVL1XF4H5AEg211gsgPGz/3a3yczTLJ8Ax4FbxX0feCJub/YdaYE/lijZ64CwVQnugeQ==
+jp_to_react@^1.3.0:
+  version "1.3.0"
+  resolved "https://registry.npmmirror.com/jp_to_react/-/jp_to_react-1.3.0.tgz#17f074ae30cffbe60e7d4100a237d91521ce754b"
+  integrity sha512-jJKwv33R7vnVTmk08FtOYoGDBaRlSoDOzfoZl1/U0+bvnyz54QRXcmiTfIa5PTbjwqF0CtJvBmA4FhUL0uw5Kg==
   dependencies:
     clsx "^1.2.1"
     lodash "^4.17.21"
