@@ -53,8 +53,8 @@ function CategoryList({ categories, categoryLevel }: CategoryListProps) {
                     <span
                         className={clsx(
                             selectedCategoryKey === category.key &&
-                                'bg-red-200',
-                            'm-2 p-2 hover:cursor-pointer hover:bg-red-200',
+                                'bg-green-200',
+                            'm-2 rounded-3xl border bg-white py-2 px-4 hover:cursor-pointer hover:bg-green-200',
                         )}
                         key={category.key}
                         onClick={() => handleClickCategory(category.key)}
@@ -63,7 +63,7 @@ function CategoryList({ categories, categoryLevel }: CategoryListProps) {
                     </span>
                 ))}
             </div>
-            <div className="m-2">
+            <div className="my-4">
                 {children && (
                     <CategoryList
                         categories={children}

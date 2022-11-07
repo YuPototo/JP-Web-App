@@ -67,6 +67,9 @@ export const booksSlice = createSlice({
                 }
             }
         },
+        cleanCategory: (state) => {
+            state.selectedCategoryKeys = []
+        },
     },
     extraReducers: (builder) => {
         builder
@@ -85,7 +88,7 @@ export const booksSlice = createSlice({
     },
 })
 
-export const { categoryPicked, bookViewed } = booksSlice.actions
+export const { categoryPicked, bookViewed, cleanCategory } = booksSlice.actions
 
 /* selectors */
 export const selectContentProgress =

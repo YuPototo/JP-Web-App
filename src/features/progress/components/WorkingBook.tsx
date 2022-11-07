@@ -1,13 +1,12 @@
-import BookCard from '../../books/components/BookCard'
 import { useNavigate } from 'react-router-dom'
 import { routes } from '../../../routes/routeBuilder'
 import { useWorkingBook } from '../hooks/useWorkingBook'
+import BookCardRecent from '../../books/components/BookCardRecent'
 
 export default function WorkingBook(): JSX.Element {
     const navigate = useNavigate()
 
-    const { book, isDone, sectionTitle, chapterTitle, questionSetIndex } =
-        useWorkingBook()
+    const { book } = useWorkingBook()
 
     if (!book) return <></>
 
@@ -16,20 +15,7 @@ export default function WorkingBook(): JSX.Element {
             className="mb-4 hover:cursor-pointer"
             onClick={() => navigate(routes.bookDetail(book.id))}
         >
-            <div>working book</div>
-            <BookCard book={book} />
-
-            {isDone ? (
-                <div>这本书做完了</div>
-            ) : (
-                <div>
-                    <div>{sectionTitle}</div>
-                    <div>{chapterTitle}</div>
-                    {questionSetIndex !== undefined && (
-                        <div>第{questionSetIndex + 1}题</div>
-                    )}
-                </div>
-            )}
+            <BookCardRecent />
         </div>
     )
 }
