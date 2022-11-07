@@ -16,7 +16,7 @@ interface BookCategory {
 export interface IBook {
     id: string
     title: string
-    category: BookCategory
+    category?: BookCategory
     cover: string
     desc: string
     hidden: boolean
