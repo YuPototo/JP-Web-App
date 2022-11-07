@@ -13,15 +13,18 @@ export default function ShelfPage() {
 
     return (
         <div>
-            <h1>书架页</h1>
-            {data?.map((bookId) => (
-                <div
-                    key={bookId}
-                    onClick={() => navigate(routes.bookDetail(bookId))}
-                >
-                    <BookWrapper bookId={bookId} />
-                </div>
-            ))}
+            <h1 className="mb-4 text-xl text-green-700">我的书架</h1>
+            <div className="flex flex-wrap gap-8">
+                {data?.map((bookId) => (
+                    <div
+                        key={bookId}
+                        onClick={() => navigate(routes.bookDetail(bookId))}
+                        className="hover:cursor-pointer"
+                    >
+                        <BookWrapper bookId={bookId} />
+                    </div>
+                ))}
+            </div>
         </div>
     )
 }

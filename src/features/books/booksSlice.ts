@@ -110,6 +110,7 @@ export const selectContentProgress =
         if (progress) {
             if (progress === 1) {
                 // case 1: 做完 book 了
+                console.log('selectContentProgress: 做完了')
                 return
             } else {
                 // case 2：有进度

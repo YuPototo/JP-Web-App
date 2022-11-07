@@ -105,12 +105,13 @@ function Chapter({ chapter, isDone, isNext }: ChapterProps) {
         <div
             className={clsx(
                 'flex cursor-pointer justify-between  p-2 hover:bg-yellow-100',
-                [isNext ? 'bg-yellow-100' : 'bg-white'],
+                isNext ? 'bg-yellow-200' : 'bg-white',
             )}
             onClick={() => navigate(routes.practiceChapter(chapter.id, 0))}
         >
-            <span className="pl-4">{chapter.title}</span>{' '}
+            <span className="pl-4">{chapter.title}</span>
             {isDone && <span>完成</span>}
+            {isNext && <span>当前进度</span>}
         </div>
     )
 }
