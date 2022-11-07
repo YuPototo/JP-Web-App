@@ -159,22 +159,24 @@ export const selectBooksByCategory = (state: RootState) => {
     const books = state.books.books.filter((book) => !book.hidden)
 
     const selectedCategoryLength = selectedCategoryKeys.length
+
+    let booksOutput = books
     if (selectedCategoryLength === 0) {
-        return books
+        // 啥也不用干
     } else if (selectedCategoryLength === 1) {
         const key = selectedCategoryKeys[0]
-        return books.filter((b) => b.category.key === key)
+        booksOutput = books.filter((b) => b.category.key === key)
     } else if (selectedCategoryLength === 2) {
         const key_0 = selectedCategoryKeys[0]
         const key_1 = selectedCategoryKeys[1]
-        return books.filter(
+        booksOutput = books.filter(
             (b) => b.category.key === key_0 && b.category.child?.key === key_1,
         )
     } else if (selectedCategoryLength === 3) {
         const key_0 = selectedCategoryKeys[0]
         const key_1 = selectedCategoryKeys[1]
         const key_2 = selectedCategoryKeys[2]
-        return books.filter(
+        booksOutput = books.filter(
             (b) =>
                 b.category.key === key_0 &&
                 b.category.child?.key === key_1 &&
@@ -182,8 +184,10 @@ export const selectBooksByCategory = (state: RootState) => {
         )
     } else {
         console.error('不允许4层及以上 cateory')
-        return books
     }
+
+    // weight 大的在前面
+    return booksOutput.sort((a, b) => b.weight - a.weight)
 }
 
 export const selectBookById = (bookId?: string) => (state: RootState) => {

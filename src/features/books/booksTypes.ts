@@ -20,6 +20,7 @@ export interface IBook {
     cover: string
     desc: string
     hidden: boolean
+    weight: number
 }
 
 export type IChapter = {
