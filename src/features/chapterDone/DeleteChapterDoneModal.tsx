@@ -1,6 +1,7 @@
 import React from 'react'
 import toast from 'react-hot-toast'
 import MyModal from '../../components/MyModal'
+import Button from '../../components/ui/Button'
 import { useAppDispatch } from '../../store/hooks'
 import { resetProgress } from '../progress/progressThunks'
 import { useDeleteChapterDoneMutation } from './chapterDoneService'
@@ -39,23 +40,20 @@ export default function ResetProgressModal({
         <MyModal isOpen={isOpen} onModalClosed={onModalClosed}>
             <h2 className="mb-3 text-lg text-red-600">重置进度</h2>
             <div className="mb-3 ml-2">
-                <p className="">确定要重置吗？</p>
+                <p className="">删除本练习册内的做题记录。确定吗？</p>
             </div>
 
             <div className="flex gap-4">
-                <button
-                    className="btn btn-warning"
+                <Button
+                    color="red"
                     onClick={handleConfirm}
                     disabled={disableConfirmBtn}
                 >
                     确认
-                </button>
-                <button
-                    className="btn btn-info--outline"
-                    onClick={onModalClosed}
-                >
+                </Button>
+                <Button outline color="gray" onClick={onModalClosed}>
                     返回
-                </button>
+                </Button>
             </div>
         </MyModal>
     )

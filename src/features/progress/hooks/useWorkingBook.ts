@@ -31,9 +31,11 @@ export function useWorkingBook() {
 
 export function useBookProgress(bookId?: string) {
     const dispatch = useAppDispatch()
+
     useEffect(() => {
         bookId && dispatch(getProgressByBookId(bookId))
     }, [bookId, dispatch])
+
     const progress = useAppSelector(selectProgressByBook(bookId))
 
     const hasProgressDetail = progress !== undefined && progress !== 1
@@ -53,6 +55,7 @@ export function useBookProgress(bookId?: string) {
         isDone,
         sectionTitle: result?.sectionTitle,
         chapterTitle: result?.chapterTitle,
+        chapterId,
         questionSetIndex,
     }
 }

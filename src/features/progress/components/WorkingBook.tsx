@@ -1,7 +1,7 @@
-import BookCard from '../books/components/BookCard'
+import BookCard from '../../books/components/BookCard'
 import { useNavigate } from 'react-router-dom'
-import { routes } from '../../routes/routeBuilder'
-import { useWorkingBook } from './hooks/useWorkingBook'
+import { routes } from '../../../routes/routeBuilder'
+import { useWorkingBook } from '../hooks/useWorkingBook'
 
 export default function WorkingBook(): JSX.Element {
     const navigate = useNavigate()

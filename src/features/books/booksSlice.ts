@@ -92,14 +92,13 @@ export const selectContentProgress =
     (bookId: string) =>
     (
         state: RootState,
-        //@ts-ignore
     ): { openSectionIndex: number; nextChapterId?: string } | undefined => {
         const sections = selectContentByBook(bookId)(state).data
 
         if (!sections) {
-            // cache 可能已经被删掉。出现的概率不高。
-            // tech debt
-            console.error('selectContentProgress: 找不到 sections')
+            /**
+             * Section 不存在。可能的原因：还没有获取 contents
+             */
             return
         }
 
@@ -251,5 +250,22 @@ export const selectSectionByChapterId =
             }
         }
     }
+
+export const selectFirstChapterId = (state: RootState) => {
+    const bookId = state.books.currentBookId
+
+    if (!bookId) {
+        console.error('selectSectionByChapterId: currentBookId is null')
+        return
+    }
+
+    const sections = selectContentByBook(bookId)(state).data
+
+    if (!sections) {
+        return
+    }
+
+    return sections[0]?.chapters[0]?.id
+}
 
 export default booksSlice.reducer
