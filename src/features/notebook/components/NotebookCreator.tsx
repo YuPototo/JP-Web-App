@@ -1,4 +1,5 @@
-import React, { useState } from 'react'
+import { useState } from 'react'
+import Button from '../../../components/ui/Button'
 import CreateNotebookModal from './CreateNotebookModal'
 
 export default function NotebookCreator() {
@@ -6,7 +7,9 @@ export default function NotebookCreator() {
 
     return (
         <div className="my-4">
-            <button onClick={() => setShowModal(true)}>创建笔记本</button>
+            <Button outline onClick={() => setShowModal(true)}>
+                创建笔记本
+            </Button>
             <CreateNotebookModal
                 isOpen={showModal}
                 onModalClosed={() => setShowModal(false)}

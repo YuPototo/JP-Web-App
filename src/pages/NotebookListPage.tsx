@@ -9,10 +9,14 @@ export default function NotebookListPage() {
 
     return (
         <div>
-            <h1>笔记本, 错题本</h1>
-            <Link to={routes.wrontNotebook()}>错题本</Link>
-            <NotebookCreator />
+            <h1 className="mb-4 text-xl text-green-700">错题本</h1>
+            <div className="my-3 block rounded bg-white py-2 px-4 hover:cursor-pointer hover:bg-green-100">
+                <Link to={routes.wrontNotebook()}>错题本</Link>
+            </div>
+
+            <h1 className="mt-8 mb-4 text-xl text-green-700">笔记本</h1>
             <NotebookList />
+            <NotebookCreator />
         </div>
     )
 }

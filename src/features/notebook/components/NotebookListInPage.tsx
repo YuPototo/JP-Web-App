@@ -32,7 +32,7 @@ function Notebooks({ notebooks }: { notebooks: INotebook[] }) {
                 <Link
                     to={routes.notebook(notebook.id)}
                     className={clsx(
-                        'my-2 block rounded p-2 hover:cursor-pointer hover:bg-green-100',
+                        'my-3 block rounded bg-white py-2 px-4 hover:cursor-pointer hover:bg-green-100',
                         {
                             'bg-green-200': notebook.id === newNotebookId,
                         },
