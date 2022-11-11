@@ -6,6 +6,7 @@ import { INotebook } from '../notebookTypes'
 import { useNavigate } from 'react-router-dom'
 import { routes } from '../../../routes/routeBuilder'
 import MyModal from '../../../components/MyModal'
+import Button from '../../../components/ui/Button'
 
 type Props = {
     notebook: INotebook
@@ -32,14 +33,21 @@ export default function DeleteNotebookModal({
     }
     return (
         <MyModal isOpen={isOpen} onModalClosed={onModalClosed}>
-            <div>删除笔记本会删除其中收藏的题目</div>
-            <div>确认删除笔记本{notebook.title}吗？</div>
-            <button className="m-2" onClick={handleDelete} disabled={isLoading}>
-                {isLoading ? <Spinner /> : '删除'}
-            </button>
-            <button className="m-2" onClick={onModalClosed}>
-                返回
-            </button>
+            <div className="mb-2">删除笔记本会删除其中收藏的题目</div>
+            <div>
+                确认删除笔记本
+                <span className="bold text-green-700">{notebook.title}</span>
+                吗？
+            </div>
+
+            <div className="mt-4 flex gap-4">
+                <Button outline color="gray" onClick={onModalClosed}>
+                    返回
+                </Button>
+                <Button color="red" onClick={handleDelete} disabled={isLoading}>
+                    {isLoading ? <Spinner /> : '删除'}
+                </Button>
+            </div>
         </MyModal>
     )
 }

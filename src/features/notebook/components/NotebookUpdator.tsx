@@ -1,4 +1,5 @@
 import React, { useState } from 'react'
+import Button from '../../../components/ui/Button'
 import { INotebook } from '../notebookTypes'
 import UpdateNotebookModal from './UpdateNotebookModal'
 
@@ -16,7 +17,9 @@ export default function NotebookUpdator({ notebook }: Props) {
                 isOpen={showModal}
                 onModalClosed={() => setShowModal(false)}
             />
-            <button onClick={() => setShowModal(true)}>改名</button>
+            <Button outline color="gray" onClick={() => setShowModal(true)}>
+                改名
+            </Button>
         </div>
     )
 }

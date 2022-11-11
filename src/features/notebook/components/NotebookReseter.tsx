@@ -1,4 +1,5 @@
 import React, { useState } from 'react'
+import Button from '../../../components/ui/Button'
 import { INotebook } from '../notebookTypes'
 import ResetNotebookProgressModal from './ResetNotebookProgressModal'
 
@@ -16,7 +17,9 @@ export default function NotebookReseter({ notebook }: Props) {
                 isOpen={showModal}
                 onModalClosed={() => setShowModal(false)}
             />
-            <button onClick={() => setShowModal(true)}>重置进度</button>
+            <Button color="gray" outline onClick={() => setShowModal(true)}>
+                重置进度
+            </Button>
         </div>
     )
 }

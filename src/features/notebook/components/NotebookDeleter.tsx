@@ -1,6 +1,7 @@
 import React, { useState } from 'react'
 import DeleteNotebookModal from './DeleteNotebookModal'
 import { INotebook } from '../notebookTypes'
+import Button from '../../../components/ui/Button'
 
 type Props = {
     notebook: INotebook
@@ -16,7 +17,9 @@ export default function NotebookDeleter({ notebook }: Props) {
                 isOpen={showModal}
                 onModalClosed={() => setShowModal(false)}
             />
-            <button onClick={() => setShowModal(true)}>删除</button>
+            <Button outline color="red" onClick={() => setShowModal(true)}>
+                删除
+            </Button>
         </div>
     )
 }

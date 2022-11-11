@@ -9,6 +9,7 @@ export interface UserSliceState {
     touristQuizChance: number // 如果没有登录，可以做几道题
     quizChance: number // 做题机会
     isMember: boolean
+    memberDays?: number
 }
 
 const initialState: UserSliceState = {
@@ -69,6 +70,9 @@ export const userSlice = createSlice({
                 (state, { payload }) => {
                     state.quizChance = payload.quizChance
                     state.isMember = payload.isMember
+                    if (payload.memberDays) {
+                        state.memberDays = payload.memberDays
+                    }
                 },
             )
     },

@@ -4,6 +4,7 @@ import { INotebook } from '../notebookTypes'
 import MyModal from '../../../components/MyModal'
 import { Formik, FormikErrors } from 'formik'
 import { useUpdateNotebookMutation } from '../notebookService'
+import Button from '../../../components/ui/Button'
 
 type Props = {
     notebook: INotebook
@@ -28,9 +29,7 @@ export default function UpdateNotebookModal({
 
     return (
         <MyModal isOpen={isOpen} onModalClosed={onModalClosed}>
-            <div>改名</div>
-
-            <div>原名：{notebook.title}</div>
+            <div className="mb-4">原名：{notebook.title}</div>
 
             <Formik
                 initialValues={initialValues}
@@ -70,22 +69,23 @@ export default function UpdateNotebookModal({
                             id="notebookTitle"
                             name="notebookTitle"
                             type="text"
+                            autoFocus
                             onChange={handleChange}
                             onBlur={handleBlur}
                             value={values.notebookTitle}
                         />
-                        <div className="text-sm text-red-500">
+                        <div className="mt-1 text-sm text-red-500">
                             {errors.notebookTitle &&
                                 touched.notebookTitle &&
                                 errors.notebookTitle}
                         </div>
-                        <div>
-                            <button disabled={isSubmitting} type="submit">
-                                {isLoading ? <Spinner /> : <span>提交</span>}
-                            </button>
-                            <button className="m-2" onClick={onModalClosed}>
+                        <div className="mt-4 flex gap-4">
+                            <Button outline onClick={onModalClosed}>
                                 返回
-                            </button>
+                            </Button>
+                            <Button disabled={isSubmitting} type="submit">
+                                {isLoading ? <Spinner /> : <span>提交</span>}
+                            </Button>
                         </div>
                     </form>
                 )}

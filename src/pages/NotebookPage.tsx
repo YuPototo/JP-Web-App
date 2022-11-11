@@ -1,5 +1,6 @@
 import { useEffect } from 'react'
 import { useNavigate, useParams } from 'react-router-dom'
+import Button from '../components/ui/Button'
 import NotebookDeleter from '../features/notebook/components/NotebookDeleter'
 import NotebookReseter from '../features/notebook/components/NotebookReseter'
 import NotebookUpdator from '../features/notebook/components/NotebookUpdator'
@@ -57,45 +58,47 @@ export default function NotebookPage() {
         }
     }
 
+    const progressInPercent = Math.floor(progress * 100) + '%'
+
     return (
         <div>
-            <h1>{notebook.title}</h1>
+            <h1 className="mb-2 text-xl text-green-700">{notebook.title}</h1>
             {notebook.isDefault || (
-                <div>
+                <div className="flex gap-4">
                     <NotebookUpdator notebook={notebook} />
                     <NotebookDeleter notebook={notebook} />
                 </div>
             )}
 
             {isEmptyNotebook && (
-                <div>
-                    <div>这个笔记本是空的</div>
-                    <button onClick={() => navigate(routes.home())}>
-                        去练习
-                    </button>
+                <div className="mt-8">
+                    <div className="mb-4">这个笔记本是空的</div>
+                    <Button outline onClick={() => navigate(-1)}>
+                        返回
+                    </Button>
                 </div>
             )}
 
             {notebookDoable && (
-                <>
-                    <div>收藏了{questionSetIds.length}题</div>
+                <div className="mt-6">
+                    <div className="mb-2">
+                        题目数量：{questionSetIds.length}
+                    </div>
 
-                    <div>复习进度：{progress}</div>
-
-                    {progress < 1 && (
-                        <div>
-                            <button onClick={handleStart}>
-                                {notebookProgress > 0 ? '继续' : '开始'}复习
-                            </button>
-                        </div>
-                    )}
+                    <div className="mb-4">复习进度：{progressInPercent}</div>
 
                     {notebookProgress > 0 && (
-                        <div>
-                            <NotebookReseter notebook={notebook} />
+                        <NotebookReseter notebook={notebook} />
+                    )}
+
+                    {progress < 1 && (
+                        <div className="mt-4">
+                            <Button onClick={handleStart}>
+                                {notebookProgress > 0 ? '继续' : '开始'}复习
+                            </Button>
                         </div>
                     )}
-                </>
+                </div>
             )}
         </div>
     )

@@ -29,12 +29,13 @@ const classes = {
             red: 'hover:bg-red-600 text-red-700 border border-red-600 ',
         },
     },
+
     fill: {
         base: 'focus:ring-2 text-white focus:ring-opacity-50',
         color: {
-            green: 'bg-green-600 hover:bg-green-800 focus:ring-green-600',
-            gray: 'bg-gray-600 hover:bg-gray-800 focus:ring-gray-600',
-            red: 'bg-red-600 hover:bg-red-800 focus:ring-red-600',
+            green: 'bg-green-600 border border-green-600 hover:bg-green-800 focus:ring-green-600 hover:border-green-800 ',
+            gray: 'bg-gray-600 border border-gray-600 hover:bg-gray-800 focus:ring-gray-600 hover:border-gray-800',
+            red: 'bg-red-600 border border-red-600 hover:bg-red-800 focus:ring-red-600 hover:border-red-800',
         },
     },
 }
