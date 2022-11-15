@@ -3,18 +3,18 @@ import { CheckCircle } from 'react-bootstrap-icons'
 import MyModal from '../../../components/MyModal'
 import Button from '../../../components/ui/Button'
 import { IGood, useGetGoodsQuery } from '../../good/goodService'
+import { useGetParamQuery } from '../../parameter/paramterService'
 
 type Props = {
     isOpen: boolean
     onModalClosed: () => void
 }
 
-const QR_CODE_URL = 'https://assets.riyu.love/images/qr_code.jpeg'
-
 export default function PayWall({ isOpen, onModalClosed }: Props) {
     const [showMemberInfo, setShowMemberInfo] = useState(false)
 
     const { data: goods } = useGetGoodsQuery()
+    const { data: qrCode } = useGetParamQuery('qr_code')
 
     const oneMonthPrice = getOneMonthPrice(goods)
 
@@ -33,7 +33,10 @@ export default function PayWall({ isOpen, onModalClosed }: Props) {
                 自2019年起，服务超过8万学习者
             </div>
 
-            {showMemberInfo || (
+            {/* Undefined is not legal as Children */}
+            {showMemberInfo ? (
+                <></>
+            ) : (
                 <div className="mt-4 ml-4">
                     <Button onClick={() => setShowMemberInfo(true)}>
                         购买会员
@@ -48,9 +51,11 @@ export default function PayWall({ isOpen, onModalClosed }: Props) {
                     </div>
                     <div className="mt-2 ml-2">添加开发者微信即可</div>
 
-                    <div className="flex justify-center ">
-                        <img src={QR_CODE_URL} alt="qr-code" />
-                    </div>
+                    {qrCode && (
+                        <div className="flex justify-center ">
+                            <img src={qrCode as string} alt="qr-code" />
+                        </div>
+                    )}
 
                     <div className="mt-1 flex justify-center gap-2 text-sm text-gray-500">
                         <span>微信号</span>
