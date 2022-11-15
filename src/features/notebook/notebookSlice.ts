@@ -48,12 +48,19 @@ export const notebookSlice = createSlice({
         },
     },
     extraReducers: (builder) => {
-        builder.addMatcher(
-            notebookApi.endpoints.createNotebook.matchFulfilled,
-            (state, { payload: notebook }) => {
-                state.newNotebook = notebook.id
-            },
-        )
+        builder
+            .addMatcher(
+                notebookApi.endpoints.createNotebook.matchFulfilled,
+                (state, { payload: notebook }) => {
+                    state.newNotebook = notebook.id
+                },
+            )
+            .addMatcher(
+                notebookApi.endpoints.getNotebookContent.matchFulfilled,
+                (state, { payload: questionSetIds }) => {
+                    state.questionSetIds = questionSetIds
+                },
+            )
     },
 })
 
