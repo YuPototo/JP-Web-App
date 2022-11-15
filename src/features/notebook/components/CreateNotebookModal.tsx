@@ -23,7 +23,7 @@ export default function CreateNotebookModal({ isOpen, onModalClosed }: Props) {
 
     return (
         <MyModal isOpen={isOpen} onModalClosed={onModalClosed}>
-            <h1 className="mb-4 text-lg">创建笔记本</h1>
+            <h1 className="mb-4 text-lg text-green-600">创建笔记本</h1>
             <Formik
                 initialValues={initialValues}
                 validate={(values) => {

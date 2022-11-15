@@ -2,7 +2,6 @@ import { useGetQuestionSetQuery } from '../questionSetService'
 import QuestionSetSkeleton from './QuestionSetSkeleton'
 import { useAppDispatch, useAppSelector } from '../../../store/hooks'
 import {
-    selectIsRight,
     selectIsDone,
     newQuestionSetInitiated,
     errorOccured,
@@ -48,7 +47,6 @@ export default function QuestionSet({ questionSetId, practiceMode }: Props) {
     }, [isError, dispatch])
 
     const isDone = useAppSelector(selectIsDone)
-    const isRight = useAppSelector(selectIsRight)
 
     // 仅在第一次加载时显示 skeleton
     if (isLoading) return <QuestionSetSkeleton />
@@ -63,8 +61,14 @@ export default function QuestionSet({ questionSetId, practiceMode }: Props) {
                 <>
                     <AudioPlayer audio={questionSet.audio} />
                     <Body body={questionSet.body} />
-                    <Questions questions={questionSet.questions} />
-                    <Explanation explanation={questionSet.explanation} />
+                    <Questions
+                        questions={questionSet.questions}
+                        isDone={isDone}
+                    />
+
+                    {isDone && (
+                        <Explanation explanation={questionSet.explanation} />
+                    )}
 
                     {isDone && (
                         <Transcription
@@ -72,14 +76,14 @@ export default function QuestionSet({ questionSetId, practiceMode }: Props) {
                         />
                     )}
 
-                    <FavButton questionSetId={questionSetId} isFav={isFav} />
-
-                    {isDone &&
-                        (isRight ? (
-                            <div className="bg-green-100 p-4 text-lg">正确</div>
-                        ) : (
-                            <div className="bg-red-100 p-4 text-lg">错误</div>
-                        ))}
+                    {isDone && (
+                        <div className="mt-6 pl-4">
+                            <FavButton
+                                questionSetId={questionSetId}
+                                isFav={isFav}
+                            />
+                        </div>
+                    )}
                 </>
             ) : (
                 <div>

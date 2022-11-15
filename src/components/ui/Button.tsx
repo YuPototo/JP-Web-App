@@ -13,6 +13,7 @@ type Props = {
     disabled?: boolean
     size?: string
     onClick?: () => void
+    className?: string
 }
 
 const classes = {
@@ -49,6 +50,7 @@ const Button = forwardRef<HTMLButtonElement, Props>(
             type = 'button',
             outline = false,
             size,
+            className,
             ...props
         },
         ref,
@@ -59,6 +61,7 @@ const Button = forwardRef<HTMLButtonElement, Props>(
                 type={type}
                 disabled={disabled}
                 className={clsx(
+                    className,
                     classes.base,
                     size || classes.baseSize,
                     disabled && classes.disabled,

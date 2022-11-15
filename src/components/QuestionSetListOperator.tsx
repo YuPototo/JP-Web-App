@@ -1,7 +1,9 @@
 import clsx from 'clsx'
+import { CaretLeft, CaretRightFill, LightbulbFill } from 'react-bootstrap-icons'
 import { selectIsDone } from '../features/questionSet/questionSetSlice'
 import { showAnswer } from '../features/questionSet/questionSetThunks'
 import { useAppDispatch, useAppSelector } from '../store/hooks'
+import Button from './ui/Button'
 
 /**
  * 操作一列 questionSet 的组件
@@ -39,36 +41,48 @@ export default function QuestionSetListOperator({
     }
 
     return (
-        <div>
-            <button
-                className={clsx('m-2 bg-green-100 p-2', {
-                    invisible: !hasPreviousQuestionSet,
-                })}
-                disabled={disabled}
-                onClick={onToLast}
-            >
-                上一题
-            </button>
+        <div className="flex gap-3">
+            <div className={clsx({ invisible: !hasPreviousQuestionSet })}>
+                <Button
+                    color="gray"
+                    outline
+                    className={clsx('flex items-center justify-center gap-1')}
+                    disabled={disabled}
+                    onClick={onToLast}
+                >
+                    <CaretLeft />
+                    上一题
+                </Button>
+            </div>
 
-            <button
-                className={clsx('m-2 bg-green-100 p-2', {
-                    invisible: isDone,
-                })}
-                disabled={disabled}
-                onClick={() => dispatch(showAnswer())}
-            >
-                答案
-            </button>
+            <div className={clsx({ invisible: isDone })}>
+                <Button
+                    color="gray"
+                    outline
+                    className={clsx('flex items-center justify-center gap-2')}
+                    disabled={disabled}
+                    onClick={() => dispatch(showAnswer())}
+                >
+                    <LightbulbFill />
+                    答案
+                </Button>
+            </div>
 
-            <button
-                className={clsx('m-2 bg-green-100 p-2', {
+            <div
+                className={clsx({
                     invisible: !showNextBtn(isDone, isQuestionSetError),
                 })}
-                disabled={disabled}
-                onClick={handleContinue}
             >
-                {hasNext ? '下一题' : '完成'}
-            </button>
+                <Button
+                    outline
+                    className={clsx('flex items-center justify-center gap-2')}
+                    disabled={disabled}
+                    onClick={handleContinue}
+                >
+                    {hasNext ? '下一题' : '完成'}
+                    <CaretRightFill />
+                </Button>
+            </div>
         </div>
     )
 }

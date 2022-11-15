@@ -1,5 +1,6 @@
 import { useEffect } from 'react'
 import { useNavigate } from 'react-router-dom'
+import ProgressBar from '../components/ProgressBar'
 import QuestionSetListOperator from '../components/QuestionSetListOperator'
 import QuestionSet from '../features/questionSet/components/QuestionSet'
 import { useGetQuestionSetLoadingInfo } from '../features/questionSet/hooks/useGetQuestionSetLoadingInfo'
@@ -35,24 +36,34 @@ export default function PracticeWrongRecordPage() {
     }
 
     return (
-        <div>
-            {questionSetId !== undefined && (
-                <QuestionSet
-                    questionSetId={questionSetId}
-                    practiceMode={PracticeMode.WrongRecord}
-                />
-            )}
+        <div className="min-h-screen rounded bg-gray-50">
+            <ProgressBar pct={(questionSetIndex + 1) / questionSetIds.length} />
 
-            {!isLoadingQuestionSet && (
-                <QuestionSetListOperator
-                    index={questionSetIndex}
-                    questionSetCount={questionSetIds.length}
-                    disabled={isFetchingQuestionSet}
-                    onToLast={() => dispatch(wrongRecordPracticeChangedBy(-1))}
-                    onToNext={() => dispatch(wrongRecordPracticeChangedBy(1))}
-                    onFinish={() => navigate(-1)}
-                />
-            )}
+            <div className="p-10">
+                {questionSetId !== undefined && (
+                    <div className="mb-10">
+                        <QuestionSet
+                            questionSetId={questionSetId}
+                            practiceMode={PracticeMode.WrongRecord}
+                        />
+                    </div>
+                )}
+
+                {!isLoadingQuestionSet && (
+                    <QuestionSetListOperator
+                        index={questionSetIndex}
+                        questionSetCount={questionSetIds.length}
+                        disabled={isFetchingQuestionSet}
+                        onToLast={() =>
+                            dispatch(wrongRecordPracticeChangedBy(-1))
+                        }
+                        onToNext={() =>
+                            dispatch(wrongRecordPracticeChangedBy(1))
+                        }
+                        onFinish={() => navigate(-1)}
+                    />
+                )}
+            </div>
         </div>
     )
 }

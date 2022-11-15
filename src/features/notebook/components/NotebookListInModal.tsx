@@ -79,7 +79,7 @@ function Notebooks({
             {reordered.map((notebook) => (
                 <div
                     className={clsx(
-                        'my-2 block rounded p-2',
+                        'my-3 cursor-pointer rounded border p-2 pl-4 hover:bg-green-200',
                         {
                             'hover:cursor-pointer  hover:bg-green-100':
                                 !isLoading,

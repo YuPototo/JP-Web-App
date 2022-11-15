@@ -17,6 +17,7 @@ import { useTouristChanceGuard } from '../features/user/hooks/useTouristChanceGu
 import { useChanceGuard } from '../features/user/hooks/useChanceGuard'
 import PayWall from '../features/user/components/PayWall'
 import Skeleton from '../components/ui/Skeleton'
+import ProgressBar from '../components/ProgressBar'
 
 export default function PracticeChapterPage() {
     const dispatch = useAppDispatch()
@@ -37,6 +38,7 @@ export default function PracticeChapterPage() {
         isSuccess: isGettingChapterInfoSuccess,
         error,
     } = useGetChapterQuery(chapterId)
+
     const questionSets = chapterInfo?.questionSets || []
 
     // init queston set results for review feature
@@ -90,40 +92,46 @@ export default function PracticeChapterPage() {
 
     // 页面状态4：展示可能存在的题目
     return (
-        <div>
+        <div className="min-h-screen rounded bg-gray-50">
+            <ProgressBar pct={(questionSetIndex + 1) / questionSets.length} />
+
             <PayWall
                 isOpen={showNoMoreChanceModal}
                 onModalClosed={() => console.log('不支持关闭')}
             />
 
-            {showChapterInfo && (
-                <ChapterInfo
-                    title={chapterInfo.title}
-                    desc={chapterInfo.desc}
-                />
-            )}
+            <div className="p-10">
+                {showChapterInfo && (
+                    <ChapterInfo
+                        title={chapterInfo.title}
+                        desc={chapterInfo.desc}
+                    />
+                )}
 
-            {showQuestionSet && (
-                <QuestionSet
-                    questionSetId={questionSetId}
-                    practiceMode={PracticeMode.Chapter}
-                />
-            )}
+                {showQuestionSet && (
+                    <div className="mb-10">
+                        <QuestionSet
+                            questionSetId={questionSetId}
+                            practiceMode={PracticeMode.Chapter}
+                        />
+                    </div>
+                )}
 
-            {showBtnArea && (
-                <QuestionSetListOperator
-                    index={questionSetIndex}
-                    questionSetCount={questionSets.length}
-                    disabled={isFetchingQuestionSet}
-                    onToLast={() => navigateQuestionSet(-1)}
-                    onToNext={() => navigateQuestionSet(1)}
-                    onFinish={() =>
-                        navigate(routes.chapterResult(chapterId), {
-                            replace: true,
-                        })
-                    }
-                />
-            )}
+                {showBtnArea && (
+                    <QuestionSetListOperator
+                        index={questionSetIndex}
+                        questionSetCount={questionSets.length}
+                        disabled={isFetchingQuestionSet}
+                        onToLast={() => navigateQuestionSet(-1)}
+                        onToNext={() => navigateQuestionSet(1)}
+                        onFinish={() =>
+                            navigate(routes.chapterResult(chapterId), {
+                                replace: true,
+                            })
+                        }
+                    />
+                )}
+            </div>
         </div>
     )
 }
@@ -139,9 +147,9 @@ function ChapterInfoSkeleton() {
 
 function ChapterInfo({ title, desc }: { title: string; desc?: string }) {
     return (
-        <div>
-            <div>{title}</div>
-            {desc && <div>{desc}</div>}
+        <div className="mb-4">
+            <div className="font-bold text-green-600">{title}</div>
+            {desc && <div className="text-sm text-gray-500">{desc}</div>}
         </div>
     )
 }

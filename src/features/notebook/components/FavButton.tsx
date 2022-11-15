@@ -33,18 +33,23 @@ export default function FavButton({ questionSetId, isFav }: Props) {
                 onModalClosed={() => setShowModal(false)}
                 questionSetId={questionSetId}
             />
-            {isFav ? (
-                <div onClick={handleUnsaveQuestionSet}>
-                    {isLoading ? <Spinner /> : <StarFill size={30} />}
-                </div>
-            ) : (
-                <div
-                    className="w-min cursor-pointer p-2 text-yellow-900 "
-                    onClick={() => setShowModal(true)}
-                >
-                    <Star size={30} />
-                </div>
-            )}
+            <div className="-mb-4">
+                {isFav ? (
+                    <div
+                        className="w-min cursor-pointer p-2 text-yellow-400"
+                        onClick={handleUnsaveQuestionSet}
+                    >
+                        {isLoading ? <Spinner /> : <StarFill size={30} />}
+                    </div>
+                ) : (
+                    <div
+                        className="w-min cursor-pointer p-2 text-yellow-400 "
+                        onClick={() => setShowModal(true)}
+                    >
+                        <Star size={30} />
+                    </div>
+                )}
+            </div>
         </>
     )
 }

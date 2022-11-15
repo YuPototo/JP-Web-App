@@ -8,9 +8,11 @@ import { RichText } from '../questionSetTypes'
 export default function Options({
     options,
     questionIndex,
+    answer,
 }: {
     options: RichText[]
     questionIndex: number
+    answer: number
 }) {
     const pickedIndex = useAppSelector(selectPickedIndex(questionIndex))
     return (
@@ -22,6 +24,7 @@ export default function Options({
                     optionIndex={index}
                     questionIndex={questionIndex}
                     picked={pickedIndex === index}
+                    isAnswer={answer === index}
                 />
             ))}
         </div>
@@ -33,11 +36,13 @@ function Option({
     questionIndex,
     optionIndex,
     picked,
+    isAnswer,
 }: {
     option: RichText
     questionIndex: number
     optionIndex: number
     picked: boolean
+    isAnswer: boolean
 }) {
     const dispatch = useAppDispatch()
 
@@ -53,11 +58,13 @@ function Option({
                     }),
                 )
             }
-            className={clsx(
-                '"my-4 hover:bg-yellow-100" p-2 ',
-                { 'cursor-pointer': !isDone },
-                { 'bg-gray-300': picked },
-            )}
+            className={clsx('my-4 mx-4 min-w-max rounded border-2 py-2 pl-4', {
+                'cursor-pointer': !isDone,
+                'bg-gray-200': !isDone && picked,
+                'hover:bg-gray-200': !isDone,
+                'bg-green-200': isDone && isAnswer,
+                'bg-red-300': isDone && picked,
+            })}
         >
             <RichTextRenderer data={option} />
         </div>

@@ -1,5 +1,6 @@
 import { useEffect } from 'react'
 import { useNavigate, useParams } from 'react-router-dom'
+import ProgressBar from '../components/ProgressBar'
 import QuestionSetListOperator from '../components/QuestionSetListOperator'
 import { useGetNotebookContentQuery } from '../features/notebook/notebookService'
 import {
@@ -66,29 +67,35 @@ export default function PracticeNotebookPage() {
     }
 
     return (
-        <div>
+        <div className="min-h-screen rounded bg-gray-50">
+            <ProgressBar pct={(questionSetIndex + 1) / questionSetIds.length} />
+
             <PayWall
                 isOpen={showNoMoreChanceModal}
                 onModalClosed={() => console.log('不支持关闭')}
             />
 
-            {questionSetId !== undefined && (
-                <QuestionSet
-                    questionSetId={questionSetId}
-                    practiceMode={PracticeMode.Notebook}
-                />
-            )}
+            <div className="p-10">
+                {questionSetId !== undefined && (
+                    <div className="mb-10">
+                        <QuestionSet
+                            questionSetId={questionSetId}
+                            practiceMode={PracticeMode.Notebook}
+                        />
+                    </div>
+                )}
 
-            {!isLoadingQuestionSet && (
-                <QuestionSetListOperator
-                    index={questionSetIndex}
-                    questionSetCount={questionSetIds.length}
-                    disabled={isFetchingQuestionSet}
-                    onToLast={handleToLast}
-                    onToNext={handleToNext}
-                    onFinish={handleFinish}
-                />
-            )}
+                {!isLoadingQuestionSet && (
+                    <QuestionSetListOperator
+                        index={questionSetIndex}
+                        questionSetCount={questionSetIds.length}
+                        disabled={isFetchingQuestionSet}
+                        onToLast={handleToLast}
+                        onToNext={handleToNext}
+                        onFinish={handleFinish}
+                    />
+                )}
+            </div>
         </div>
     )
 }
