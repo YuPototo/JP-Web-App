@@ -70,7 +70,7 @@ export default function QuestionSet({ questionSetId, practiceMode }: Props) {
                         <Explanation explanation={questionSet.explanation} />
                     )}
 
-                    {isDone && (
+                    {isDone && questionSet.audio && (
                         <Transcription
                             transcription={questionSet.audio?.transcription}
                         />

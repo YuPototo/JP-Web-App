@@ -13,7 +13,7 @@ export default function ContactPage() {
                 <div className=" center ml-4 mt-4">
                     <img
                         className="mx-auto shadow"
-                        src="https://asset-cdn.riyu.love/images/qr_code.jpeg"
+                        src="https://assets.riyu.love/images/qr_code.jpeg"
                         alt="qr_code"
                     />
                     <div className="mt-1 text-center text-sm text-gray-500">
