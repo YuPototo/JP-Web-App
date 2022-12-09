@@ -14,7 +14,7 @@ export const questionSetApi = splitApi.injectEndpoints({
     }),
 })
 
-export const { useGetQuestionSetQuery } = questionSetApi
+export const { useGetQuestionSetQuery, usePrefetch } = questionSetApi
 
 export const updateQuestionSetFav = (questionSetId: string, isFav: boolean) =>
     questionSetApi.util.updateQueryData(

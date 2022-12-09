@@ -13,9 +13,13 @@
     word-break: break-word;
 }
 
-.jp-paragraph {
-    margin-bottom: 1em;
+.jp-paragraph:not(:first-child) {
+    margin-bottom: 0.5em;
 }
+
+/* .jp-paragraph {
+    margin-bottom: 1em;
+} */
 
 .jp-filler {
     width: 25px;

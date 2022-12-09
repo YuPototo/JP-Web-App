@@ -90,6 +90,7 @@ export default function PracticeNotebookPage() {
                         index={questionSetIndex}
                         questionSetCount={questionSetIds.length}
                         disabled={isFetchingQuestionSet}
+                        nextQuestionSetId={questionSetIds[questionSetIndex + 1]}
                         onToLast={handleToLast}
                         onToNext={handleToNext}
                         onFinish={handleFinish}

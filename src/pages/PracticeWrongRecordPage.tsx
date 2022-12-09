@@ -54,6 +54,7 @@ export default function PracticeWrongRecordPage() {
                         index={questionSetIndex}
                         questionSetCount={questionSetIds.length}
                         disabled={isFetchingQuestionSet}
+                        nextQuestionSetId={questionSetIds[questionSetIndex + 1]}
                         onToLast={() =>
                             dispatch(wrongRecordPracticeChangedBy(-1))
                         }

@@ -122,6 +122,7 @@ export default function PracticeChapterPage() {
                         index={questionSetIndex}
                         questionSetCount={questionSets.length}
                         disabled={isFetchingQuestionSet}
+                        nextQuestionSetId={questionSets[questionSetIndex + 1]}
                         onToLast={() => navigateQuestionSet(-1)}
                         onToNext={() => navigateQuestionSet(1)}
                         onFinish={() =>
