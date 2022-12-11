@@ -8,4 +8,4 @@ It is built with:
 - Redux
 - Tailwind
 
-It's a bonus for my subscribers, who mostly use the product as a WeChat mini app.
+This web app is a special bonus for my subscribers, many of whom use my product as a WeChat mini app. I am offering this app as a way to say thank you to my subscribers.
