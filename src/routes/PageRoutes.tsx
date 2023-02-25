@@ -19,6 +19,7 @@ import PracticeNotebookPage from '../pages/PracticeNotebookPage'
 import WrongNotebookPage from '../pages/WrongNotebookPage'
 import PracticeWrongRecordPage from '../pages/PracticeWrongRecordPage'
 import { MiniProgramPage } from '../pages/MiniProgramPage'
+import { PdfPage } from '../pages/PdfPage'
 
 export default function PageRoutes() {
     return (
@@ -57,6 +58,7 @@ export default function PageRoutes() {
                 element={<PracticeWrongRecordPage />}
             />
             <Route path="/miniProgram" element={<MiniProgramPage />} />
+            <Route path="/pdf" element={<PdfPage />} />
         </Routes>
     )
 }

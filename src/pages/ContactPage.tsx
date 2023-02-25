@@ -7,9 +7,9 @@ export default function ContactPage() {
                 联系开发者
             </h1>
             <div className="ml-2">
-                <p className="my-2">你好，我是《日语轻松考》的开发者，覃煜。</p>
+                <p className="my-2">你好，我是《日语轻松考》的开发者。</p>
                 <p className="my-2">我是个初级日语学习者。</p>
-                <p className="my-2">如果你有任何问题，欢迎联系我。</p>
+                <p className="my-2">如果有任何问题，欢迎联系我。</p>
                 <div className=" center ml-4 mt-4">
                     <img
                         className="mx-auto shadow"

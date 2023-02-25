@@ -17,4 +17,5 @@ export const routes = {
     wrontNotebook: () => '/wrongNotebook',
     practiceWrongRecord: () => '/practiceWrongRecord',
     miniProgramm: () => '/miniProgram',
+    pdf: () => `/pdf`,
 }

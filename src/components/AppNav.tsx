@@ -34,6 +34,9 @@ export default function AppNav(): ReactElement {
             >
                 微信小程序
             </Link>
+            <Link className="p-2 hover:text-green-800" to={routes.pdf()}>
+                真题 PDF
+            </Link>
 
             <AccountButton isLogin={isLogin} className="ml-auto" />
         </div>
