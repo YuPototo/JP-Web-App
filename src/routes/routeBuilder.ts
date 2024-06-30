@@ -16,6 +16,4 @@ export const routes = {
         `/notebooks/${notebookId}/questionSet/${questionSetId}`,
     wrontNotebook: () => '/wrongNotebook',
     practiceWrongRecord: () => '/practiceWrongRecord',
-    miniProgramm: () => '/miniProgram',
-    pdf: () => `/pdf`,
 }
