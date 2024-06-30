@@ -31,6 +31,7 @@ export const queryErrorMiddleware: Middleware<{}, RootState> =
             const errMsg =
                 //@ts-ignore
                 'error' in payload ? payload.error : JSON.stringify(payload)
+            // @ts-expect-error todo
             toast.error(errMsg, { duration: 4000 })
         }
 
