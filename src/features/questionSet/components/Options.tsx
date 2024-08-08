@@ -63,7 +63,7 @@ function Option({
                 'bg-gray-200': !isDone && picked,
                 'hover:bg-gray-200': !isDone,
                 'bg-green-200': isDone && isAnswer,
-                'bg-red-300': isDone && picked,
+                'bg-red-300': isDone && picked && !isAnswer,
             })}
         >
             <RichTextRenderer data={option} />
