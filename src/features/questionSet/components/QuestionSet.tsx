@@ -6,6 +6,7 @@ import {
     newQuestionSetInitiated,
     errorOccured,
 } from '../questionSetSlice'
+import SimpleAudioPlayer from '../../../components/SimpleAudioPlayer'
 
 import { useEffect } from 'react'
 import { PracticeMode } from '../questionSetTypes'
@@ -13,7 +14,7 @@ import Body from './Body'
 import Explanation from './Explanation'
 import Questions from './Questions'
 import Transcription from './Transcription'
-import AudioPlayer from './AudioPlayer'
+// import AudioPlayer from './AudioPlayer'
 import FavButton from '../../notebook/components/FavButton'
 
 type Props = {
@@ -59,7 +60,13 @@ export default function QuestionSet({ questionSetId, practiceMode }: Props) {
         <div className={isFetching ? 'bg-gray-100' : ''}>
             {questionSet ? (
                 <>
-                    <AudioPlayer audio={questionSet.audio} />
+                    {questionSet.audio && (
+                        <SimpleAudioPlayer
+                            key={questionSet.audio.key}
+                            audioUrl={questionSet.audio.key}
+                        />
+                    )}
+                    {/* <AudioPlayer audio={questionSet.audio} /> */}
                     <Body body={questionSet.body} />
                     <Questions
                         questions={questionSet.questions}
@@ -72,7 +79,7 @@ export default function QuestionSet({ questionSetId, practiceMode }: Props) {
 
                     {isDone && questionSet.audio && (
                         <Transcription
-                            transcription={questionSet.audio?.transcription}
+                            transcription={questionSet.audio.transcription}
                         />
                     )}
 
