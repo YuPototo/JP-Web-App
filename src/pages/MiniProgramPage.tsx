@@ -9,7 +9,7 @@ export function MiniProgramPage() {
             <div className="w-80">
                 <img
                     src="https://assets.riyu.love/images/mini_program_qr_code.jpg"
-                    alt="微信搜索：日语轻松考"
+                    alt="日语轻松考"
                 />
             </div>
         </div>
