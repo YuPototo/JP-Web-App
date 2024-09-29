@@ -4,6 +4,7 @@ import MyModal from '../../../components/MyModal'
 import Button from '../../../components/ui/Button'
 import { IGood, useGetGoodsQuery } from '../../good/goodService'
 import { useGetParamQuery } from '../../parameter/paramterService'
+import { useAppSelector } from '../../../store/hooks'
 
 type Props = {
     isOpen: boolean
@@ -11,6 +12,8 @@ type Props = {
 }
 
 export default function PayWall({ isOpen, onModalClosed }: Props) {
+    const displayId = useAppSelector((state) => state.user.displayId)
+
     const [showMemberInfo, setShowMemberInfo] = useState(false)
 
     const { data: goods } = useGetGoodsQuery()
@@ -30,7 +33,7 @@ export default function PayWall({ isOpen, onModalClosed }: Props) {
                 <span className="text-gray-800">每月仅需{oneMonthPrice}元</span>
             </div>
             <div className="text-sm text-gray-600">
-                自2019年起，服务超过8万学习者
+                自2019年起，服务超过10万学习者
             </div>
 
             {/* Undefined is not legal as Children */}
@@ -61,6 +64,8 @@ export default function PayWall({ isOpen, onModalClosed }: Props) {
                         <span>微信号</span>
                         <span>yjjs18599007893</span>
                     </div>
+
+                    <div>添加开发者后，提供您的ID：{displayId}</div>
                 </>
             )}
         </MyModal>
